@@ -49,12 +49,12 @@ async def set_toggle_state(request):
         return web.json_response({'Message': "No valid state provided"},
                                  status=400)
 
-    result = await dataaccess.set_toggle_state(env, feature, state)
-    return web.json_response(result)
+    await dataaccess.set_toggle_state(env, feature, state)
+    all_toggles = await dataaccess.get_all_toggles()
+    return web.json_response(all_toggles)
 
 
 async def get_all_toggle_states(request):
     toggle_list = await dataaccess.get_all_toggles()
-    toggles = {'toggles': toggle_list}
-    return web.json_response(toggles)
+    return web.json_response(toggle_list)
 

@@ -5,6 +5,7 @@ use an actual database
 import asyncio
 from collections import defaultdict
 from .db import DB, KeyAlreadyExistsError
+from sqlalchemy import select, text
 __toggles = []
 __envs = []
 __switches = defaultdict(dict)
@@ -77,7 +78,6 @@ async def set_toggle_state(env, feature, state):
                           .where(db.toggles.c.feature == feature)
                           .where(db.toggles.c.env == env),
                           callback=_get_toggles_)
-    print(results)
 
     if not results:
         if state == 'ON':
@@ -99,10 +99,21 @@ async def set_toggle_state(env, feature, state):
 
 
 async def get_all_toggles():
-    results = await db.go(db.toggles
-                          .select(),
-                          callback=_get_toggles_)
-    return results
+    query = """\
+SELECT
+  environments.name as env,
+  features.name as feature,
+  CASE WHEN toggles.state IS NULL THEN 'OFF'
+    ELSE toggles.state
+    END as state
+FROM environments
+CROSS JOIN features
+LEFT OUTER JOIN toggles ON feature = features.name AND env = environments.name;\
+"""
+
+    print(query)
+    results = await db.go(query, callback=_get_toggles_)
+    return {'toggles': results}
 
 
 async def create_toggle(toggle_name):

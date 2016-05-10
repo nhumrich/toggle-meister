@@ -34,5 +34,5 @@ async def delete_feature(request):
     if not feature.isidentifier():
         return web.json_response({'Message': 'No valid feature provided'})
 
-    dataaccess.delete_feature(feature)
+    await dataaccess.delete_feature(feature)
     return web.json_response(None, status=204)

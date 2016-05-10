@@ -46,9 +46,10 @@ class DB:
         self.engine = None
 
     def __del__(self):
-        self.engine.close()
-        while not self.engine.closed:
-            pass
+        if self.engine:
+            self.engine.close()
+            while not self.engine.closed:
+                pass
 
     async def go(self, query, callback=None):
         if not self.engine:

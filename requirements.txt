@@ -2,3 +2,4 @@ aiohttp
 sqlalchemy
 alembic
 aiopg
+aiohttp_autoreload
