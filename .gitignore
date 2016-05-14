@@ -58,3 +58,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# js stuff
+**/babel-helpers.js
+jspm_packages
+node_modules
+serf/static/build/
+serf/static/coverage/

@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+jspm build toggle-meister \
+	- toast-service!sofe \
+	build/toggle-meister.js \
+	--format amd \
+	"$@"
