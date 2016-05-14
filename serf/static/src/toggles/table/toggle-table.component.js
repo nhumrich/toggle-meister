@@ -24,7 +24,7 @@ export default function({toggles, searchValue, actions}) {
 							const featureName = groupOfToggles[0].toggle.feature;
 
 							return (
-								<tr key={featureName}>
+								<tr key={featureName} className="+hover">
 									<td>
 										{featureName}
 									</td>
