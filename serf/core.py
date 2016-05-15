@@ -1,6 +1,7 @@
 import asyncio
 from aiohttp import web
 import aiohttp_autoreload
+from aiohttp_index import IndexMiddleware
 import os
 from . import toggles, features, environments
 
@@ -16,6 +17,7 @@ async def init_public(loop):
 
 async def init_private(loop):
     app = web.Application(loop=loop)
+    app = web.Application(middlewares=[IndexMiddleware()])
     app.router.add_route('GET', '/api/envs/{name}/toggles', toggles.get_toggle_states_for_env)
     app.router.add_route('GET', '/api/toggles', toggles.get_all_toggle_states)
     app.router.add_route('PUT', '/api/toggles', toggles.set_toggle_state)
@@ -25,7 +27,7 @@ async def init_private(loop):
     app.router.add_route('GET', '/api/envs', environments.get_envs)
     app.router.add_route('POST', '/api/envs', environments.add_env)
     app.router.add_route('DELETE', '/api/envs/{name}', environments.delete_env)
-    app.router.add_static('/', os.path.dirname(__file__) + '/static/')
+    app.router.add_static('/', os.path.dirname(__file__) + '/static')
     handler = app.make_handler(debug=debug)
     await loop.create_server(handler, '0.0.0.0', 8445)
     print('======= Private Server running at :8445 =======')

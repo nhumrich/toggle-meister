@@ -3,3 +3,4 @@ sqlalchemy
 alembic
 aiopg
 aiohttp_autoreload
+aiohttp_index

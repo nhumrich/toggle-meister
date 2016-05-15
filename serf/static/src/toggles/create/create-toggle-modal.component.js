@@ -44,7 +44,7 @@ export default function({actions, toggles}) {
 							actions.createFeature(document.getElementById('create-toggle-modal-input').value, toggles);
 						}}
 						>
-						CREATE TOGGLE
+						CREATE FEATURE
 					</button>
 					<a className="cps-link" onClick={actions.hideCreateToggleModal}>
 						NEVERMIND
