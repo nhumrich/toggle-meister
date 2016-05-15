@@ -8,7 +8,7 @@ services:
   serf:
     build: 
       context: .
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile-ubuntu
     volumes:
       - .:/app/
     environment:
