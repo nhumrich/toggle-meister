@@ -17,6 +17,7 @@ services:
       DATABASE_PASSWORD: password
       DATABASE_DB_NAME: postgres
       DEBUG: "true"
+      AIOHTTP_NOSENDFILE: "true"
     links:
       - postgres
     ports:
