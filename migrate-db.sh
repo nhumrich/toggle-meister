@@ -7,7 +7,6 @@ opts="--force"
 fi
 
 while ! nc -z $DATABASE_URL 5432; do sleep 4; done
-cd serf/
 alembic upgrade head
 
 
