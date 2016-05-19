@@ -2,7 +2,7 @@ import React from 'react';
 import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.helpers.js';
 
 export default function({toggles, searchValue, actions}) {
-	searchedToggles = fuzzySearch(toggles, searchValue);
+	const searchedToggles = fuzzySearch(toggles, searchValue);
 
 	const envList = getEnvList(searchedToggles);
 
