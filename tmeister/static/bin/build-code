@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-jspm build toggle-meister \
+./node_modules/jspm/jspm.js build toggle-meister \
 	- toast-service!sofe \
 	build/toggle-meister.js \
 	--format amd \
