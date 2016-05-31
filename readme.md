@@ -1,4 +1,4 @@
-# Toggle Miester!
+# Toggle Meister!
 
 ## current endpoints
 
