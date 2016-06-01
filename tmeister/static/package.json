@@ -51,6 +51,7 @@
       "postcss-safe-parser": "npm:postcss-safe-parser@^1.0.7",
       "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
       "punycode": "github:jspm/nodelibs-punycode@^0.2.0-alpha",
+      "url": "github:jspm/nodelibs-url@^0.2.0-alpha",
       "util": "github:jspm/nodelibs-util@^0.2.0-alpha",
       "vanilla": "github:systemjs/plugin-css@^0.1.21"
     },
@@ -66,7 +67,6 @@
       "stream": "github:jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "github:jspm/nodelibs-string_decoder@^0.2.0-alpha",
       "tty": "github:jspm/nodelibs-tty@^0.2.0-alpha",
-      "url": "github:jspm/nodelibs-url@^0.2.0-alpha",
       "vm": "github:jspm/nodelibs-vm@^0.2.0-alpha",
       "zlib": "github:jspm/nodelibs-zlib@^0.2.0-alpha"
     },

@@ -6,7 +6,7 @@
 
 `http :8445/api/toggles`
 
-`http PUT :8445/api/toggles toggle:='{"env": "Production", "feature": "foo", "state": "ON"}'`
+`http PATCH :8445/api/toggles toggle:='{"env": "Production", "feature": "foo", "state": "ON"}'`
 
 `http :8445/api/features`
 

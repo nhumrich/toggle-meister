@@ -1,0 +1,19 @@
+pre_ci_boot:
+  image_name: canopytax/alpine
+  image_tag: latest
+  pull: true
+
+integrations:
+  hub:
+    - integrationName: Dockerhub
+      type: docker
+      branches:
+        only:
+          - master
+
+build:
+  ci:
+    - echo "testing 123"
+  post_ci:
+    - docker build -t canopytax/toggle-meister .
+

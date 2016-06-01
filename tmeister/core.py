@@ -20,7 +20,7 @@ async def init_private(loop):
     app = web.Application(middlewares=[IndexMiddleware()])
     app.router.add_route('GET', '/api/envs/{name}/toggles', toggles.get_toggle_states_for_env)
     app.router.add_route('GET', '/api/toggles', toggles.get_all_toggle_states)
-    app.router.add_route('PUT', '/api/toggles', toggles.set_toggle_state)
+    app.router.add_route('PATCH', '/api/toggles', toggles.set_toggle_state)
     app.router.add_route('GET', '/api/features', features.get_features)
     app.router.add_route('POST', '/api/features', features.create_feature)
     app.router.add_route('DELETE', '/api/features/{name}', features.delete_feature)
