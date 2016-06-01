@@ -5,7 +5,7 @@ pre_ci_boot:
 
 integrations:
   hub:
-    - integrationName: Dockerhub
+    - integrationName: Dockerhub1
       type: docker
       branches:
         only:
