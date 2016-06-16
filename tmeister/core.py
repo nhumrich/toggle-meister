@@ -16,8 +16,7 @@ async def init_public(loop):
 
 
 async def init_private(loop):
-    app = web.Application(loop=loop)
-    app = web.Application(middlewares=[IndexMiddleware()])
+    app = web.Application(loop=loop, middlewares=[IndexMiddleware()])
     app.router.add_route('GET', '/api/envs/{name}/toggles', toggles.get_toggle_states_for_env)
     app.router.add_route('GET', '/api/toggles', toggles.get_all_toggle_states)
     app.router.add_route('PATCH', '/api/toggles', toggles.set_toggle_state)
