@@ -5,7 +5,6 @@ use an actual database
 import asyncio
 from collections import defaultdict
 from .db import DB, KeyAlreadyExistsError
-from sqlalchemy import select, text
 __toggles = []
 __envs = []
 __switches = defaultdict(dict)
@@ -15,6 +14,7 @@ ON_STATE = 1
 ROLLING_STATE = 4
 
 db = DB()
+
 
 async def add_env(env_name):
     await db.go(db.environments.insert().values(name=env_name))
@@ -54,6 +54,12 @@ async def add_feature(feature_name):
 async def delete_feature(feature_name):
     await db.go(db.features.delete().where(db.features.c.name == feature_name))
 
+
+async def delete_env(env_name):
+    await db.go(db.environments.delete()
+                .where(db.environments.c.name == env_name))
+
+    await db.go(db.toggles.delete().where(db.toggles.c.env == env_name))
 
 async def get_toggle_states_for_env(env, list_of_features):
     async def _get_toggle_states(toggles):

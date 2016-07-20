@@ -1,8 +1,0 @@
----
-- config:
-  - testset: "app tests"
-
-- test:
-  - name: "smoketest"
-  - url: "/envs"
-

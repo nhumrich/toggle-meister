@@ -28,6 +28,8 @@ async def add_env(request):
                 .format(env_name)},
             status=409)
 
+
 async def delete_env(request):
-    return web.json_response({'Message': 'Not yet implemented'},
-                             status=501)
+    env = request.match_info['name']
+    await dataaccess.delete_env(env)
+    return web.HTTPNoContent()

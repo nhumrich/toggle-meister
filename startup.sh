@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/bash -e
 
 echo ---Running serf---
 
-/app/migrate-db.sh
+./migrate-db.sh
 if [ "$DEBUG" == "true" ];
 then
-  nodemon --exec "python3 -u" /app/run.py -i /app/tmeister/static/jspm_packages/
+  nodemon --exec "python3 -u" run.py -i /app/tmeister/static/jspm_packages/
 
 else
-  python3 -u /app/run.py
+  python3 -u run.py
 fi

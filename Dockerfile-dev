@@ -1,18 +1,9 @@
-from canopytax/alpine
+from canopytax/python-base
 
 RUN apk add --update \
-    nodejs \
-    postgresql-dev gcc python3-dev musl-dev \
-    python3 && \
-    python3 -m ensurepip && \
-    python3 -m pip install dumb-init && \
+    nodejs && \
     rm -rf /var/cache/apk/*
 
 RUN npm install -g nodemon
-COPY ./requirements.txt /app/
-RUN python3 -m pip install -r /app/requirements.txt
-
 
 EXPOSE 8445
-WORKDIR /app
-CMD ["dumb-init", "/app/startup.sh"]

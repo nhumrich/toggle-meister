@@ -1,6 +1,7 @@
 aiohttp
 sqlalchemy
 alembic
+aiogithubauth
 aiopg
 aiohttp_autoreload
 aiohttp_index

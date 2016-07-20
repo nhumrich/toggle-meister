@@ -1,0 +1,116 @@
+---
+- config:
+  - testset: 'app tests'
+
+- test:
+  - name: 'test get envs'
+  - url: '/api/envs'
+  - validators:
+    - compare: {jmespath: 'envs[0].name', expected: 'dev'}
+
+- test:
+  - name: 'invalid json'
+  - url: '/api/envs'
+  - method: 'POST'
+  - body: '{"name": "bob2}'
+  - expected_status: 400
+
+- test:
+  - name: 'test adding env'
+  - url: '/api/envs'
+  - method: 'POST'
+  - body: '{"name": "bob2"}'
+  - validators:
+    - compare: {jmespath: 'name', expected: 'bob2'}
+
+- test:
+  - name: 'test getting envs'
+  - url: '/api/envs'
+  - validators:
+    - compare: {jmespath: 'envs[*].name',
+                comparator: 'contains', expected: 'bob2'}
+
+- test:
+  - name: 'env already exists'
+  - url: '/api/envs'
+  - method: 'POST'
+  - body: '{"name": "bob2"}'
+  - expected_status: 409
+
+- test:
+  - name: 'add feature'
+  - url: '/api/features'
+  - method: 'POST'
+  - body: '{"name": "bobbytables"}'
+  - validators:
+    - compare: {jmespath: 'name', expected: 'bobbytables'}
+
+- test:
+  - name: 'get features'
+  - url: '/api/features'
+  - validators:
+    - compare: {jmespath: 'features[*].name',
+                comparator: 'contains', expected: 'bobbytables'}
+
+- test:
+  - name: 'get toggles'
+  - url: '/api/toggles'
+  - validators:
+    - compare: {jmespath: 'toggles[*].toggle.env',
+                comparator: 'contains', expected: 'bob2'}
+    - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                          toggle.feature=='bobbytables'].toggle.state | [0]",
+                expected: 'OFF'}
+- test:
+  - name: 'get env toggles'
+  - url: '/api/envs/bob2/toggles?feature=bobbytables'
+  - validators:
+    - compare: {jmespath: "bobbytables", expected: "OFF"}
+
+- test:
+  - name: 'turn toggle on'
+  - url: '/api/toggles'
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "ON"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'bob2'}
+      - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'ON'}
+
+- test:
+  - name: 'get toggles again'
+  - url: '/api/toggles'
+  - validators:
+    - compare: {jmespath: 'toggles[*].toggle.env',
+                comparator: 'contains', expected: 'bob2'}
+    - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                          toggle.feature=='bobbytables'].toggle.state | [0]",
+                expected: 'ON'}
+
+
+
+# test deletes and clean up
+- test:
+  - name: 'turn toggle on'
+  - url: '/api/toggles'
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "OFF"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'bob2'}
+      - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'OFF'}
+
+- test:
+  - name: 'remove bob2 env'
+  - url: '/api/envs/bob2'
+  - method: 'DELETE'
+
+- test:
+  - name: 'remove bobbytables feature'
+  - url: '/api/features/bobbytables'
+  - method: 'DELETE'
+
