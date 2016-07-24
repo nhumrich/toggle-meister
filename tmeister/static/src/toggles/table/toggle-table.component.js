@@ -3,7 +3,6 @@ import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.h
 
 export default function({toggles, searchValue, actions}) {
 	const searchedToggles = fuzzySearch(toggles, searchValue);
-
 	const envList = getEnvList(searchedToggles);
 
 	return (

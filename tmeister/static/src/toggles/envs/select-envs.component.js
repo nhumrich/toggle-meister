@@ -36,5 +36,5 @@ function setSelectedEnvs(action, envItems) {
 		.value();
 
 	window.localStorage.setItem(`selected-envs`, JSON.stringify(envs));
-	action();
+	action(envs);
 }
