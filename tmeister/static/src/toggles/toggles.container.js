@@ -13,6 +13,7 @@ import * as createActions from './create/create.actions.js';
 @connect(state => ({
 	toggles: state.toggles,
 	searchValue: state.toggleSearch.searchValue,
+	selectedEnvs: state.toggleSearch.selectedEnvs,
 	createState: state.create,
 }))
 export default class TogglesContainer extends React.Component {
@@ -20,25 +21,31 @@ export default class TogglesContainer extends React.Component {
 		super();
 	}
 
-	render() {
-		const { toggles, dispatch, searchValue, createState } = this.props;
+	componentWillMount() {
+		const { dispatch } = this.props;
 
-		const actions = {
+		this.boundActions = {
 			...bindActionCreators(toggleActions, dispatch),
 			...bindActionCreators(searchActions, dispatch),
 			...bindActionCreators(createActions, dispatch),
-		};
+		}
+
+		this.boundActions.getToggles();
+	}
+
+	render() {
+		const { toggles, searchValue, createState } = this.props;
 
 		return (
 			<div className={`cps-card ${styles.root} cps-padding-16`}>
 				<ToggleControls
 					toggles={toggles}
-					actions={actions}
+					actions={this.boundActions}
 					createState={createState}
 				/>
 				<ToggleTable
 					toggles={toggles}
-					actions={actions}
+					actions={this.boundActions}
 					searchValue={searchValue}
 				/>
 			</div>

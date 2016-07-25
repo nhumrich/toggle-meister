@@ -6,3 +6,11 @@ export function newSearchValue(searchValue) {
 		searchValue,
 	};
 }
+
+export function envSelectionChanged(envs) {
+	// We basically just want to trigger a re-render
+	return {
+		type: types.NEW_SELECTED_ENVS,
+		selectedEnvs: envs,
+	};
+}

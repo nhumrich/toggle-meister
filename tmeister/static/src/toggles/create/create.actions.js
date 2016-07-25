@@ -1,9 +1,11 @@
 import * as types from './create.types.js';
-import { batchCreateToggles } from '../toggles.actions.js';
+import { getToggles, createToggle } from '../toggles.actions.js';
+import { createEnv } from '../envs/envs.actions.js';
 import { includes, uniqBy, find } from 'lodash';
 import toasts from 'toast-service!sofe';
 import { getEnvList } from '../table/toggle-table.helpers.js';
 import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
+import { envSelectionChanged } from '../search/search.actions.js';
 
 export function showCreateToggleModal() {
 	return {
@@ -34,23 +36,27 @@ export function createEnvironment(name, toggles) {
 		if (includes(getEnvList(toggles), name)) {
 			toasts.generalToast(`Environment '${name}' already exists`, `I apologize for trying`);
 		} else {
-			window.localStorage.setItem('selected-envs', JSON.stringify(getSelectedEnvs().concat(name)));
-
-			dispatch(
-			   batchCreateToggles(
-				   uniqBy(toggles, toggle => toggle.toggle.feature)
-				   .map(toggle => ({
-					   ...toggle,
-					   toggle: {
-						   ...toggle.toggle,
-						   state: 'OFF',
-						   env: name,
-					   },
-				   }))
-			   )
-			);
-
 			dispatch(hideCreateEnvModal());
+			fetch('/api/envs', {
+				method: "POST",
+				body: JSON.stringify({
+					name,
+				}),
+			})
+			.then(response => {
+				if (response.ok) {
+					const newEnvSelection = getSelectedEnvs().concat(name);
+					window.localStorage.setItem('selected-envs', JSON.stringify(newEnvSelection));
+					dispatch(envSelectionChanged(newEnvSelection))
+					dispatch(getToggles());
+				} else {
+					throw new Error(`server responded with status ${response.status}`);
+				}
+			})
+			.catch(ex => {
+				toasts.generalToast(`Error creating env - ${ex}`);
+				throw new Error(ex);
+			});
 		}
 	}
 }
@@ -60,19 +66,7 @@ export function createFeature(name, toggles) {
 		if (find(toggles, toggle => toggle.toggle.feature === name)) {
 			toasts.generalToast(`Feature '${name}' already exists`, `I apologize for trying`);
 		} else {
-			dispatch(
-			   batchCreateToggles(
-				   getEnvList(toggles)
-				   .map(env => ({
-					   toggle: {
-						   feature: name,
-						   state: 'OFF',
-						   env,
-					   },
-				   }))
-			   )
-			);
-
+			dispatch(createToggle(name));
 			dispatch(hideCreateToggleModal());
 		}
 	}

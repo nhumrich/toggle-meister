@@ -1,7 +1,9 @@
 import * as types from './search.types.js';
+import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 
 const defaultState = {
 	searchValue: null,
+	selectedEnvs: getSelectedEnvs(),
 };
 
 export default function(state = defaultState, action) {
@@ -9,6 +11,13 @@ export default function(state = defaultState, action) {
 		return {
 			...state,
 			searchValue: action.searchValue,
+		};
+	}
+
+	if (action.type === types.NEW_SELECTED_ENVS) {
+		return {
+			...state,
+			selectedEnvs: action.selectedEnvs,
 		};
 	}
 

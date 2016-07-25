@@ -1,3 +1,4 @@
 .input {
-	width: 29rem;
+	min-width: 17rem;
+	max-width: 22rem;
 }
