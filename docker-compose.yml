@@ -18,6 +18,7 @@ services:
       DATABASE_DB_NAME: postgres
       DEBUG: "true"
       AIOHTTP_NOSENDFILE: "true"
+      IS_LOCAL: "true"
     links:
       - postgres
     ports:

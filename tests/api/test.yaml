@@ -90,6 +90,20 @@
                 expected: 'ON'}
 
 
+- test:
+  - name: 'add another feature'
+  - url: '/api/features'
+  - method: 'POST'
+  - body: '{"name": "bobbytables2"}'
+  - validators:
+    - compare: {jmespath: 'name', expected: 'bobbytables2'}
+
+- test:
+  - name: 'get multiple env toggles'
+  - url: '/api/envs/bob2/toggles?feature=bobbytables&feature=bobbytables2'
+  - validators:
+    - compare: {jmespath: "bobbytables", expected: "OFF"}
+
 
 # test deletes and clean up
 - test:
@@ -112,5 +126,10 @@
 - test:
   - name: 'remove bobbytables feature'
   - url: '/api/features/bobbytables'
+  - method: 'DELETE'
+
+- test:
+  - name: 'remove bobbytables2 feature'
+  - url: '/api/features/bobbytables2'
   - method: 'DELETE'
 

@@ -6,6 +6,7 @@ from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import ARRAY, TIMESTAMP
 import sqlalchemy as sa
 from psycopg2 import IntegrityError
+import asyncpg
 
 metadata = sa.MetaData()
 
@@ -133,6 +134,44 @@ class DB:
         return Transaction(conn)
 
     async def test(self):
+        await self._get_engine()
+        query = self.toggles.select() \
+            .where(db.toggles.c.env == 'bob2') \
+            .where(db.toggles.c.feature.in_(['bobbytables', "table2' or 1=1;"]))
+
+
+        pool = await asyncpg.create_pool(
+            user=POSTGRES_USERNAME,
+            database=POSTGRES_DB_NAME,
+            host=POSTGRES_URL,
+            password=POSTGRES_PASSWORD,
+        )
+        con = await pool.acquire()
+        # async with con.transaction():
+        import json
+        _dialect = sa.dialects.postgresql.base.PGDialect(
+            json_serializer=json.dumps,
+            json_deserializer=lambda x: x)
+        _dialect.implicit_returning = True
+        _dialect.supports_native_enum = True
+        _dialect.supports_smallserial = True  # 9.2+
+        _dialect._backslash_escapes = False
+        _dialect.supports_sane_multi_rowcount = True  # psycopg 2.0.9+
+        _dialect._has_native_hstore = True
+        _dialect = sa.dialects.postgresql.dialect()
+        q = query.compile(dialect=_dialect, compile_kwargs={"literal_binds": True})
+        print(q)
+
+
+
+
+
+        result = await con.fetch(str(q))
+        for r in result:
+            print(r)
+        print(result)
+
+        await pool.release(con)
         async with self.begin() as conn:
             print(dir(conn))
 
