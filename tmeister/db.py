@@ -6,7 +6,6 @@ from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey
 from sqlalchemy.dialects.postgresql import ARRAY, TIMESTAMP
 import sqlalchemy as sa
 from psycopg2 import IntegrityError
-import asyncpg
 
 metadata = sa.MetaData()
 
@@ -134,6 +133,7 @@ class DB:
         return Transaction(conn)
 
     async def test(self):
+        import asyncpg
         await self._get_engine()
         query = self.toggles.select() \
             .where(db.toggles.c.env == 'bob2') \
