@@ -34,7 +34,7 @@ export function newToggles(toggles) {
 export function turnFeatureOn(toggle) {
 	return dispatch => {
 		fetch(`/api/toggles`, {
-			method: 'PUT',
+			method: 'PATCH',
 			body: JSON.stringify({
 				toggle: {
 					...toggle.toggle,
@@ -64,7 +64,7 @@ export function turnFeatureOn(toggle) {
 export function turnFeatureOff(toggle) {
 	return dispatch => {
 		fetch(`/api/toggles`, {
-			method: 'PUT',
+			method: 'PATCH',
 			body: JSON.stringify({
 				toggle: {
 					...toggle.toggle,
