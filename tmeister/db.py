@@ -49,9 +49,6 @@ class DB:
         self.environments = Table(
             'environments', metadata,
             Column('name', type_=String(40), primary_key=True, unique=True),
-            Column('external', type_=Boolean, default=False),
-            Column('external_url', type_=String),
-            Column('external_secret', type_=String),
             Column('squad_id', Integer, ForeignKey('squads.squad_id'),
                    nullable=True),
         )

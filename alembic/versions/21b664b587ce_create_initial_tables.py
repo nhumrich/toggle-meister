@@ -42,9 +42,6 @@ def upgrade():
     envs_table = op.create_table(
         'environments',
         Column('name', type_=String(40), primary_key=True, unique=True),
-        Column('external', type_=Boolean, default=False),
-        Column('external_url', type_=String),
-        Column('external_secret', type_=String),
         Column('squad_id', Integer, ForeignKey('squads.squad_id'),
                nullable=True),
 
@@ -92,6 +89,7 @@ def upgrade():
     op.bulk_insert(
         envs_table,
         [
+            {'name': 'Production'},
             # just a place holder so nobody tries to create this environment
             {'name': 'dev'}
         ]
