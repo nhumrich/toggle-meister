@@ -1,3 +1,4 @@
+asyncpgsa
 aiohttp
 sqlalchemy
 alembic

@@ -6,7 +6,7 @@
   - name: 'test get envs'
   - url: '/api/envs'
   - validators:
-    - compare: {jmespath: 'envs[0].name', expected: 'dev'}
+    - compare: {jmespath: 'envs[0].name', expected: 'Production'}
 
 - test:
   - name: 'invalid json'
@@ -65,7 +65,7 @@
   - name: 'get env toggles'
   - url: '/api/envs/bob2/toggles?feature=bobbytables'
   - validators:
-    - compare: {jmespath: "bobbytables", expected: "OFF"}
+    - compare: {jmespath: "bobbytables", expected: False}
 
 - test:
   - name: 'turn toggle on'
@@ -102,7 +102,8 @@
   - name: 'get multiple env toggles'
   - url: '/api/envs/bob2/toggles?feature=bobbytables&feature=bobbytables2'
   - validators:
-    - compare: {jmespath: "bobbytables", expected: "OFF"}
+    - compare: {jmespath: "bobbytables2", expected: False}
+    - compare: {jmespath: "bobbytables", expected: True}
 
 
 # test deletes and clean up

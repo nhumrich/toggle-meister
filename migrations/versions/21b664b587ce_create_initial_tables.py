@@ -97,6 +97,9 @@ def upgrade():
 
 
 def downgrade():
+    op.drop_table('employees')
+    op.drop_table('roles')
+    op.drop_table('toggles')
     op.drop_table('features')
     op.drop_table('environments')
-    op.drop_table('toggles')
+    op.drop_table('squads')

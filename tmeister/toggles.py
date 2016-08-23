@@ -9,25 +9,22 @@ async def get_toggle_states_for_env(request):
 
     env = request.match_info['name']
     features = params.get('feature', None)
-    print(features)
-    print(params)
     if not features:
         return web.json_response({'Message': "No features provided"}, status=400)
     if env == 'dev':
-        result = {feature: 'ON' for feature in features}
+        result = {feature: True for feature in features}
     else:
         result = await dataaccess.get_toggle_states_for_env(env, features)
         for f in features:
             if f not in result.keys():
-                # Everything not in the database is assumed off, even if it doesn't exist
-                result[f] = 'OFF'
-    print(result)
+                # Everything not in the database is assumed off,
+                # even if it doesn't exist
+                result[f] = False
     return web.json_response(result)
 
 
 async def set_toggle_state(request):
     body = await request.json()
-    print(body)
     toggle = body.get('toggle', None)
     if not toggle:
         return web.json_response({'Message': "No toggle provided"},

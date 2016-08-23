@@ -1,11 +1,10 @@
 from aiohttp import web
 
 from . import dataaccess
-from .db import KeyAlreadyExistsError
+from asyncpg.exceptions import UniqueViolationError
 
 async def create_feature(request):
     body = await request.json()
-    print(body)
     feature_name = body.get('name', None)
     if not feature_name.isidentifier():
         return web.json_response({'Message': "Not a valid name"},
@@ -15,7 +14,7 @@ async def create_feature(request):
         response = await dataaccess.add_feature(feature_name)
         return web.json_response(response, status=201)
 
-    except KeyAlreadyExistsError as e:
+    except UniqueViolationError as e:
         return web.json_response(
             {'Message': "The feature name '{}' already exists"
                 .format(feature_name)},

@@ -1,7 +1,7 @@
 from aiohttp import web
 
 from . import dataaccess
-from .db import KeyAlreadyExistsError
+from asyncpg.exceptions import UniqueViolationError
 
 
 async def get_envs(request):
@@ -12,8 +12,8 @@ async def get_envs(request):
 
 async def add_env(request):
     body = await request.json()
-    print(body)
     env_name = body.get('name', None)
+
     if not env_name.isidentifier():
         return web.json_response({'Message': "Not a valid name"},
                                  status=400)
@@ -22,7 +22,7 @@ async def add_env(request):
         response = await dataaccess.add_env(env_name)
         return web.json_response(response, status=201)
 
-    except KeyAlreadyExistsError as e:
+    except UniqueViolationError as e:
         return web.json_response(
             {'Message': "The environment name '{}' already exists"
                 .format(env_name)},
