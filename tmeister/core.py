@@ -9,7 +9,7 @@ from asyncpgsa import pg
 
 from . import toggles, features, environments
 
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
 GH_ID = os.getenv('GITHUB_ID')
 GH_SECRET = os.getenv('GITHUB_SECRET')
