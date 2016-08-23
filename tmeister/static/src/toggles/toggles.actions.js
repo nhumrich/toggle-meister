@@ -4,7 +4,7 @@ import toasts from 'toast-service!sofe';
 
 export function getToggles() {
 	return dispatch => {
-		fetch('/api/toggles')
+		fetch('/api/toggles', {credentials: 'same-origin'})
 		.then(response => {
 			if (response.ok) {
 				return response
@@ -41,6 +41,7 @@ export function turnFeatureOn(toggle) {
 					state: "ON",
 				},
 			}),
+			credentials: 'same-origin',
 		})
 		.then(response => {
 			if (response.ok) {
@@ -71,6 +72,7 @@ export function turnFeatureOff(toggle) {
 					state: "OFF",
 				},
 			}),
+			credentials: 'same-origin',
 		})
 		.then(response => {
 			if (response.ok) {
@@ -98,6 +100,7 @@ export function createToggle(name) {
 			body: JSON.stringify({
 				name,
 			}),
+			credentials: 'same-origin',
 		})
 		.then(response => {
 			if (response.ok) {

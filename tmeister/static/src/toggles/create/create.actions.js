@@ -41,6 +41,7 @@ export function createEnvironment(name, toggles) {
 				body: JSON.stringify({
 					name,
 				}),
+				credentials: 'same-origin',
 			})
 			.then(response => {
 				if (response.ok) {
