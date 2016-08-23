@@ -1,9 +1,0 @@
-from canopytax/python-base
-
-RUN apk add --update \
-    nodejs && \
-    rm -rf /var/cache/apk/*
-
-RUN npm install -g nodemon
-
-EXPOSE 8445

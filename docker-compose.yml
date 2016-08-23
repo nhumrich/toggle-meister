@@ -6,11 +6,9 @@ services:
       - 5432:5432
   
   tmeister:
-    build: 
-      context: .
-      dockerfile: Dockerfile-dev
+    image: canopytax/toggle-meister
     volumes:
-      - .:/app/
+      - ./tmeister:/app/tmeister
     environment:
       DATABASE_URL: postgres
       DATABASE_USERNAME: postgres
