@@ -14,11 +14,11 @@ build:
     - script:
       name: build UI
       code: |
-        apk --no-cache add nodejs
+        apk --no-cache add nodejs git
         cd tmeister/static
         npm install
         npm run build
-        apk del nodejs
+        apk del nodejs git
         cd /app
 
     - script:
