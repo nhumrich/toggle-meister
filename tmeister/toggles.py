@@ -12,7 +12,8 @@ async def get_toggle_states_for_env(request):
     env = request.match_info['name']
     features = params.get('feature', None)
     if not features:
-        return web.json_response({'Message': "No features provided"}, status=400)
+        return web.json_response({'Message': "No features provided"},
+                                 status=400)
     if env == 'dev':
         result = {feature: True for feature in features}
     else:
@@ -67,4 +68,3 @@ async def set_toggle_state(request):
 async def get_all_toggle_states(request):
     toggle_list = await dataaccess.get_all_toggles()
     return web.json_response(toggle_list)
-

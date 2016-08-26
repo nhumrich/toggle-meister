@@ -1,0 +1,108 @@
+box: canopytax/python-base
+build:
+  services:
+    - id: canopytax/postgresdb
+      tag: latest
+      username: $DOCKER_USERNAME
+      password: $DOCKER_PASSWORD
+
+  steps:
+    - script:
+      name: pip install
+      code: |
+        mv "$WERCKER_CACHE_DIR/pip" /root/.local || echo "Nothing in cache"
+        pip3 install -r requirements.txt --user -U
+        cp -a /root/.local "$WERCKER_CACHE_DIR/pip" || "nothing to copy"
+
+    - script:
+      name: build UI
+      code: |
+        apk --no-cache add nodejs
+        cd /app/tmeister/static
+        npm run build
+        apk del nodejs
+        cd /app
+
+    - script:
+      name: lint
+      code: |
+        invoke lint
+
+    - script:
+      name: run tests
+      code: |
+        invoke test -x
+
+    - script:
+      name: clean and copy files
+      code: |
+        invoke clean
+        mv /root/.local .pip
+
+dockerhub:
+  steps:
+    - script:
+      name: get tags
+      code: |
+        if [ $WERCKER_GIT_BRANCH == 'master' ]; then export DOCKER_BRANCH=latest; else export DOCKER_BRANCH="$(basename $WERCKER_GIT_BRANCH)"; fi;
+        echo $DOCKER_BRANCH
+
+    - script:
+      name: prepare for dockerhub
+      code: |
+        # put pip files back in place
+        mv .pip /root/.local
+
+        # clean unneeded files
+        rm -rf .git/
+        rm .gitignore
+        rm wercker.yml
+        rm readme.md
+        rm requirements.txt
+        rm .pylintrc
+        rm .coverage
+        rm Dockerfile
+        rm docker-compose.yml
+        rm -rf tests/
+        rm -rf tmeister/static/node_modules
+        rm -rf tmeister/static/spec
+        rm -rf tmeister/static/src
+        rm -rf tmeister/static/bin
+
+        # move files
+        cp -a . /app
+
+        # clean wercker files
+        cd /app
+        rm -rf /pipeline/
+
+        # recreate output dir
+        mkdir -p "$WERCKER_OUTPUT_DIR"
+        #mkdir -p "$WERCKER_ROOT"
+        touch "$WERCKER_OUTPUT_DIR/touch"
+
+    - internal/docker-push:
+        repository: $REPO
+        tag: $WERCKER_GIT_COMMIT $DOCKER_BRANCH
+        ports: "9191"
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        cmd: 'dumb-init ./startup.sh'
+
+deploy:
+  box:
+    id: canopytax/deployment
+    username: $DOCKER_USERNAME
+    password: $DOCKER_PASSWORD
+    tag: latest
+  steps:
+    - script:
+      name: run migration
+      code: |
+        echo "placeholder"
+    - script:
+      name: deploy to rancher
+      code: |
+        /scripts/deploy-to-rancher.py --docker-tag "$WERCKER_GIT_COMMIT"
+
+

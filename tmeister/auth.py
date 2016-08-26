@@ -1,6 +1,5 @@
 from aioauth_client import GithubClient
 from aiohttp import web
-from aiohttp_session.cookie_storage import EncryptedCookieStorage
 
 github = GithubClient(
     client_id='b6281b6fe88fa4c313e6',
