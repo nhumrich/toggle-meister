@@ -17,6 +17,7 @@ build:
         apk --no-cache add nodejs git
         cd tmeister/static
         npm install
+        npm run postinstall
         npm run build
         apk del nodejs git
         cd /app
