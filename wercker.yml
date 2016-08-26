@@ -1,10 +1,7 @@
 box: canopytax/python-base
 build:
   services:
-    - id: canopytax/postgresdb
-      tag: latest
-      username: $DOCKER_USERNAME
-      password: $DOCKER_PASSWORD
+    - postgres
 
   steps:
     - script:
