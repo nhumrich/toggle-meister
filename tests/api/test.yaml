@@ -80,6 +80,18 @@
                   expected: 'ON'}
 
 - test:
+  - name: 'turn toggle on again'  # shouldnt return an error
+  - url: '/api/toggles'
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "ON"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'bob2'}
+      - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'ON'}
+
+- test:
   - name: 'get toggles again'
   - url: '/api/toggles'
   - validators:

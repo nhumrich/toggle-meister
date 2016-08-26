@@ -40,12 +40,13 @@ async def error_middleware(app, handler):
 
 
 async def async_setup(loop):
+
     await pg.init(
         user=POSTGRES_USERNAME,
         password=POSTGRES_PASSWORD,
         host=POSTGRES_URL,
         database=POSTGRES_DB_NAME,
-        loop=loop,
+        # loop=loop,
         min_size=POSTGRES_MIN_POOL_SIZE,
         max_size=POSTGRES_MAX_POOL_SIZE,
     )

@@ -1,3 +1,5 @@
+import asyncio
+
 from aiohttp import web
 
 from . import dataaccess
@@ -46,7 +48,18 @@ async def set_toggle_state(request):
         return web.json_response({'Message': "No valid state provided"},
                                  status=400)
 
-    await dataaccess.set_toggle_state(env, feature, state)
+    if env == 'Production' and state == 'ON':
+        calls = []
+        envs = await dataaccess.get_envs()
+        print(envs)
+        for env in envs:
+            calls.append(
+                dataaccess.set_toggle_state(env, feature, 'ON')
+            )
+        await asyncio.wait(calls)
+    else:
+        await dataaccess.set_toggle_state(env, feature, state)
+
     all_toggles = await dataaccess.get_all_toggles()
     return web.json_response(all_toggles)
 
