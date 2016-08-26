@@ -15,7 +15,7 @@ build:
       name: build UI
       code: |
         apk --no-cache add nodejs
-        cd /app/tmeister/static
+        cd tmeister/static
         npm run build
         apk del nodejs
         cd /app
