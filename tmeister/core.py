@@ -20,8 +20,8 @@ POSTGRES_URL = os.getenv('DATABASE_URL', 'localhost')
 POSTGRES_USERNAME = os.getenv('DATABASE_USER', 'postgres')
 POSTGRES_PASSWORD = os.getenv('DATABASE_PASS', 'password')
 POSTGRES_DB_NAME = os.getenv('DATABASE_DB_NAME', 'postgres')
-POSTGRES_MIN_POOL_SIZE = os.getenv('DATABASE_MIN_POOL_SIZE', 2)
-POSTGRES_MAX_POOL_SIZE = os.getenv('DATABASE_MAX_POOL_SIZE', 4)
+POSTGRES_MIN_POOL_SIZE = int(os.getenv('DATABASE_MIN_POOL_SIZE', '2'))
+POSTGRES_MAX_POOL_SIZE = int(os.getenv('DATABASE_MAX_POOL_SIZE', '4'))
 
 
 if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
