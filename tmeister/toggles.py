@@ -23,7 +23,8 @@ async def get_toggle_states_for_env(request):
                 # Everything not in the database is assumed off,
                 # even if it doesn't exist
                 result[f] = False
-    return web.json_response(result)
+    return web.json_response(result,
+                             headers={'Access-Control-Allow-Origin': '*'})
 
 
 async def set_toggle_state(request):
