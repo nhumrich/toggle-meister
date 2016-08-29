@@ -54,8 +54,12 @@ async def get_toggle_states_for_env(env, list_of_features):
         .where(db.toggles.c.env == env) \
         .where(db.toggles.c.feature.in_(list_of_features))
 
-    toggles = await pg.fetch(query)
-    return {row.feature: row.state == 'ON' for row in toggles}
+    results = {}
+    async with pg.query(query) as cursor:
+        async for row in cursor:
+            results[row.feature] = row.state == 'ON'
+
+    return results
 
 
 def _transform_toggles(toggles):
@@ -119,5 +123,5 @@ LEFT OUTER JOIN toggles ON feature = features.name
                     'state': row.state}
          }
         for row in toggles
-    ]
+        ]
     return {'toggles': results}

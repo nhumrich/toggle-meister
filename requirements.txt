@@ -5,5 +5,5 @@ alembic
 aiogithubauth
 aiohttp_autoreload
 psycopg2
-aiohttp_index
 uvloop
+aiohttp_index
