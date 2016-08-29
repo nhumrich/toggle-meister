@@ -14,14 +14,14 @@ build:
     - script:
       name: build UI
       code: |
-        apk --no-cache add nodejs git
+        apk --update add nodejs git
         cd tmeister/static
         echo '//npm.canopytax.com/:_authToken="xrWFRKpQUST+6no1HCmddV8mVbGVEOGEWB3NQZKMXPc="' > ~/.npmrc
         npm set registry http://npm.canopytax.com
         npm install
         npm run postinstall
         npm run build
-        apk del nodejs git
+        apk --no-cache del nodejs git
         cd /app
 
     - script:
