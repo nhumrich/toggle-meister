@@ -1,8 +1,10 @@
 #!/bin/bash -e
 
-echo ---Running serf---
-
+if [ "$SKIP_MIGRATIONS" != "true" ];
+then
 ./migrate-db.sh
+fi
+
 
 if [ "$NO_GUNICORN" = "true" ];
 then

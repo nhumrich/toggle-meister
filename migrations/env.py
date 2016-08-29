@@ -26,8 +26,8 @@ target_metadata = None
 
 def get_database_url():
     POSTGRES_URL = os.getenv('DATABASE_URL', 'localhost')
-    POSTGRES_USERNAME = os.getenv('DATABASE_USER', 'postgres')
-    POSTGRES_PASSWORD = os.getenv('DATABASE_PASS', 'password')
+    POSTGRES_USERNAME = os.getenv('DATABASE_MIGRATION_USER', 'postgres')
+    POSTGRES_PASSWORD = os.getenv('DATABASE_MIGRATION_PASS', 'password')
     POSTGRES_DB_NAME = os.getenv('DATABASE_DB_NAME', 'postgres')
 
     url = 'postgres://{user}:{password}@{host}/{db}'.format(
