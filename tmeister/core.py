@@ -6,6 +6,8 @@ import aiogithubauth
 from aiohttp import web
 from aiohttp_index import IndexMiddleware
 from asyncpgsa import pg
+from raven import Client
+from raven_aiohttp import AioHttpTransport
 
 from . import toggles, features, environments
 
@@ -22,6 +24,8 @@ POSTGRES_PASSWORD = os.getenv('DATABASE_PASS', 'password')
 POSTGRES_DB_NAME = os.getenv('DATABASE_DB_NAME', 'postgres')
 POSTGRES_MIN_POOL_SIZE = int(os.getenv('DATABASE_MIN_POOL_SIZE', '2'))
 POSTGRES_MAX_POOL_SIZE = int(os.getenv('DATABASE_MAX_POOL_SIZE', '4'))
+SENTRY_URL = os.getenv('SENTRY_URL')
+ENV_NAME = os.getenv('ENV_LOCATION', 'Local')
 
 
 if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
@@ -30,16 +34,42 @@ if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
 
 
 async def error_middleware(app, handler):
-    async def middleware_handler(request):
+    async def middleware_handler(request: web.Request):
         try:
             response = await handler(request)
         except json.decoder.JSONDecodeError as e:
             return web.json_response(data={'Message': e.msg}, status=400)
+        except Exception as e:
+            if app.raven:
+                data = {
+                    'request': {
+                        'method': request.method,
+                        'data': None,
+                        'query_string': request.query_string,
+                        'url': request.path
+                    },
+                    # 'user': {
+                    #     'id': 3,
+                    #     'username': 'nhumrich',
+                    # }
+                }
+                tags = {
+                    # Put things you want to filter by in sentry here
+                }
+                extra_data = {
+                    'handler': str(handler.__module__ + '.' + handler.__name__)
+                }
+                if request.has_body:
+                    data['request']['data'] = await request.text()
+
+                app.raven.captureException(extra=extra_data,
+                                           tags=tags, data=data)
+            raise
         return response
     return middleware_handler
 
 
-async def async_setup(loop):
+async def async_setup():
 
     await pg.init(
         user=POSTGRES_USERNAME,
@@ -52,12 +82,11 @@ async def async_setup(loop):
 
 
 def init():
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(async_setup(loop))
-
+    asyncio.ensure_future(async_setup())
     app = web.Application(middlewares=[
+        IndexMiddleware(),
         error_middleware,
-        IndexMiddleware()])
+        ])
 
     if not LOCAL_DEV:
         aiogithubauth.add_github_auth_middleware(
@@ -82,6 +111,12 @@ def init():
     app.router.add_route('POST', '/api/envs', environments.add_env)
     app.router.add_route('DELETE', '/api/envs/{name}', environments.delete_env)
     app.router.add_static('/', os.path.dirname(__file__) + '/static')
+
+    client = None
+    if SENTRY_URL:
+        client = Client(SENTRY_URL, transport=AioHttpTransport,
+                        environment=ENV_NAME)
+    app.raven = client
     return app
 
 

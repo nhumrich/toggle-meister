@@ -1,5 +1,5 @@
 asyncpgsa
-aiohttp
+aiohttp<0.22
 sqlalchemy
 alembic
 aiogithubauth
@@ -7,3 +7,4 @@ aiohttp_autoreload
 psycopg2
 uvloop
 aiohttp_index
+raven-aiohttp
