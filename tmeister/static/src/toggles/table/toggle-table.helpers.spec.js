@@ -127,7 +127,7 @@ describe('toggle-table.helpers.js', () => {
 		});
 
 		it(`returns the top-level array is sorted by env list`, () => {
-			toggles = toggles.concat(
+			toggles = [
 				{
 					toggle: {
 						env: "Production",
@@ -137,39 +137,46 @@ describe('toggle-table.helpers.js', () => {
 				},
 				{
 					toggle: {
+						env: "Integration",
+						feature: "f2",
+						state: "OFF",
+					},
+				},
+				{
+					toggle: {
+						env: "Stage",
+						feature: "f2",
+						state: "OFF",
+					},
+				},
+				{
+					toggle: {
 						env: "Production",
-						feature: "f3",
+						feature: "f1",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
 						env: "Stage",
-						feature: "f4",
+						feature: "f1",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
-						feature: "f5",
+						env: "Integration",
+						feature: "f1",
 						state: "OFF",
 					},
 				},
-				{
-					toggle: {
-						env: "Stage",
-						feature: "f6",
-						state: "OFF",
-					},
-				},
-			);
+			];
 
-			envList = ["Production", "Stage"];
+			envList = ["Integration", "Stage", "Production"];
 
 			const expected = [
-				[toggles[0], toggles[1], toggles[2]], //prod
-				[toggles[3], toggles[4], toggles[5]],
+				[toggles[1], toggles[2], toggles[0]],
+				[toggles[5], toggles[4], toggles[3]],
 			];
 			const actual = groupTogglesByFeature(toggles, envList);
 

@@ -7,7 +7,7 @@
     "build": "./bin/build-code",
     "watch": "./bin/build-code -dw",
     "postinstall": "jspm install",
-    "test": "jspmjasmine --coverage --coverage-files 'src/**/**.js' --clean-coverage-dir"
+    "test": "jspmjasmine"
   },
   "author": "Joel Denning",
   "license": "ISC",

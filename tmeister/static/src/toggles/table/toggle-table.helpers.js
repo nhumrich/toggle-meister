@@ -1,4 +1,4 @@
-import { chain, includes, uniq, union } from 'lodash';
+import { reduce, sortBy, chain, includes, uniq, union } from 'lodash';
 import { filter as fuzzyFilter } from 'fuzzy';
 import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 
@@ -18,8 +18,15 @@ export function getEnvList(toggles) {
 export function groupTogglesByFeature(toggles, envList) {
 	return chain(toggles)
 	.groupBy('toggle.feature')
-	.flatMap(group => [group])
-	.sortBy(groupArr => envList.indexOf(groupArr[0].toggle.env))
+	.map(group => {
+		return reduce(group, (newGroup, el) => {
+			newGroup[envList.indexOf(el.toggle.env)] = el;
+			return newGroup;
+		}, []);
+	})
+	.flatMap(group => {
+		return [group]
+	})
 	.value()
 }
 
