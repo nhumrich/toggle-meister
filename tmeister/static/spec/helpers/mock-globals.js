@@ -7,6 +7,9 @@ mockGlobals([
 			getItem() {},
 		}
 	},
+	document: {
+		getElementById() {}
+	},
 });
 
 global.TESTING_MODE = true;
