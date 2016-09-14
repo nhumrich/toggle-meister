@@ -33,6 +33,9 @@ if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
                      ' environment variables are missing')
 
 
+
+BLARG
+
 async def error_middleware(app, handler):
     async def middleware_handler(request: web.Request):
         try:
@@ -117,6 +120,7 @@ def init():
         client = Client(SENTRY_URL, transport=AioHttpTransport,
                         environment=ENV_NAME)
     app.raven = client
+    app.environment = ENV_NAME
     return app
 
 
