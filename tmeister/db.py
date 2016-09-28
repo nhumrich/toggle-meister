@@ -1,5 +1,6 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, ForeignKey
-from sqlalchemy.dialects.postgresql import ARRAY, TIMESTAMP
+from sqlalchemy import Table, Column, Integer, String, \
+    Boolean, ForeignKey
+from sqlalchemy.dialects.postgresql import ARRAY, TIMESTAMP, JSONB
 import sqlalchemy as sa
 
 METADATA = sa.MetaData()
@@ -10,7 +11,7 @@ features = Table(
     Column('prefix', String(10)),
     Column('squad_id', Integer, ForeignKey('squads.squad_id')),
     Column('created_on', TIMESTAMP),
-    Column('deleted_on', TIMESTAMP)
+    Column('deleted_on', TIMESTAMP),
 )
 
 environments = Table(
@@ -22,9 +23,18 @@ environments = Table(
 
 toggles = Table(
     'toggles', METADATA,
-    Column('feature', String(50)),
-    Column('env', String(40)),
-    Column('state', String(5))
+    Column('feature', String, ForeignKey('features.name')),
+    Column('env', String, ForeignKey('environments.name')),
+    Column('state', String(5)),
+)
+
+auditing = Table(
+    'auditing', METADATA,
+    Column('id', Integer, autoincrement=True, primary_key=True),
+    Column('event', String(50), index=True),
+    Column('user', String),
+    Column('date', TIMESTAMP),
+    Column('event_data', JSONB)
 )
 
 squads = Table(

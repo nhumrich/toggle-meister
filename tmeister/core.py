@@ -1,7 +1,6 @@
 import os
 import json
 
-import asyncio
 import aiogithubauth
 from aiohttp import web
 from aiohttp_index import IndexMiddleware
@@ -9,7 +8,7 @@ from asyncpgsa import pg
 from raven import Client
 from raven_aiohttp import AioHttpTransport
 
-from . import toggles, features, environments
+from . import toggles, features, environments, auditing
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
@@ -49,15 +48,16 @@ async def error_middleware(app, handler):
                         'url': request.path
                     },
                     # 'user': {
+                    #     # put user data here
                     #     'id': 3,
-                    #     'username': 'nhumrich',
+                    #     'username': 'myuser',
                     # }
                 }
                 tags = {
                     # Put things you want to filter by in sentry here
                 }
                 extra_data = {
-                    'handler': str(handler.__module__ + '.' + handler.__name__)
+                    # Put extra data here
                 }
                 if request.has_body:
                     data['request']['data'] = await request.text()
@@ -69,7 +69,7 @@ async def error_middleware(app, handler):
     return middleware_handler
 
 
-async def async_setup():
+async def async_setup(app):
 
     await pg.init(
         user=POSTGRES_USERNAME,
@@ -82,11 +82,12 @@ async def async_setup():
 
 
 def init():
-    asyncio.ensure_future(async_setup())
     app = web.Application(middlewares=[
         IndexMiddleware(),
         error_middleware,
         ])
+
+    app.on_startup.append(async_setup)
 
     if not LOCAL_DEV:
         aiogithubauth.add_github_auth_middleware(
@@ -99,17 +100,20 @@ def init():
             whitelist_handlers=[toggles.get_toggle_states_for_env],
             api_unauthorized=True
         )
-    app.router.add_route('GET', '/api/envs/{name}/toggles',
+    app.router.add_get('/api/envs/{name}/toggles',
                          toggles.get_toggle_states_for_env)
-    app.router.add_route('GET', '/api/toggles', toggles.get_all_toggle_states)
-    app.router.add_route('PATCH', '/api/toggles', toggles.set_toggle_state)
-    app.router.add_route('GET', '/api/features', features.get_features)
-    app.router.add_route('POST', '/api/features', features.create_feature)
-    app.router.add_route('DELETE', '/api/features/{name}',
+    app.router.add_get('/api/toggles', toggles.get_all_toggle_states)
+    app.router.add_patch('/api/toggles', toggles.set_toggle_state)
+    app.router.add_get('/api/features', features.get_features)
+    app.router.add_post('/api/features', features.create_feature)
+    app.router.add_delete('/api/features/{name}',
                          features.delete_feature)
-    app.router.add_route('GET', '/api/envs', environments.get_envs)
-    app.router.add_route('POST', '/api/envs', environments.add_env)
-    app.router.add_route('DELETE', '/api/envs/{name}', environments.delete_env)
+    app.router.add_get('/api/envs', environments.get_envs)
+    app.router.add_post('/api/envs', environments.add_env)
+    app.router.add_delete('/api/envs/{name}', environments.delete_env)
+    app.router.add_get('/api/auditlog', auditing.get_audit_events)
+
+    # Add static handler
     app.router.add_static('/', os.path.dirname(__file__) + '/static')
 
     client = None
@@ -123,13 +127,6 @@ def init():
 def main():
     # setup
     app = init()
-    loop = asyncio.get_event_loop()
-
-    handler = app.make_handler(debug=DEBUG)
-    loop.run_until_complete(
-        loop.create_server(handler, '0.0.0.0', 8445)
-    )
-    print('======= Server running at :8445 =======')
 
     if DEBUG:
         import aiohttp_autoreload
@@ -137,11 +134,7 @@ def main():
         aiohttp_autoreload.start()
 
     # Run server
-    try:
-        loop.run_forever()
-    except KeyboardInterrupt:
-        loop.stop()
-        loop.close()
+    web.run_app(app, port=8445)
 
 if __name__ == '__main__':
     main()

@@ -36,7 +36,6 @@ def upgrade():
         Column('created_on', TIMESTAMP),
         Column('deleted_on', TIMESTAMP)
     )
-    # op.create_index('feat_name', 'features', ['name'], unique=True)
 
     # environments
     envs_table = op.create_table(
@@ -46,7 +45,6 @@ def upgrade():
                nullable=True),
 
     )
-    # op.create_index('env_name', 'environments', ['name'], unique=True)
 
     # toggles
     op.create_table(

@@ -117,6 +117,10 @@
     - compare: {jmespath: "bobbytables2", expected: False}
     - compare: {jmespath: "bobbytables", expected: True}
 
+- test:
+  - name: 'get audit logs (just make sure it doesnt error'
+  - url: '/api/auditlog'
+
 
 # test deletes and clean up
 - test:

@@ -1,5 +1,5 @@
 asyncpgsa
-aiohttp<0.22
+aiohttp
 sqlalchemy
 alembic
 aiogithubauth

@@ -1,7 +1,9 @@
 from aiohttp import web
 
-from . import dataaccess
 from asyncpg.exceptions import UniqueViolationError
+
+from . import dataaccess
+from . import auditing
 
 
 async def get_envs(request):
@@ -13,6 +15,7 @@ async def get_envs(request):
 async def add_env(request):
     body = await request.json()
     env_name = body.get('name', None)
+    user = request.get('user')
 
     if not env_name.isidentifier():
         return web.json_response({'Message': "Not a valid name"},
@@ -20,6 +23,8 @@ async def add_env(request):
 
     try:
         response = await dataaccess.add_env(env_name)
+        await auditing.audit_event(
+            'environment.add', user, {'env_name': env_name})
         return web.json_response(response, status=201)
 
     except UniqueViolationError as e:
@@ -31,5 +36,8 @@ async def add_env(request):
 
 async def delete_env(request):
     env = request.match_info['name']
+    user = request.get('user')
     await dataaccess.delete_env(env)
+    await auditing.audit_event(
+        'environment.remove', user, {'env_name': env})
     return web.HTTPNoContent()

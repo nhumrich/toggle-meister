@@ -1,8 +1,10 @@
 import asyncio
 
 from aiohttp import web
+from aiohttp_session import get_session
 
 from . import dataaccess
+from . import auditing
 import urllib
 
 
@@ -37,6 +39,7 @@ async def set_toggle_state(request):
     env = toggle.get('env', None)
     feature = toggle.get('feature', None)
     state = toggle.get('state', None)
+    user = request.get('user', None)
 
     if (not env or not env.isidentifier() or
             not await dataaccess.get_envs(env_list=[env])):
@@ -61,7 +64,9 @@ async def set_toggle_state(request):
         await asyncio.wait(calls)
     else:
         await dataaccess.set_toggle_state(env, feature, state)
-
+    await auditing.audit_event(
+        'toggle.switch', user,
+        {'toggle_env': env, 'toggle_feature': feature, 'new_state': state})
     all_toggles = await dataaccess.get_all_toggles()
     return web.json_response(all_toggles)
 
