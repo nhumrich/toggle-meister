@@ -4,9 +4,9 @@ from asyncpgsa import pg
 
 from . import db
 
-OFF_STATE = 0
-ON_STATE = 1
-ROLLING_STATE = 4
+OFF = 'OFF'
+ON = 'ON'
+ROLLING = 'ROLL'
 
 
 async def add_env(env_name):
@@ -83,7 +83,8 @@ async def set_toggle_state(env, feature, state):
     if not results:
         if state == 'ON':
             await pg.fetchval(
-                db.toggles.insert().values(feature=feature, env=env, state='ON')
+                db.toggles.insert()
+                    .values(feature=feature, env=env, state='ON')
             )
     elif state == 'OFF':
         await pg.fetchval(db.toggles

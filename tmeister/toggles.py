@@ -1,7 +1,6 @@
 import asyncio
 
 from aiohttp import web
-from aiohttp_session import get_session
 
 from . import dataaccess
 from . import auditing

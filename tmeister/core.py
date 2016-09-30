@@ -101,13 +101,13 @@ def init():
             api_unauthorized=True
         )
     app.router.add_get('/api/envs/{name}/toggles',
-                         toggles.get_toggle_states_for_env)
+                       toggles.get_toggle_states_for_env)
     app.router.add_get('/api/toggles', toggles.get_all_toggle_states)
     app.router.add_patch('/api/toggles', toggles.set_toggle_state)
     app.router.add_get('/api/features', features.get_features)
     app.router.add_post('/api/features', features.create_feature)
     app.router.add_delete('/api/features/{name}',
-                         features.delete_feature)
+                          features.delete_feature)
     app.router.add_get('/api/envs', environments.get_envs)
     app.router.add_post('/api/envs', environments.add_env)
     app.router.add_delete('/api/envs/{name}', environments.delete_env)
