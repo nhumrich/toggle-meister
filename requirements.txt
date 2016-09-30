@@ -7,4 +7,4 @@ aiohttp_autoreload
 psycopg2
 uvloop
 aiohttp_index
-raven-aiohttp
+raven-aiohttp flush
