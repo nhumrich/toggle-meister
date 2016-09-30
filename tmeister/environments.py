@@ -2,12 +2,12 @@ from aiohttp import web
 
 from asyncpg.exceptions import UniqueViolationError
 
-from . import dataaccess
+from .dataaccess import environmentda
 from . import auditing
 
 
 async def get_envs(request):
-    env_list = await dataaccess.get_envs()
+    env_list = await environmentda.get_envs()
     envs = {'envs': [{'name': e} for e in env_list]}
     return web.json_response(envs)
 
@@ -22,7 +22,7 @@ async def add_env(request):
                                  status=400)
 
     try:
-        response = await dataaccess.add_env(env_name)
+        response = await environmentda.add_env(env_name)
         await auditing.audit_event(
             'environment.add', user, {'env_name': env_name})
         return web.json_response(response, status=201)
@@ -37,7 +37,7 @@ async def add_env(request):
 async def delete_env(request):
     env = request.match_info['name']
     user = request.get('user')
-    await dataaccess.delete_env(env)
+    await environmentda.delete_env(env)
     await auditing.audit_event(
         'environment.remove', user, {'env_name': env})
     return web.HTTPNoContent()

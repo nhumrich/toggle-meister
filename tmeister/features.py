@@ -2,7 +2,7 @@ from aiohttp import web
 
 from asyncpg.exceptions import UniqueViolationError
 
-from . import dataaccess
+from .dataaccess import featureda
 from . import auditing
 
 
@@ -15,7 +15,7 @@ async def create_feature(request):
                                  status=400)
 
     try:
-        response = await dataaccess.add_feature(feature_name)
+        response = await featureda.add_feature(feature_name)
         await auditing.audit_event(
             'feature.add', user, {'feature_name': feature_name})
         return web.json_response(response, status=201)
@@ -28,7 +28,7 @@ async def create_feature(request):
 
 
 async def get_features(request):
-    feature_list = await dataaccess.get_features()
+    feature_list = await featureda.get_features()
     features = {'features': [{'name': f} for f in feature_list]}
     return web.json_response(features)
 
@@ -40,7 +40,7 @@ async def delete_feature(request):
     if not feature.isidentifier():
         return web.json_response({'Message': 'No valid feature provided'})
 
-    await dataaccess.delete_feature(feature)
+    await featureda.delete_feature(feature)
     await auditing.audit_event(
         'feature.remove', user, {'feature_name': feature})
     return web.json_response(None, status=204)

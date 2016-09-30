@@ -4,7 +4,7 @@ import json
 
 from aiohttp import web
 
-from . import dataaccess
+from .dataaccess import auditda
 
 
 async def audit_event(event, user, event_data, date=None):
@@ -12,11 +12,11 @@ async def audit_event(event, user, event_data, date=None):
         date = datetime.now()
     if isinstance(event_data, dict):
         event_data = json.dumps(event_data)
-    await dataaccess.audit_event(event, user, event_data, date)
+    await auditda.audit_event(event, user, event_data, date)
 
 
 async def get_audit_events(request):
-    results = await dataaccess.get_recent_audits()
+    results = await auditda.get_recent_audits()
     for row in results:
         row['date'] = row['date'].isoformat()
 
