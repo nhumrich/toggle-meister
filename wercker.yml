@@ -28,7 +28,7 @@ build:
         cd tmeister/static
         mv "$WERCKER_CACHE_DIR/node_modules" ./node_modules || echo "Nothing in cache"
         mv "$WERCKER_CACHE_DIR/jspm_packages" ./jspm_packages || echo "Nothing in cache"
-        echo '//npm.canopytax.com/:_authToken="$NPM_TOKEN"' > ~/.npmrc
+        echo "//npm.canopytax.com/:_authToken=\"$NPM_TOKEN\"" > ~/.npmrc
         npm set registry http://npm.canopytax.com
         npm install
         npm run postinstall
