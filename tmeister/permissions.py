@@ -18,7 +18,9 @@ class Action(Enum):
     toggle_prod = 1
     toggle = 2
     create_env = 3
-    create_feature = 4
+    delete_env = 4
+    create_feature = 5
+    delete_feature = 6
 
 
 async def check_permissions(username: str, action: Action):
@@ -29,7 +31,7 @@ async def check_permissions(username: str, action: Action):
     if (action == Action.toggle_prod and
             role not in (Role.admin, Role.qa)):
         raise InsufficientPermissionsError
-    if (action == Action.create_env and
+    if (action in (Action.create_env, Action.delete_env) and
             role != Role.admin):
         raise InsufficientPermissionsError
 

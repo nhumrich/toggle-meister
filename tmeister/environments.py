@@ -2,6 +2,7 @@ from aiohttp import web
 
 from asyncpg.exceptions import UniqueViolationError
 
+from . import permissions
 from .dataaccess import environmentda
 from . import auditing
 
@@ -21,6 +22,7 @@ async def add_env(request):
         return web.json_response({'Message': "Not a valid name"},
                                  status=400)
 
+    await permissions.check_permissions(user, permissions.Action.create_env)
     try:
         response = await environmentda.add_env(env_name)
         await auditing.audit_event(
@@ -37,6 +39,9 @@ async def add_env(request):
 async def delete_env(request):
     env = request.match_info['name']
     user = request.get('user')
+
+    await permissions.check_permissions(user, permissions.Action.delete_env)
+
     await environmentda.delete_env(env)
     await auditing.audit_event(
         'environment.remove', user, {'env_name': env})
