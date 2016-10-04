@@ -2,11 +2,11 @@ import asyncio
 
 from aiohttp import web
 
-import permissions
 from .dataaccess import toggleda
 from .dataaccess import environmentda
 from .dataaccess import featureda
 from . import auditing
+from . import permissions
 
 
 async def get_toggle_states_for_env(request):
