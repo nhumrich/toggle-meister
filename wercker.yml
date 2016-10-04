@@ -12,19 +12,6 @@ build:
         cp -a /root/.local "$WERCKER_CACHE_DIR/pip" || "nothing to copy"
 
     - script:
-      name: build UI
-      code: |
-        apk --update add nodejs git
-        cd tmeister/static
-        echo '//npm.canopytax.com/:_authToken="xrWFRKpQUST+6no1HCmddV8mVbGVEOGEWB3NQZKMXPc="' > ~/.npmrc
-        npm set registry http://npm.canopytax.com
-        npm install
-        npm run postinstall
-        npm run build
-        apk --no-cache del nodejs git
-        cd /app
-
-    - script:
       name: lint
       code: |
         invoke lint
@@ -33,6 +20,23 @@ build:
       name: run tests
       code: |
         invoke test -x
+
+    - script:
+      name: build UI
+      code: |
+        apk --no-cache add nodejs git
+        cd tmeister/static
+        mv "$WERCKER_CACHE_DIR/node_modules" ./node_modules || echo "Nothing in cache"
+        mv "$WERCKER_CACHE_DIR/jspm_packages" ./jspm_packages || echo "Nothing in cache"
+        echo '//npm.canopytax.com/:_authToken="$NPM_TOKEN"' > ~/.npmrc
+        npm set registry http://npm.canopytax.com
+        npm install
+        npm run postinstall
+        npm run build
+        apk --no-cache del nodejs git
+        cp -a ./node_modules "$WERCKER_CACHE_DIR/node_modules" || "nothing to copy"
+        cp -a ./jspm_packages "$WERCKER_CACHE_DIR/jspm_packages" || "nothing to copy"
+        cd /app
 
     - script:
       name: clean and copy files
