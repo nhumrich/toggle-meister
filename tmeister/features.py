@@ -3,6 +3,7 @@ from aiohttp import web
 from asyncpg.exceptions import UniqueViolationError
 
 from .dataaccess import featureda
+from . import permissions
 from . import auditing
 
 
@@ -14,6 +15,8 @@ async def create_feature(request):
         return web.json_response({'Message': "Not a valid name"},
                                  status=400)
 
+    await permissions.check_permissions(
+        user, permissions.Action.create_feature)
     try:
         response = await featureda.add_feature(feature_name)
         await auditing.audit_event(
@@ -36,6 +39,9 @@ async def get_features(request):
 async def delete_feature(request):
     feature = request.match_info['name']
     user = request.get('user')
+
+    await permissions.check_permissions(
+        user, permissions.Action.delete_feature)
 
     if not feature.isidentifier():
         return web.json_response({'Message': 'No valid feature provided'})

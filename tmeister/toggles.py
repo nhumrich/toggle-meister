@@ -2,6 +2,7 @@ import asyncio
 
 from aiohttp import web
 
+import permissions
 from .dataaccess import toggleda
 from .dataaccess import environmentda
 from .dataaccess import featureda
@@ -31,15 +32,15 @@ async def get_toggle_states_for_env(request):
 
 async def set_toggle_state(request):
     body = await request.json()
-    toggle = body.get('toggle', None)
+    toggle = body.get('toggle')
     if not toggle:
         return web.json_response({'Message': "No toggle provided"},
                                  status=400)
 
-    env = toggle.get('env', None)
-    feature = toggle.get('feature', None)
-    state = toggle.get('state', None)
-    user = request.get('user', None)
+    env = toggle.get('env')
+    feature = toggle.get('feature')
+    state = toggle.get('state')
+    user = request.get('user')
 
     if (not env or not env.isidentifier() or
             not await environmentda.get_envs(env_list=[env])):
@@ -53,6 +54,7 @@ async def set_toggle_state(request):
         return web.json_response({'Message': "No valid state provided"},
                                  status=400)
 
+    await permissions.check_toggle_permissions(user, env)
     if env == 'Production' and state == 'ON':
         calls = []
         envs = await environmentda.get_envs()

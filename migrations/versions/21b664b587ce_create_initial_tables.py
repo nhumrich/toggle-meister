@@ -13,8 +13,8 @@ branch_labels = None
 depends_on = None
 
 from alembic import op
-from sqlalchemy import Column, String, Integer, Boolean, ForeignKey
-from sqlalchemy.dialects.postgresql import ARRAY, TIMESTAMP
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB
 
 
 def upgrade():
@@ -23,7 +23,7 @@ def upgrade():
     # squads
     op.create_table(
         'squads',
-        Column('squad_id', type_=Integer, primary_key=True),
+        Column('id', type_=Integer, primary_key=True, autoincrement=True),
         Column('name', type_=String(50), unique=True)
     )
 
@@ -55,35 +55,27 @@ def upgrade():
     )
     op.create_index('on_togs', 'toggles', ['feature', 'env'], unique=True)
 
-    # roles
-    roles_table = op.create_table(
-        'roles',
-        Column('role_id', type_=Integer, primary_key=True),
-        Column('name', type_=String()),
-        Column('is_blacklist', type_=Boolean, default=True),
-        Column('whitelist', type_=ARRAY(String)),
-        Column('blacklist', type_=ARRAY(String)),
-        Column('can_create', type_=Boolean)
-    )
-
     # employees
     op.create_table(
         'employees',
-        Column('employee_id', Integer, primary_key=True),
-        Column('name', String()),
-        Column('username', type_=String(), unique=True),
+        Column('username', type_=String(25), unique=True, primary_key=True),
+        Column('name', String),
         Column('squad_id', Integer, ForeignKey('squads.squad_id')),
-        Column('email', type_=String()),
-        Column('role_id', Integer, ForeignKey('roles.role_id'))
+        Column('email', type_=String),
+        Column('role_id', Integer)
+    )
+
+    # auditing
+    op.create_table(
+        'auditing',
+        Column('id', Integer, autoincrement=True, primary_key=True),
+        Column('event', String(length=50), nullable=False, index=True),
+        Column('user', String(), nullable=True),
+        Column('date', TIMESTAMP),
+        Column('event_data', JSONB, nullable=True)
     )
 
     # Seed
-    op.bulk_insert(
-        roles_table,
-        [
-            {'name': 'admin', 'can_create': True}
-        ]
-    )
     op.bulk_insert(
         envs_table,
         [
@@ -96,8 +88,8 @@ def upgrade():
 
 def downgrade():
     op.drop_table('employees')
-    op.drop_table('roles')
     op.drop_table('toggles')
     op.drop_table('features')
     op.drop_table('environments')
     op.drop_table('squads')
+    op.drop_table('auditing')

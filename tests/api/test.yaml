@@ -3,6 +3,12 @@
   - testset: 'app tests'
 
 - test:
+  - name: 'hit main page'
+  - url: '/'
+  - curl_option_followlocation: True
+  - curl_option_maxredirs: 5
+
+- test:
   - name: 'test get envs'
   - url: '/api/envs'
   - validators:
