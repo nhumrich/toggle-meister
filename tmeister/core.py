@@ -1,21 +1,21 @@
 import os
-import json
 
-import aiogithubauth
+import aiohttp_oauth
 from aiohttp import web
 from aiohttp_index import IndexMiddleware
 from asyncpgsa import pg
 from raven import Client
 from raven_aiohttp import AioHttpTransport
 
-from . import toggles, features, environments, auditing
+from . import toggles, features, environments, auditing, employees
+from .errorhandling import error_middleware
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
 GH_ID = os.getenv('GITHUB_ID')
 GH_SECRET = os.getenv('GITHUB_SECRET')
 GH_ORG = os.getenv('GITHUB_ORG')
-COOKIE_NAME = os.getenv('COOKIE_NAME', 's3githubauth')
+COOKIE_NAME = os.getenv('COOKIE_NAME', 'tmeister-auth')
 COOKIE_KEY = os.getenv('COOKIE_KEY')
 POSTGRES_URL = os.getenv('DATABASE_URL', 'localhost')
 POSTGRES_USERNAME = os.getenv('DATABASE_USER', 'postgres')
@@ -30,43 +30,6 @@ ENV_NAME = os.getenv('ENV_LOCATION', 'Local')
 if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
     raise ValueError('GITHUB_ID, GITHUB_SECRET or GITHUB_ORG'
                      ' environment variables are missing')
-
-
-async def error_middleware(app, handler):
-    async def middleware_handler(request: web.Request):
-        try:
-            response = await handler(request)
-        except json.decoder.JSONDecodeError as e:
-            return web.json_response(data={'Message': e.msg}, status=400)
-        except Exception as e:
-            if app.raven:
-                data = {
-                    'request': {
-                        'method': request.method,
-                        'data': None,
-                        'query_string': request.query_string,
-                        'url': request.path
-                    },
-                    # 'user': {
-                    #     # put user data here
-                    #     'id': 3,
-                    #     'username': 'myuser',
-                    # }
-                }
-                tags = {
-                    # Put things you want to filter by in sentry here
-                }
-                extra_data = {
-                    # Put extra data here
-                }
-                if request.has_body:
-                    data['request']['data'] = await request.text()
-
-                app.raven.captureException(extra=extra_data,
-                                           tags=tags, data=data)
-            raise
-        return response
-    return middleware_handler
 
 
 async def async_setup(app):
@@ -85,21 +48,30 @@ def init():
     app = web.Application(middlewares=[
         IndexMiddleware(),
         error_middleware,
-        ])
+    ])
 
     app.on_startup.append(async_setup)
 
-    if not LOCAL_DEV:
-        aiogithubauth.add_github_auth_middleware(
-            app,
-            github_id=GH_ID,
-            github_secret=GH_SECRET,
-            github_org=GH_ORG,
-            cookie_name=COOKIE_NAME,
-            cookie_key=COOKIE_KEY,
-            whitelist_handlers=[toggles.get_toggle_states_for_env],
-            api_unauthorized=True
-        )
+    oauth_kwargs = dict(
+        github_id=GH_ID,
+        github_secret=GH_SECRET,
+        github_org=GH_ORG,
+        cookie_name=COOKIE_NAME,
+        cookie_key=COOKIE_KEY,
+        whitelist_handlers=[toggles.get_toggle_states_for_env],
+        oauth_url='/oauth_callback/github',
+        auth_callback=employees.check_employee,
+        cookie_is_secure=True
+    )
+    if LOCAL_DEV:
+        oauth_kwargs['dummy'] = True
+        oauth_kwargs['cookie_is_secure'] = False
+
+    aiohttp_oauth.add_oauth_middleware(
+        app,
+        **oauth_kwargs
+    )
+
     app.router.add_get('/api/envs/{name}/toggles',
                        toggles.get_toggle_states_for_env)
     app.router.add_get('/api/toggles', toggles.get_all_toggle_states)
@@ -124,9 +96,10 @@ def init():
     return app
 
 
-def main():
+def main(app=None):
     # setup
-    app = init()
+    if app is None:
+        app = init()
 
     if DEBUG:
         import aiohttp_autoreload

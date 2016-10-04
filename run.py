@@ -4,4 +4,4 @@ from tmeister import core
 app = core.init()
 
 if __name__ == '__main__':
-    core.main()
+    core.main(app)

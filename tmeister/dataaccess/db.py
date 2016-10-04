@@ -31,34 +31,23 @@ toggles = Table(
 auditing = Table(
     'auditing', METADATA,
     Column('id', Integer, autoincrement=True, primary_key=True),
-    Column('event', String(50), index=True),
-    Column('user', String),
+    Column('event', String(50), index=True, nullable=False),
+    Column('user', String, nullable=True),
     Column('date', TIMESTAMP),
-    Column('event_data', JSONB)
+    Column('event_data', JSONB, nullable=True)
 )
 
 squads = Table(
     'squads', METADATA,
-    Column('squad_id', type_=Integer, primary_key=True),
+    Column('squad_id', type_=Integer, primary_key=True, autoincrement=True),
     Column('name', type_=String(50), unique=True),
 )
 
 employees = Table(
     'employees', METADATA,
-    Column('employee_id', Integer, primary_key=True),
-    Column('name', String()),
-    Column('username', type_=String(), unique=True),
+    Column('username', type_=String(), primary_key=True, unique=True),
+    Column('name', String),
     Column('squad_id', Integer, ForeignKey('squads.squad_id')),
-    Column('email', type_=String()),
-    Column('role_id', Integer, ForeignKey('roles.role_id'))
-)
-
-roles = Table(
-    'roles', METADATA,
-    Column('role_id', type_=Integer, primary_key=True),
-    Column('name', type_=String()),
-    Column('is_blacklist', type_=Boolean, default=True),
-    Column('whitelist', type_=ARRAY(String)),
-    Column('blacklist', type_=ARRAY(String)),
-    Column('can_create', type_=Boolean)
+    Column('email', type_=String),
+    Column('role_id', Integer)
 )
