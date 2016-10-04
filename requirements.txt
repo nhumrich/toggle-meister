@@ -2,7 +2,7 @@ asyncpgsa
 aiohttp
 sqlalchemy
 alembic
-aiohttp_auth
+aiohttp_oauth
 aiohttp_autoreload
 psycopg2
 uvloop
