@@ -32,7 +32,7 @@ def upgrade():
         'features',
         Column('name', String(50), unique=True, primary_key=True),
         Column('prefix', String(10)),
-        Column('squad_id', Integer, ForeignKey('squads.squad_id')),
+        Column('squad_id', Integer, ForeignKey('squads.id')),
         Column('created_on', TIMESTAMP),
         Column('deleted_on', TIMESTAMP)
     )
@@ -41,7 +41,7 @@ def upgrade():
     envs_table = op.create_table(
         'environments',
         Column('name', type_=String(40), primary_key=True, unique=True),
-        Column('squad_id', Integer, ForeignKey('squads.squad_id'),
+        Column('squad_id', Integer, ForeignKey('squads.id'),
                nullable=True),
 
     )
@@ -60,7 +60,7 @@ def upgrade():
         'employees',
         Column('username', type_=String(25), unique=True, primary_key=True),
         Column('name', String),
-        Column('squad_id', Integer, ForeignKey('squads.squad_id')),
+        Column('squad_id', Integer, ForeignKey('squads.id')),
         Column('email', type_=String),
         Column('role_id', Integer)
     )

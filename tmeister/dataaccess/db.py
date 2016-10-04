@@ -9,7 +9,7 @@ features = Table(
     'features', METADATA,
     Column('name', String(50), unique=True, primary_key=True),
     Column('prefix', String(10)),
-    Column('squad_id', Integer, ForeignKey('squads.squad_id')),
+    Column('squad_id', Integer, ForeignKey('squads.id')),
     Column('created_on', TIMESTAMP),
     Column('deleted_on', TIMESTAMP),
 )
@@ -17,7 +17,7 @@ features = Table(
 environments = Table(
     'environments', METADATA,
     Column('name', type_=String(40), primary_key=True, unique=True),
-    Column('squad_id', Integer, ForeignKey('squads.squad_id'),
+    Column('squad_id', Integer, ForeignKey('squads.id'),
            nullable=True),
 )
 
@@ -47,7 +47,7 @@ employees = Table(
     'employees', METADATA,
     Column('username', type_=String(), primary_key=True, unique=True),
     Column('name', String),
-    Column('squad_id', Integer, ForeignKey('squads.squad_id')),
+    Column('squad_id', Integer, ForeignKey('squads.id')),
     Column('email', type_=String),
     Column('role_id', Integer)
 )
