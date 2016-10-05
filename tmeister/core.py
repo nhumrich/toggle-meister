@@ -9,6 +9,7 @@ from raven_aiohttp import AioHttpTransport
 
 from . import toggles, features, environments, auditing, employees
 from .errorhandling import error_middleware
+from .security import security_middleware
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
@@ -48,6 +49,7 @@ def init():
     app = web.Application(middlewares=[
         IndexMiddleware(),
         error_middleware,
+        security_middleware,
     ])
 
     app.on_startup.append(async_setup)
