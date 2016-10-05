@@ -1,11 +1,15 @@
 from aiohttp import web
 import json
 
+from .permissions import InsufficientPermissionsError
+
 
 async def error_middleware(app, handler):
     async def middleware_handler(request: web.Request):
         try:
             response = await handler(request)
+        except InsufficientPermissionsError:
+            return web.HTTPForbidden()
         except json.decoder.JSONDecodeError as e:
             return web.json_response(data={'Message': e.msg}, status=400)
         except Exception as e:

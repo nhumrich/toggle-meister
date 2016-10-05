@@ -61,11 +61,9 @@ def init():
         whitelist_handlers=[toggles.get_toggle_states_for_env],
         oauth_url='/oauth_callback/github',
         auth_callback=employees.check_employee,
-        cookie_is_secure=True
     )
     if LOCAL_DEV:
         oauth_kwargs['dummy'] = True
-        oauth_kwargs['cookie_is_secure'] = False
 
     aiohttp_oauth.add_oauth_middleware(
         app,
