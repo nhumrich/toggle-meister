@@ -7,7 +7,7 @@ from asyncpgsa import pg
 from raven import Client
 from raven_aiohttp import AioHttpTransport
 
-from . import toggles, features, environments, auditing, employees
+from . import toggles, features, environments, auditing, employees, health
 from .errorhandling import error_middleware
 from .security import security_middleware
 
@@ -60,7 +60,10 @@ def init():
         github_org=GH_ORG,
         cookie_name=COOKIE_NAME,
         cookie_key=COOKIE_KEY,
-        whitelist_handlers=[toggles.get_toggle_states_for_env],
+        whitelist_handlers=[
+            toggles.get_toggle_states_for_env,
+            health.get_health
+        ],
         oauth_url='/oauth_callback/github',
         auth_callback=employees.check_employee,
     )
@@ -84,6 +87,7 @@ def init():
     app.router.add_post('/api/envs', environments.add_env)
     app.router.add_delete('/api/envs/{name}', environments.delete_env)
     app.router.add_get('/api/auditlog', auditing.get_audit_events)
+    app.router.add_get('/heartbeat', health.get_health)
 
     # Add static handler
     app.router.add_static('/', os.path.dirname(__file__) + '/static')
