@@ -55,3 +55,5 @@ docker-compose up
 `http POST :8445/api/envs name=my_env`
 
 `http DELETE :8445/api/envs/my_env`
+
+`http :8445/api/auditlog`
