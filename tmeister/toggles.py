@@ -58,9 +58,9 @@ async def set_toggle_state(request):
     if env == 'Production' and state == 'ON':
         calls = []
         envs = await environmentda.get_envs()
-        for env in envs:
+        for e in envs:
             calls.append(
-                toggleda.set_toggle_state(env, feature, 'ON')
+                toggleda.set_toggle_state(e, feature, 'ON')
             )
         await asyncio.wait(calls)
     else:
