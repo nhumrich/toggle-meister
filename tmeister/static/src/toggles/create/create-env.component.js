@@ -8,7 +8,7 @@ export default function({actions, modalShowing, toggles}) {
 				className="cps-btn +secondary"
 				onClick={actions.showCreateEnvModal}
 				>
-					CREATE ENVIRONMENT
+					Create environment
 			</button>
 			{
 				modalShowing &&

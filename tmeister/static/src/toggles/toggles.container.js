@@ -37,17 +37,22 @@ export default class TogglesContainer extends React.Component {
 		const { toggles, searchValue, createState } = this.props;
 
 		return (
-			<div className={`cps-card ${styles.root} cps-padding-16`}>
-				<ToggleControls
-					toggles={toggles}
-					actions={this.boundActions}
-					createState={createState}
-				/>
-				<ToggleTable
-					toggles={toggles}
-					actions={this.boundActions}
-					searchValue={searchValue}
-				/>
+			<div className={`${styles.root}`}>
+				<h2>
+					Manage feature toggles
+				</h2>
+				<div className={`cps-card cps-padding-16`}>
+					<ToggleControls
+						toggles={toggles}
+						actions={this.boundActions}
+						createState={createState}
+					/>
+					<ToggleTable
+						toggles={toggles}
+						actions={this.boundActions}
+						searchValue={searchValue}
+					/>
+				</div>
 			</div>
 		);
 	}

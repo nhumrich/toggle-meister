@@ -1,0 +1,34 @@
+.menu {
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 64px;
+	background-color: rgba(0, 191, 75, 1);
+
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
+}
+
+.menuItem {
+	padding: 8px;
+}
+
+.menuItem:focus, .menuItem:hover {
+	text-decoration: none;
+}
+
+.menuItem:hover {
+	background-color: #00A632;
+}
+
+.menuItem.active {
+	background-color: #00A632;
+}
+
+.icon {
+	width: 100%;
+	height: 100%;
+}

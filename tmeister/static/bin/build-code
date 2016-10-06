@@ -1,8 +1,14 @@
 #!/bin/bash -e
+./node_modules/jspm/jspm.js bundle \
+	sofe \
+	build/bundled-deps.js \
+	--source-map-contents
 
 ./node_modules/jspm/jspm.js build toggle-meister \
 	- toast-service!sofe \
+	- sofe \
 	build/toggle-meister.js \
 	--format amd \
-	--skip-source-maps \
+	--skip-rollup \
+	--source-map-contents \
 	"$@"

@@ -44,10 +44,10 @@ export default function({actions, toggles}) {
 							actions.createFeature(document.getElementById('create-toggle-modal-input').value, toggles);
 						}}
 						>
-						CREATE FEATURE
+						Create feature
 					</button>
 					<a className="cps-link" onClick={actions.hideCreateToggleModal}>
-						NEVERMIND
+						Nevermind
 					</a>
 				</div>
 			</div>

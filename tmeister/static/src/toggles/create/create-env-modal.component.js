@@ -41,10 +41,10 @@ export default function({actions, toggles}) {
 					<button className="cps-btn +primary" onClick={e => {
 						actions.createEnvironment(document.getElementById('create-environment-name').value, toggles)
 					}}>
-						CREATE ENVIRONMENT
+						Create environment
 					</button>
 					<a className="cps-link" onClick={actions.hideCreateEnvModal}>
-						NEVERMIND
+						Nevermind
 					</a>
 				</div>
 			</div>

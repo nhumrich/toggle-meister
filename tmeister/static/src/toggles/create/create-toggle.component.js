@@ -8,7 +8,7 @@ export default function({modalShowing, actions, toggles}) {
 				className="cps-btn +primary"
 				onClick={actions.showCreateToggleModal}
 				>
-					CREATE FEATURE
+					Create feature
 			</button>
 			{
 				modalShowing &&
