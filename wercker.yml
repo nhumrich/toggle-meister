@@ -24,9 +24,10 @@ build:
         alembic upgrade head
         coverage run run.py &
         tm_pid=$!
-        sleep 10
+        sleep 6
         /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
-        kill $tm_pid
+        kill -s TERM $tm_pid
+        sleep 2
         coverage report --include "tmeister/*"
 
     - script:
