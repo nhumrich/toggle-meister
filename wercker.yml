@@ -26,7 +26,7 @@ build:
         tm_pid=$!
         sleep 6
         /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
-        kill -s TERM $tm_pid
+        kill -SIGINT $tm_pid
         sleep 2
         coverage report
 
