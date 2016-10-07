@@ -21,7 +21,7 @@ build:
     - script:
       name: run tests
       code: |
-        coverage run run.py &
+        coverage run run.py
         tm_pid=$!
         /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
         kill $tm_pid
