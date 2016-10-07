@@ -28,7 +28,7 @@ build:
         /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
         kill -s TERM $tm_pid
         sleep 2
-        coverage report --include "tmeister/*"
+        coverage report
 
     - script:
       name: build UI
