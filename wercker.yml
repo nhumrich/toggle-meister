@@ -22,7 +22,7 @@ build:
       code: |
         coverage run run.py &
         tm_pid=$!
-        invoke test
+        /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
         kill $tm_pid
         coverage report --include "tmeister/*"
 
