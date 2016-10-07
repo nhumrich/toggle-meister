@@ -19,7 +19,11 @@ build:
     - script:
       name: run tests
       code: |
-        invoke test -x
+        coverage run run.py &
+        tm_pid=$!
+        invoke test
+        kill $tm_pid
+        coverage report --include "tmeister/*"
 
     - script:
       name: build UI
