@@ -7,6 +7,7 @@ build:
     - script:
       name: pip install
       code: |
+        apk add --no-cache curl-dev
         mv "$WERCKER_CACHE_DIR/pip" /root/.local || echo "Nothing in cache"
         pip3 install -r requirements.txt --user -U
         cp -a /root/.local "$WERCKER_CACHE_DIR/pip" || "nothing to copy"
