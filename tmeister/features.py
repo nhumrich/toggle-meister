@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from asyncpg.exceptions import UniqueViolationError, ForeignKeyViolationError
+from asyncpg.exceptions import UniqueViolationError
 
 from .dataaccess import featureda
 from . import permissions
