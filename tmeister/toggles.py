@@ -64,11 +64,7 @@ async def set_toggle_state(request):
     if env != 'dev' and current_state != state:
         await permissions.check_toggle_permissions(user, env)
         if env == 'Production' and state == 'ON':
-            envs = await environmentda.get_envs()
-            await asyncio.wait(
-                [toggleda.set_toggle_state(e, feature, 'ON')
-                 for e in envs]
-            )
+            await _toggle_all_for_feature(feature, state='ON')
         else:
             await toggleda.set_toggle_state(env, feature, state)
         await auditing.audit_event(
@@ -81,3 +77,11 @@ async def set_toggle_state(request):
 async def get_all_toggle_states(request=None):
     toggle_list = await toggleda.get_all_toggles()
     return web.json_response(toggle_list)
+
+
+async def _toggle_all_for_feature(feature, *, state):
+    envs = await environmentda.get_envs()
+    await asyncio.wait(
+        [toggleda.set_toggle_state(e, feature, state)
+         for e in envs]
+    )

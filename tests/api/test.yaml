@@ -226,7 +226,6 @@
   - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'DELETE'
 
-
 - test:
   - name: 'remove bobbytables2 feature'
   - url: '/api/features/bobbytables2'
