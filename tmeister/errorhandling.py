@@ -1,7 +1,10 @@
 from aiohttp import web
 import json
+import os
 
 from .permissions import InsufficientPermissionsError
+
+LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
 
 
 async def error_middleware(app, handler):
@@ -36,8 +39,10 @@ async def error_middleware(app, handler):
                 if request.has_body:
                     data['request']['data'] = await request.text()
 
-                app.raven.captureException(extra=extra_data,
-                                           tags=tags, data=data)
+                if not LOCAL_DEV:
+                    app.raven.captureException(extra=extra_data,
+                                               tags=tags, data=data)
             raise
         return response
+
     return middleware_handler

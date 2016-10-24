@@ -54,20 +54,26 @@ async def set_toggle_state(request):
         return web.json_response({'Message': "No valid state provided"},
                                  status=400)
 
-    await permissions.check_toggle_permissions(user, env)
-    if env == 'Production' and state == 'ON':
-        calls = []
-        envs = await environmentda.get_envs()
-        for e in envs:
-            calls.append(
-                toggleda.set_toggle_state(e, feature, 'ON')
-            )
-        await asyncio.wait(calls)
+    # get current state
+    current = await toggleda.get_toggle_states_for_env(env, [feature])
+    if not current:
+        current_state = 'OFF'
     else:
-        await toggleda.set_toggle_state(env, feature, state)
-    await auditing.audit_event(
-        'toggle.switch', user,
-        {'toggle_env': env, 'toggle_feature': feature, 'new_state': state})
+        current_state = 'ON'
+
+    if env != 'dev' and current_state != state:
+        await permissions.check_toggle_permissions(user, env)
+        if env == 'Production' and state == 'ON':
+            envs = await environmentda.get_envs()
+            await asyncio.wait(
+                [toggleda.set_toggle_state(e, feature, 'ON')
+                 for e in envs]
+            )
+        else:
+            await toggleda.set_toggle_state(env, feature, state)
+        await auditing.audit_event(
+            'toggle.switch', user,
+            {'toggle_env': env, 'toggle_feature': feature, 'new_state': state})
 
     return await get_all_toggle_states()
 

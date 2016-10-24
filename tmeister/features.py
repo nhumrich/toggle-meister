@@ -1,6 +1,6 @@
 from aiohttp import web
 
-from asyncpg.exceptions import UniqueViolationError
+from asyncpg.exceptions import UniqueViolationError, ForeignKeyViolationError
 
 from .dataaccess import featureda
 from . import permissions
@@ -46,7 +46,12 @@ async def delete_feature(request):
     if not feature.isidentifier():
         return web.json_response({'Message': 'No valid feature provided'})
 
-    await featureda.delete_feature(feature)
+    try:
+        await featureda.delete_feature(feature)
+    except ForeignKeyViolationError as e:
+        return web.json_response(
+            {'Message': 'Feature still has toggles turned on'}, status=409)
+
     await auditing.audit_event(
         'feature.remove', user, {'feature_name': feature})
     return web.json_response(None, status=204)
