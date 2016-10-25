@@ -29,7 +29,7 @@ def lint(ctx, full=False):
 
 
 @task(pre=[clean])
-def test(ctx, coverage=True, x=False, v=False):
+def test(ctx):
     """
     test the code!
     :param ctx:
@@ -39,18 +39,8 @@ def test(ctx, coverage=True, x=False, v=False):
     :param v: use -v to increase verbosity
     :return:
     """
-    cmd = 'python3 -m pytest --color yes'
-    if coverage:
-        print("coverage added")
-        cmd += ' --cov=tmeister'
-
-    if x:
-        cmd += ' -x'
-
-    if not v:
-        cmd += ' --quiet'
-
-    ctx.run(cmd, pty=IS_TTY)
+    cmd = 'pyresttest http://localhost:8445 tests/api/test.yaml'
+    ctx.run(cmd)
 
 
 @task

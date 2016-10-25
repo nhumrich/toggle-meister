@@ -8,3 +8,6 @@ psycopg2
 uvloop
 aiohttp_index
 raven-aiohttp
+pyresttest
+jmespath
+coverage

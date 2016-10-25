@@ -7,6 +7,8 @@ build:
     - script:
       name: pip install
       code: |
+        apk add --no-cache curl-dev
+        export PYCURL_SSL_LIBRARY=openssl
         mv "$WERCKER_CACHE_DIR/pip" /root/.local || echo "Nothing in cache"
         pip3 install -r requirements.txt --user -U
         cp -a /root/.local "$WERCKER_CACHE_DIR/pip" || "nothing to copy"
@@ -19,7 +21,14 @@ build:
     - script:
       name: run tests
       code: |
-        invoke test -x
+        alembic upgrade head
+        coverage run run.py &
+        tm_pid=$!
+        sleep 6
+        /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
+        kill -SIGINT $tm_pid
+        sleep 2
+        coverage report --include "tmeister/*"
 
     - script:
       name: build UI

@@ -1,4 +1,5 @@
 import os
+import signal
 
 import aiohttp_oauth
 from aiohttp import web
@@ -111,6 +112,9 @@ def main(app=None):
         aiohttp_autoreload.start()
 
     # Run server
+    def handle_signal(*args):
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGINT, handle_signal)
     web.run_app(app, port=8445)
 
 if __name__ == '__main__':

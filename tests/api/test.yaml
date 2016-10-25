@@ -2,22 +2,37 @@
 - config:
   - testset: 'app tests'
 
+
+# So far this only works with the dummy cookie
 - test:
   - name: 'hit main page'
   - url: '/'
-  - curl_option_followlocation: True
-  - curl_option_maxredirs: 5
+  - expected_status: 302
+  - extract_binds:
+    - 'init_cookie': { header: 'Set-Cookie'}
+    - 'location': { header: 'Location'}
+
+- test:
+  - name: 'authenticate'
+  - url: {'template': '$location'}
+  - headers: {'template': {'Cookie': '$init_cookie'}}
+  - expected_status: 302
+  - extract_binds:
+    - 'cookie': { header: 'Set-Cookie'}
+
 
 - test:
   - name: 'test get envs'
   - url: '/api/envs'
   - validators:
     - compare: {jmespath: 'envs[0].name', expected: 'Production'}
+  - headers: {'template': {'Cookie': '$cookie'}}
 
 - test:
   - name: 'invalid json'
   - url: '/api/envs'
   - method: 'POST'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - body: '{"name": "bob2}'
   - expected_status: 400
 
@@ -25,6 +40,7 @@
   - name: 'test adding env'
   - url: '/api/envs'
   - method: 'POST'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - body: '{"name": "bob2"}'
   - validators:
     - compare: {jmespath: 'name', expected: 'bob2'}
@@ -32,6 +48,7 @@
 - test:
   - name: 'test getting envs'
   - url: '/api/envs'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: 'envs[*].name',
                 comparator: 'contains', expected: 'bob2'}
@@ -39,6 +56,7 @@
 - test:
   - name: 'env already exists'
   - url: '/api/envs'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'POST'
   - body: '{"name": "bob2"}'
   - expected_status: 409
@@ -46,6 +64,7 @@
 - test:
   - name: 'add feature'
   - url: '/api/features'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'POST'
   - body: '{"name": "bobbytables"}'
   - validators:
@@ -54,6 +73,7 @@
 - test:
   - name: 'get features'
   - url: '/api/features'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: 'features[*].name',
                 comparator: 'contains', expected: 'bobbytables'}
@@ -61,6 +81,7 @@
 - test:
   - name: 'get toggles'
   - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: 'toggles[*].toggle.env',
                 comparator: 'contains', expected: 'bob2'}
@@ -70,12 +91,14 @@
 - test:
   - name: 'get env toggles'
   - url: '/api/envs/bob2/toggles?feature=bobbytables'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: "bobbytables", expected: False}
 
 - test:
   - name: 'turn toggle on'
   - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'PATCH'
   - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "ON"}}'
   - validators:
@@ -88,6 +111,7 @@
 - test:
   - name: 'turn toggle on again'  # shouldnt return an error
   - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'PATCH'
   - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "ON"}}'
   - validators:
@@ -100,6 +124,7 @@
 - test:
   - name: 'get toggles again'
   - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: 'toggles[*].toggle.env',
                 comparator: 'contains', expected: 'bob2'}
@@ -111,6 +136,7 @@
 - test:
   - name: 'add another feature'
   - url: '/api/features'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'POST'
   - body: '{"name": "bobbytables2"}'
   - validators:
@@ -119,19 +145,15 @@
 - test:
   - name: 'get multiple env toggles'
   - url: '/api/envs/bob2/toggles?feature=bobbytables&feature=bobbytables2'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - validators:
     - compare: {jmespath: "bobbytables2", expected: False}
     - compare: {jmespath: "bobbytables", expected: True}
 
 - test:
-  - name: 'get audit logs (just make sure it doesnt error'
-  - url: '/api/auditlog'
-
-
-# test deletes and clean up
-- test:
-  - name: 'turn toggle on'
+  - name: 'turn toggle on bob2 off'
   - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'PATCH'
   - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "OFF"}}'
   - validators:
@@ -142,17 +164,70 @@
                   expected: 'OFF'}
 
 - test:
+  - name: 'turn toggle on for Production should also turn on bob2'
+  - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "Production", "feature": "bobbytables", "state": "ON"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'bob2'}
+      - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'ON'}
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                          comparator: 'contains', expected: 'Production'}
+      - compare: {jmespath: "toggles[?toggle.env=='Production' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'ON'}
+
+- test:
+  - name: 'get audit logs (just make sure it doesnt error'
+  - url: '/api/auditlog'
+  - headers: {'template': {'Cookie': '$cookie'}}
+
+
+# test deletes and clean up
+- test:
+  - name: 'turn toggle off'
+  - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "bob2", "feature": "bobbytables", "state": "OFF"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'bob2'}
+      - compare: {jmespath: "toggles[?toggle.env=='bob2' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'OFF'}
+
+- test:
+  - name: 'turn toggle off'
+  - url: '/api/toggles'
+  - headers: {'template': {'Cookie': '$cookie'}}
+  - method: 'PATCH'
+  - body: '{"toggle": {"env": "Production", "feature": "bobbytables", "state": "OFF"}}'
+  - validators:
+      - compare: {jmespath: 'toggles[*].toggle.env',
+                  comparator: 'contains', expected: 'Production'}
+      - compare: {jmespath: "toggles[?toggle.env=='Production' &&
+                            toggle.feature=='bobbytables'].toggle.state | [0]",
+                  expected: 'OFF'}
+
+- test:
   - name: 'remove bob2 env'
   - url: '/api/envs/bob2'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'DELETE'
 
 - test:
   - name: 'remove bobbytables feature'
   - url: '/api/features/bobbytables'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'DELETE'
 
 - test:
   - name: 'remove bobbytables2 feature'
   - url: '/api/features/bobbytables2'
+  - headers: {'template': {'Cookie': '$cookie'}}
   - method: 'DELETE'
-
