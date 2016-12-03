@@ -8,12 +8,8 @@ async def get_toggle_states_for_env(env, list_of_features):
         .where(db.toggles.c.env == env) \
         .where(db.toggles.c.feature.in_(list_of_features))
 
-    results = {}
-    async with pg.query(query) as cursor:
-        async for row in cursor:
-            results[row.feature] = row.state == 'ON'
-
-    return results
+    return {r.feature: r.state == 'ON'
+            for r in await pg.fetch(query)}
 
 
 async def set_toggle_state(env, feature, state):
