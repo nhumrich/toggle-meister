@@ -24,7 +24,8 @@ build:
         alembic upgrade head
         coverage run run.py &
         tm_pid=$!
-        sleep 6
+        # wait for 8445 to be open
+        while ! nc -z localhost 8446; do echo "."; sleep 2; done
         /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
         kill -SIGINT $tm_pid
         sleep 2
