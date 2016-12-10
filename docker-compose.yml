@@ -4,7 +4,6 @@ services:
     image: canopytax/postgresdb
     ports:
       - 5432:5432
-  
   tmeister:
     image: canopytax/toggle-meister
     volumes:
