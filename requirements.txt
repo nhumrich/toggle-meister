@@ -1,12 +1,12 @@
 asyncpgsa
-aiohttp
 sqlalchemy
 alembic
+aiohttp==1.0.5
 aiohttp_oauth
 aiohttp_autoreload
+aiohttp_index
 psycopg2
 uvloop
-aiohttp_index
 raven-aiohttp
 pyresttest
 jmespath
