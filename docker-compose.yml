@@ -17,6 +17,7 @@ services:
       DEBUG: "true"
       AIOHTTP_NOSENDFILE: "true"
       IS_LOCAL: "true"
+      COOKIE_KEY: 02a6b302c4290605f439baba456f954d
     links:
       - postgres
     ports:
