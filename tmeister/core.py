@@ -114,8 +114,10 @@ def main(app=None):
     # Run server
     def handle_signal(*args):
         raise KeyboardInterrupt
+
     signal.signal(signal.SIGINT, handle_signal)
     web.run_app(app, port=8445)
+
 
 if __name__ == '__main__':
     main()

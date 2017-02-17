@@ -13,6 +13,7 @@ async def audit_event(event, user, event_data, date):
         event_data=event_data)
     )
 
+
 async def get_recent_audits():
     query = db.auditing.select().order_by(db.auditing.c.date.desc()).limit(50)
     results = await pg.fetch(query)
