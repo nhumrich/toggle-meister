@@ -44,7 +44,6 @@ SELECT
   environments.name AS env,
   features.name AS feature,
   CASE
-    WHEN environments.name = 'dev' THEN 'ON'
     WHEN toggles.state IS NULL THEN 'OFF'
     ELSE toggles.state
     END AS state

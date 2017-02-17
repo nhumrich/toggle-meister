@@ -79,9 +79,7 @@ def upgrade():
     op.bulk_insert(
         envs_table,
         [
-            {'name': 'Production'},
-            # just a place holder so nobody tries to create this environment
-            {'name': 'dev'}
+            {'name': 'Production'}
         ]
     )
 

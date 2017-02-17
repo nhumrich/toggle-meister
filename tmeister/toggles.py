@@ -17,8 +17,6 @@ async def get_toggle_states_for_env(request):
     if not features:
         return web.json_response({'Message': "No features provided"},
                                  status=400)
-    if env == 'dev':
-        result = {feature: True for feature in features}
     else:
         result = await toggleda.get_toggle_states_for_env(env, features)
         for f in features:
@@ -61,7 +59,7 @@ async def set_toggle_state(request):
     else:
         current_state = 'ON'
 
-    if env != 'dev' and current_state != state:
+    if current_state != state:
         await permissions.check_toggle_permissions(user, env)
         if env == 'Production' and state == 'ON':
             await _toggle_all_for_feature(feature, state='ON')
