@@ -14,7 +14,7 @@
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "jasmine": "^2.4.1",
-    "jspm": "^0.17.0-beta.32",
+    "jspm": "0.17.0-beta.32",
     "node-jspm-jasmine": "^2.4.6"
   },
   "jspm": {
