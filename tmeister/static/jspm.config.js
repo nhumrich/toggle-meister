@@ -493,6 +493,7 @@ SystemJS.config({
     "fuzzy": "npm:fuzzy@0.1.1",
     "http": "npm:jspm-nodelibs-http@0.2.0",
     "https": "npm:jspm-nodelibs-https@0.2.0",
+    "jquery": "npm:jquery@3.1.1",
     "lodash": "npm:lodash@4.13.1",
     "moment": "npm:moment@2.15.1",
     "net": "npm:jspm-nodelibs-net@0.2.0",

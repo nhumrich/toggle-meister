@@ -8,6 +8,7 @@
 	- toast-service!sofe \
 	- canopy-styleguide!sofe \
 	- sofe \
+	+ jquery \
 	build/toggle-meister.js \
 	--format amd \
 	--skip-rollup \
