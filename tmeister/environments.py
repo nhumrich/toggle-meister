@@ -1,4 +1,5 @@
 from aiohttp import web
+from tmeister.dataaccess import toggleda, featureda
 
 from asyncpg.exceptions import UniqueViolationError
 
@@ -46,3 +47,27 @@ async def delete_env(request):
     await auditing.audit_event(
         'environment.remove', user, {'env_name': env})
     return web.HTTPNoContent()
+
+
+async def compare_envs(request):
+    params = request.GET
+    env_a_name = request.match_info['name']
+    env_b_name = params.get('compare_to')
+
+    all_features = await featureda.get_features()
+    env_a_toggles = await toggleda.get_toggle_states_for_env(env_a_name, all_features)
+    env_b_toggles = await toggleda.get_toggle_states_for_env(env_a_name, all_features)
+
+    difference = []
+    for toggle_a_name, toggle_a_val in env_a_toggles.items():
+        for toggle_b_name, toggle_b_val in env_b_toggles.items():
+            if toggle_b_name == toggle_a_name:
+                if toggle_a_val != toggle_b_val:
+                    difference.append(
+                        (toggle_a_name, toggle_a_val, toggle_b_val))
+
+    result = {}
+    for name, a, b in difference:
+        result[name] = {env_a_name: a, env_b_name: b}
+
+    return web.json_response({'diff': result})
