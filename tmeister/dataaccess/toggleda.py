@@ -1,5 +1,5 @@
 from asyncpgsa import pg
-
+from typing import Dict
 from . import db
 
 
@@ -10,6 +10,16 @@ async def get_toggle_states_for_env(env, list_of_features):
 
     return {r.feature: r.state == 'ON'
             for r in await pg.fetch(query)}
+
+
+async def get_all_toggles_for_env(env) -> Dict[str, bool]:
+    query = db.toggles.select()\
+        .join(db.features,
+              onclause=db.features.c.name == db.toggles.c.feature,
+              isouter=True)\
+        .where(db.toggles.c.env == env)
+
+    return {r.feature: r.state == 'ON' for r in await pg.fetch(query)}
 
 
 async def set_toggle_state(env, feature, state):
