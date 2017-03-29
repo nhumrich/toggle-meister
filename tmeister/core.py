@@ -87,6 +87,7 @@ def init():
     app.router.add_get('/api/envs', environments.get_envs)
     app.router.add_post('/api/envs', environments.add_env)
     app.router.add_delete('/api/envs/{name}', environments.delete_env)
+    app.router.add_get('/api/envs/{name}/diff', environments.compare_envs)
     app.router.add_get('/api/auditlog', auditing.get_audit_events)
     app.router.add_get('/heartbeat', health.get_health)
 

@@ -151,6 +151,14 @@
     - compare: {jmespath: "bobbytables", expected: True}
 
 - test:
+  - name: 'compare to envs'
+  - url: '/api/envs/bob2/toggles?feature=bobbytables&feature=bobbytables2'
+  - headers: {'template': {'Cookie': '$cookie'}}
+  - validators:
+    - compare: {jmespath: "bobbytables2", expected: False}
+    - compare: {jmespath: "bobbytables", expected: True}
+
+- test:
   - name: 'turn toggle on bob2 off'
   - url: '/api/toggles'
   - headers: {'template': {'Cookie': '$cookie'}}
