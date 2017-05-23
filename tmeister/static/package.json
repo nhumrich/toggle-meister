@@ -37,6 +37,7 @@
       "sofe": "npm:sofe@^1.5.5"
     },
     "devDependencies": {
+      "babel-plugin-transform-class-properties": "npm:babel-plugin-transform-class-properties@^6.24.1",
       "babel-plugin-transform-decorators-legacy": "npm:babel-plugin-transform-decorators-legacy@^1.3.4",
       "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@^6.8.0",
       "cluster": "npm:jspm-nodelibs-cluster@^0.2.0",
@@ -75,6 +76,28 @@
     },
     "overrides": {
       "npm:babel-types@6.11.1": {
+        "meta": {
+          "lib/index.js": {
+            "deps": [
+              "./definitions/init.js"
+            ],
+            "cjsDeferDepsExecute": true
+          },
+          "lib/definitions/init.js": {
+            "deps": [
+              "./index",
+              "./core",
+              "./es2015",
+              "./flow",
+              "./jsx",
+              "./misc",
+              "./experimental"
+            ],
+            "cjsDeferDepsExecute": true
+          }
+        }
+      },
+      "npm:babel-types@6.24.1": {
         "meta": {
           "lib/index.js": {
             "deps": [
@@ -141,6 +164,20 @@
           "util": "@node/util"
         }
       },
+      "npm:debug@2.6.8": {
+        "main": "browser.js",
+        "jspmNodeConversion": false,
+        "format": "cjs",
+        "map": {
+          "./browser.js": {
+            "node": "./node.js"
+          },
+          "fs": "@node/fs",
+          "net": "@node/net",
+          "tty": "@node/tty",
+          "util": "@node/util"
+        }
+      },
       "npm:esprima@2.7.2": {
         "jspmNodeConversion": false
       },
@@ -152,7 +189,7 @@
       "npm:jquery@3.1.1": {
         "format": "amd"
       },
-      "npm:lodash@4.13.1": {
+      "npm:lodash@4.17.4": {
         "map": {
           "buffer": "@empty",
           "process": "@empty"
@@ -164,6 +201,12 @@
       "npm:ms@0.7.1": {
         "jspmNodeConversion": false,
         "format": "cjs"
+      },
+      "npm:pbkdf2@3.0.12": {
+        "main": "browser.js"
+      },
+      "npm:safe-buffer@5.0.1": {
+        "browser": "index.js"
       },
       "npm:svgo@0.6.6": {
         "meta": {

@@ -1,0 +1,20 @@
+.featureName {
+	display: flex;
+	align-items: center;
+}
+
+.featureName .buttonIcon {
+	visibility: hidden;
+}
+
+.featureName:hover .buttonIcon {
+	visibility: visible;
+}
+
+.buttonIcon {
+	margin-left: 16px;
+}
+
+.buttonIcon :global(.cps-icon) {
+	font-size: 20px;
+}

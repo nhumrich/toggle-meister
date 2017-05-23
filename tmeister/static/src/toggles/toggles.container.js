@@ -9,6 +9,7 @@ import styles from './toggles.container.css!';
 import * as toggleActions from './toggles.actions.js';
 import * as searchActions from './search/search.actions.js';
 import * as createActions from './create/create.actions.js';
+import * as deleteActions from './delete/delete.actions.js';
 
 @connect(state => ({
 	toggles: state.toggles,
@@ -28,6 +29,7 @@ export default class TogglesContainer extends React.Component {
 			...bindActionCreators(toggleActions, dispatch),
 			...bindActionCreators(searchActions, dispatch),
 			...bindActionCreators(createActions, dispatch),
+			...bindActionCreators(deleteActions, dispatch),
 		}
 
 		this.boundActions.getToggles();
