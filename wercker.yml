@@ -36,14 +36,10 @@ build:
       code: |
         apk --no-cache add nodejs git
         cd tmeister/static
-        mv "$WERCKER_CACHE_DIR/node_modules" ./node_modules || echo "Nothing in cache"
-        mv "$WERCKER_CACHE_DIR/jspm_packages" ./jspm_packages || echo "Nothing in cache"
         npm install
         npm run postinstall
         npm run build
         apk --no-cache del nodejs git
-        cp -a ./node_modules "$WERCKER_CACHE_DIR/node_modules" || "nothing to copy"
-        cp -a ./jspm_packages "$WERCKER_CACHE_DIR/jspm_packages" || "nothing to copy"
         cd /app
 
     - script:
