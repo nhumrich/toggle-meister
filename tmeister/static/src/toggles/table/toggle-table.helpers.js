@@ -2,6 +2,12 @@ import { reduce, sortBy, chain, includes, uniq, union } from 'lodash';
 import { filter as fuzzyFilter } from 'fuzzy';
 import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 
+const sortOrder = {
+	integ: 1,
+	stage: 2,
+	Production: 3,
+}
+
 export function getEnvList(toggles) {
 	return toggles
 		.reduce((result, toggle) => {
@@ -12,7 +18,14 @@ export function getEnvList(toggles) {
 					result.concat(env)
 				:
 					result
-		}, ["Production"]);
+		}, ["Production"])
+		.sort((first, second) => {
+			if (sortOrder[first] && sortOrder[second]) {
+				return sortOrder[first] < sortOrder[second] ? -1 : 1;
+			} else {
+				return first < second ? -1 : 1;
+			}
+		})
 }
 
 export function groupTogglesByFeature(toggles, envList) {

@@ -4,7 +4,7 @@ export function getSelectedEnvs(allEnvs) {
 	const localStorageValue = window.localStorage.getItem(`selected-envs`);
 	const specificallySelectedEnvs = localStorageValue ? JSON.parse(localStorageValue) : [];
 	const selectedEnvs = chain(specificallySelectedEnvs)
-		.concat("Production")
+		.concat("integ", "stage", "Production")
 		.uniq()
 		.value();
 
