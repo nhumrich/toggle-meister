@@ -28,16 +28,6 @@ async def check_permissions(username: str, action: Action):
     role = Role(employee.role_id)
     if role == Role.read_only:
         raise InsufficientPermissionsError
-    if (action == Action.toggle_prod and
-            role not in (Role.admin, Role.qa)):
-        raise InsufficientPermissionsError
     if (action in (Action.create_env, Action.delete_env) and
             role != Role.admin):
         raise InsufficientPermissionsError
-
-
-async def check_toggle_permissions(username: str, environment: str):
-    if environment == 'Production':
-        await check_permissions(username, Action.toggle_prod)
-    else:
-        await check_permissions(username, Action.toggle)

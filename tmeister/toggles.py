@@ -60,7 +60,7 @@ async def set_toggle_state(request):
         current_state = 'ON'
 
     if current_state != state:
-        await permissions.check_toggle_permissions(user, env)
+        await permissions.check_permissions(user, permissions.Action.toggle)
         if env == 'Production' and state == 'ON':
             await _toggle_all_for_feature(feature, state='ON')
         else:
