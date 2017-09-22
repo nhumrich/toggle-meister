@@ -1,13 +1,27 @@
-asyncpgsa
+asyncpgsa==0.13.0
 sqlalchemy
 alembic
 aiohttp==1.0.5
-aiohttp_oauth
-aiohttp_autoreload
-aiohttp_index
+aiohttp_oauth=0.4.3
+aiohttp_autoreload==0.0.1
+aiohttp_index==0.1
 psycopg2
 uvloop
-raven-aiohttp
+raven-aiohttp==0.5.0
 pyresttest
 jmespath
+psycopg2
+alembic
+invoke==0.13.0
+gunicorn
+
+# dev stuff
 coverage
+flake8
+pylint
+pytest
+pytest-cov
+
+# extra
+dumb-init
+

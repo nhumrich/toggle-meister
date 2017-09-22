@@ -1,8 +1,10 @@
 FROM python:alpine
 
-RUN apk --no-cache add curl-dev bash
+RUN apk --no-cache add curl-dev bash postgresql-dev \
+    gcc make libffi-dev musl-dev musl-utils
 
 COPY requirements.txt /app/
+WORKDIR /app
 
 RUN export PYCURL_SSL_LIBRARY=openssl && \
     pip3 install -r requirements.txt --user -U
@@ -16,8 +18,6 @@ RUN apk --no-cache add nodejs git && \
     apk --no-cache del nodejs git && \
     rm -rf node_modules spec src bin &&  \
     cd /app
-
-WORKDIR /app
 
 COPY . /app
 

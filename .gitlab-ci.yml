@@ -23,7 +23,6 @@ build:
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
   script:
     - docker build --pull -t $CONTAINER_IMAGE .
-  after_script:
     - docker push $REPO_NAME:$CI_COMMIT_SHA
 
 lint:
