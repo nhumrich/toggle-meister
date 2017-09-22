@@ -12,7 +12,6 @@ pyresttest
 jmespath
 psycopg2
 alembic
-invoke==0.13.0
 gunicorn
 
 # dev stuff
