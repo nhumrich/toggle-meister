@@ -21,6 +21,3 @@ pylint
 pytest
 pytest-cov
 
-# extra
-dumb-init
-

@@ -7,7 +7,7 @@ ENV PYCURL_SSL_LIBRARY=openssl \
 # compile requirements for some python libraries
 RUN apk --no-cache add curl-dev bash postgresql-dev \
     gcc make libffi-dev musl-dev musl-utils && \
-    python3 -m pip install gunicorn "invoke==0.13.0" alembic
+    python3 -m pip install gunicorn "invoke==0.13.0" alembic dumb-init
 
 # install python reqs
 COPY requirements.txt /app/
