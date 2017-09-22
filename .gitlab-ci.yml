@@ -36,7 +36,6 @@ test:
   script:
     - export DATABASE_URL=postgres
     - export IS_LOCAL=true
-    - export PYTHONPATH=.
     - alembic upgrade head
     - python3 -m coverage run run.py &
     - tm_pid=$!

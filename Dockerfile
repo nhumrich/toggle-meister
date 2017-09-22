@@ -1,5 +1,9 @@
 FROM python:alpine
 
+ENV PYCURL_SSL_LIBRARY=openssl \
+    PYTHONPATH=. \
+    DOCKER=True
+
 # compile requirements for some python libraries
 RUN apk --no-cache add curl-dev bash postgresql-dev \
     gcc make libffi-dev musl-dev musl-utils && \
