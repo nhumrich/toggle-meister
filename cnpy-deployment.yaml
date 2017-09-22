@@ -1,4 +1,4 @@
-name: tmeister
+name: toggle-meister
 labels:
   stack: python
   squad: black
