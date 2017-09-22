@@ -81,3 +81,4 @@ deploy-prod:
   environment:
     name: production
     url: https://tm.canopytax.com
+  when: manual
