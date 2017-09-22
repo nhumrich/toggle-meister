@@ -1,2 +1,64 @@
-test-build
-hello
+image: canopytax/dind
+
+stages:
+    - build
+    - test
+    - push-to-dockerhub
+    - deploy-stage
+    - deploy-prod
+
+variables:
+  REPO_NAME: canopytax/toggle-meister
+  CONTAINER_IMAGE: docker.io/$REPO_NAME:$CI_COMMIT_SHA
+  REGISTRY: docker.io
+  DOCKER_DRIVER: overlay
+
+build:
+  stage: build
+  cache:
+      paths:
+       - pip/
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - docker build --pull -t $CONTAINER_IMAGE .
+  after_script:
+    - docker push $REPO_NAME:$CI_COMMIT_SHA
+
+lint:
+  image: $REPO_NAME:$CI_COMMIT_SHA
+  stage: test
+  script:
+    - invoke lint
+
+test:
+  image: $REPO_NAME:$CI_COMMIT_SHA
+  stage: test
+  script:
+    - invoke test -x
+
+push-to-dockerhub:
+  stage: push-to-dockerhub
+  before_script:
+    - mkdir -p $HOME/.docker
+    - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
+  script:
+    - docker pull $REPO_NAME:$CI_COMMIT_SHA
+    - docker tag $REPO_NAME:$CI_COMMIT_SHA $REPO_NAME:latest
+    - docker push $REPO_NAME:latest
+  only:
+    - master
+
+
+deploy-stage:
+  image: canopytax/deployment
+  stage: deploy-stage
+  environment:
+    name: stage
+    url: https://tm.canopy.ninja
+  script:
+    - /scripts/canopy-deploy.py --docker-tag "$CI_COMMIT_SHA"
+  only:
+    - master
+
