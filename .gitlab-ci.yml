@@ -37,6 +37,8 @@ test:
   image: $REPO_NAME:$CI_COMMIT_SHA
   stage: test
   script:
+    - export DATABASE_URL=postgres
+    - export IS_LOCAL=true
     - alembic upgrade head
     - coverage run run.py &
     - tm_pid=$!
