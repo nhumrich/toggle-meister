@@ -39,8 +39,9 @@ test:
   script:
     - export DATABASE_URL=postgres
     - export IS_LOCAL=true
-    - python3 -m alembic upgrade head
-    - python3 -m coverage run run.py &
+    - export PYTHONPATH=.
+    - alembic upgrade head
+    - coverage run run.py &
     - tm_pid=$!
     # wait for 8445 to be open
     - while ! nc -z localhost 8445; do echo "."; sleep 2; done
