@@ -30,5 +30,5 @@ RUN apk --no-cache add nodejs git && \
 
 
 EXPOSE 8445
-CMD ['dumb-init', 'startup.sh']
+CMD ["dumb-init", "startup.sh"]
 COPY . /app
