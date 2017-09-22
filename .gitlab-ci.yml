@@ -15,9 +15,6 @@ variables:
 
 build:
   stage: build
-  cache:
-      paths:
-       - pip/
   before_script:
     - mkdir -p $HOME/.docker
     - echo $DOCKER_AUTH_CONFIG > $HOME/.docker/config.json
@@ -41,7 +38,7 @@ test:
     - export IS_LOCAL=true
     - export PYTHONPATH=.
     - alembic upgrade head
-    - coverage run run.py &
+    - python3 -m coverage run run.py &
     - tm_pid=$!
     # wait for 8445 to be open
     - while ! nc -z localhost 8445; do echo "."; sleep 2; done
