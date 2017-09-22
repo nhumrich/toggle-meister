@@ -26,11 +26,27 @@ build:
   after_script:
     - docker push $REPO_NAME:$CI_COMMIT_SHA
 
-test:
+lint:
   image: $REPO_NAME:$CI_COMMIT_SHA
   stage: test
   script:
-    - pytest
+    - invoke lint
+
+test:
+  services:
+    - postgres
+  image: $REPO_NAME:$CI_COMMIT_SHA
+  stage: test
+  script:
+    - alembic upgrade head
+    - coverage run run.py &
+    - tm_pid=$!
+    # wait for 8445 to be open
+    - while ! nc -z localhost 8445; do echo "."; sleep 2; done
+    - /root/.local/bin/pyresttest http://localhost:8445 tests/api/test.yaml
+    - kill -SIGINT $tm_pid
+    - sleep 2
+    - coverage report --include "tmeister/*"
 
 push-to-dockerhub:
   stage: push-to-dockerhub

@@ -4,9 +4,14 @@ Dockerfile
 docker-compose.yml
 Dockerfile-dev
 wercker.yml
+.gitlab-ci.yml
+cnpy-deployment.yaml
 tests/
 .vscode/
 .idea/
+readme.md
+.coverage
+.pylintrc
 
 
 # Byte-compiled / optimized / DLL files
