@@ -26,17 +26,11 @@ build:
   after_script:
     - docker push $REPO_NAME:$CI_COMMIT_SHA
 
-lint:
-  image: $REPO_NAME:$CI_COMMIT_SHA
-  stage: test
-  script:
-    - invoke lint
-
 test:
   image: $REPO_NAME:$CI_COMMIT_SHA
   stage: test
   script:
-    - invoke test -x
+    - pytest
 
 push-to-dockerhub:
   stage: push-to-dockerhub
@@ -50,15 +44,25 @@ push-to-dockerhub:
   only:
     - master
 
-
-deploy-stage:
+.deploy: &deploy
   image: canopytax/deployment
-  stage: deploy-stage
-  environment:
-    name: stage
-    url: https://tm.canopy.ninja
   script:
     - /scripts/canopy-deploy.py --docker-tag "$CI_COMMIT_SHA"
   only:
     - master
+  allow_failure: false
 
+
+deploy-stage:
+  <<: *deploy
+  stage: deploy-stage
+  environment:
+    name: stage
+    url: https://tm.canopy.ninja
+
+deploy-prod:
+  <<: *deploy
+  stage: deploy-prod
+  environment:
+    name: production
+    url: https://tm.canopytax.com
