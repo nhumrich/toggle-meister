@@ -106,11 +106,7 @@ deploy:
     tag: latest
   steps:
     - script:
-      name: run migration
-      code: |
-        echo "placeholder"
-    - script:
-      name: deploy to rancher
+      name: deploy to k8s
       code: |
         /scripts/deploy-to-rancher.py --docker-tag "$WERCKER_GIT_COMMIT"
 
