@@ -74,7 +74,8 @@ async def set_toggle_state(request):
 
 async def get_all_toggle_states(request=None):
     toggle_list = await toggleda.get_all_toggles()
-    return web.json_response(toggle_list)
+    return web.json_response(toggle_list,
+                             headers={'Access-Control-Allow-Origin': '*'})
 
 
 async def _toggle_all_for_feature(feature, *, state):
