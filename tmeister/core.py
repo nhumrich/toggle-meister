@@ -63,6 +63,7 @@ def init():
         cookie_key=COOKIE_KEY,
         whitelist_handlers=[
             toggles.get_toggle_states_for_env,
+            features.get_features,
             health.get_health
         ],
         oauth_url='/oauth_callback/github',
