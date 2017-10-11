@@ -34,7 +34,8 @@ async def create_feature(request):
 async def get_features(request):
     feature_list = await featureda.get_features()
     features = {'features': [{'name': f} for f in feature_list]}
-    return web.json_response(features)
+    return web.json_response(features,
+                             headers={'Access-Control-Allow-Origin': '*'})
 
 
 async def delete_feature(request):
