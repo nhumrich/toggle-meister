@@ -3,6 +3,7 @@ sqlalchemy
 alembic
 aiohttp==1.0.5
 aiohttp_oauth==0.4.3
+aiohttp_session==0.8.0
 aiohttp_autoreload==0.0.1
 aiohttp_index==0.1
 psycopg2
