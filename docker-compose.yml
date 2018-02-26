@@ -1,7 +1,7 @@
 version: '2'
 services:
   postgres:
-    image: canopytax/postgresdb
+    image: postgres:9.6-alpine
     ports:
       - 5432:5432
   tmeister:
