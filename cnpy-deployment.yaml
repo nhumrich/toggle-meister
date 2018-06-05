@@ -22,9 +22,8 @@ environment:
     ENV_LOCATION: Prod
 
 secrets:
-  global:
-    DATABASE_URL: database_hostname
   tmeister:
+    DATABASE_URL: database_hostname
     DATABASE_PASS: database_password
     GITHUB_ID: github_id
     GITHUB_SECRET: github_secret
@@ -38,7 +37,6 @@ migration:
     default:
       DATABASE_MIGRATION_USER: tmeister_sa
   secrets:
-    global:
-      DATABASE_URL: database_hostname
     tmeister:
+      DATABASE_URL: database_hostname
       DATABASE_MIGRATION_PASS: database_migration_password
