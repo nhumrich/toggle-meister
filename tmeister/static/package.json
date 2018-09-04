@@ -35,6 +35,9 @@
       "react-redux": "npm:react-redux@^4.4.5",
       "react-router": "npm:react-router@^2.4.0",
       "redux-thunk": "npm:redux-thunk@^2.1.0",
+      "rx": "npm:rx@^4.1.0",
+      "rxjs": "npm:rxjs@^6.3.2",
+      "single-spa-canopy": "npm:single-spa-canopy@^1.15.0",
       "sofe": "npm:sofe@^1.5.5"
     },
     "devDependencies": {
@@ -253,6 +256,14 @@
               "../../plugins/addClassesToSVGElement",
               "../../plugins/removeStyleElement"
             ]
+          }
+        }
+      },
+      "npm:tslib@1.9.3": {
+        "format": "cjs",
+        "meta": {
+          "tslib.js": {
+            "esModule": true
           }
         }
       }
