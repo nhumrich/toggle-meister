@@ -2513,7 +2513,7 @@ regex-not@^1.0.0, regex-not@^1.0.2:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
 
-"remap-istanbul@github:m-a-r-c-e-l-i-n-o/remap-istanbul":
+remap-istanbul@m-a-r-c-e-l-i-n-o/remap-istanbul:
   version "0.6.5-pre"
   resolved "https://codeload.github.com/m-a-r-c-e-l-i-n-o/remap-istanbul/tar.gz/8c489d0ca284b87e458d3831ba35271e2fb15021"
   dependencies:

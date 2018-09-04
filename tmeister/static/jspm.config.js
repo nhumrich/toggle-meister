@@ -582,7 +582,7 @@ SystemJS.config({
     "net": "npm:jspm-nodelibs-net@0.2.0",
     "os": "npm:jspm-nodelibs-os@0.2.0",
     "path": "npm:jspm-nodelibs-path@0.2.0",
-    "process": "npm:jspm-nodelibs-process@0.2.1",
+    "process": "npm:jspm-nodelibs-process@0.2.0",
     "prop-types": "npm:prop-types@15.6.0",
     "react": "npm:react@15.3.2",
     "react-dom": "npm:react-dom@15.2.1",
@@ -590,6 +590,9 @@ SystemJS.config({
     "react-router": "npm:react-router@2.6.0",
     "redux": "npm:redux@3.5.2",
     "redux-thunk": "npm:redux-thunk@2.1.0",
+    "rx": "npm:rx@4.1.0",
+    "rxjs": "npm:rxjs@6.3.2",
+    "single-spa-canopy": "npm:single-spa-canopy@1.15.0",
     "sofe": "npm:sofe@1.5.5",
     "stream": "npm:jspm-nodelibs-stream@0.2.0",
     "string_decoder": "npm:jspm-nodelibs-string_decoder@0.2.0",
@@ -1117,6 +1120,16 @@ SystemJS.config({
         "bn.js": "npm:bn.js@4.11.8",
         "inherits": "npm:inherits@2.0.3",
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
+      }
+    },
+    "npm:rxjs@6.3.2": {
+      "map": {
+        "tslib": "npm:tslib@1.9.3"
+      }
+    },
+    "npm:single-spa-canopy@1.15.0": {
+      "map": {
+        "deepmerge": "npm:deepmerge@1.5.2"
       }
     }
   }
