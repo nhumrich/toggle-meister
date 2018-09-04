@@ -1,4 +1,4 @@
-FROM python:alpine
+FROM python:3.6-alpine
 
 ENV PYCURL_SSL_LIBRARY=openssl \
     PYTHONPATH=. \
@@ -6,7 +6,7 @@ ENV PYCURL_SSL_LIBRARY=openssl \
 
 # compile requirements for some python libraries
 RUN apk --no-cache add curl-dev bash postgresql-dev \
-    gcc make libffi-dev musl-dev musl-utils && \
+    build-base libffi-dev libressl-dev && \
     python3 -m pip install gunicorn "invoke==0.13.0" alembic dumb-init
 
 # install python reqs
@@ -14,12 +14,12 @@ COPY requirements.txt /app/
 WORKDIR /app
 
 RUN export PYCURL_SSL_LIBRARY=openssl && \
-    pip3 install -r requirements.txt --user -U
+    pip3 install -r requirements.txt
 
 
 # build frontend
 COPY tmeister/static /app/tmeister/static
-RUN apk --no-cache add nodejs git && \
+RUN apk --no-cache add nodejs npm git && \
     cd /app/tmeister/static && \
     npm install && \
     npm run postinstall && \
