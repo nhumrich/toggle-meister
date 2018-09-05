@@ -5,6 +5,9 @@
   + react-dom \
   + prop-types \
   + jquery \
+  + rx \
+  + rxjs \
+  + rxjs/operators \
   build/bundled-deps.js \
   --source-map-contents
 
