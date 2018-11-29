@@ -1,3 +1,2 @@
 mockModules({
-	'toast-service!sofe': {}
 })

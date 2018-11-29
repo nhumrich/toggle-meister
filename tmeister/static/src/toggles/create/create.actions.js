@@ -1,7 +1,7 @@
 import * as types from './create.types.js';
 import { getToggles, createToggle } from '../toggles.actions.js';
 import { includes, uniqBy, find } from 'lodash';
-import toasts from 'toast-service!sofe';
+import toasts from '../../common/simple-toast/simple-toast.js';
 import { getEnvList } from '../table/toggle-table.helpers.js';
 import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 import { envSelectionChanged } from '../search/search.actions.js';

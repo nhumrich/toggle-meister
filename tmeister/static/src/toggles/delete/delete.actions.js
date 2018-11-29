@@ -1,5 +1,5 @@
 import {noop} from 'lodash';
-import {generalToast} from 'toast-service!sofe';
+import {generalToast} from '../../common/simple-toast/simple-toast.js';
 import * as types from './delete.types.js';
 
 export function deleteFeature(featureName, cbk=noop) {

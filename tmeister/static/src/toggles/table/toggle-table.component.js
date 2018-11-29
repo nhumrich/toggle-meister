@@ -3,7 +3,7 @@ import styles from './toggle-table.css';
 import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.helpers.js';
 import DeleteFeatureModal from '../delete/delete-feature-modal.component.js';
 import ToggleProdModal from './toggle-prod-modal.component.js';
-import { infoToast } from 'toast-service!sofe';
+import { infoToast } from '../../common/simple-toast/simple-toast.js';
 
 export default class ToggleTable extends React.Component {
 	state = {

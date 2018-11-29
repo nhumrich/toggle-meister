@@ -1,6 +1,5 @@
 import React from 'react';
-// import {CprButton} from 'canopy-styleguide!sofe';
-import SimpleButton from 'src/common/simple-button.component.js'
+import SimpleButton from '../../common/simple-button/simple-button.component.js'
 
 export default class ToggleProdModal extends React.PureComponent {
 	render() {

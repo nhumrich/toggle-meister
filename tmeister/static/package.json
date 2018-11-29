@@ -68,7 +68,7 @@
       "os": "npm:jspm-nodelibs-os@^0.2.0",
       "path": "npm:jspm-nodelibs-path@^0.2.0",
       "process": "github:jspm/nodelibs-process@^0.2.0-alpha",
-      "react": "npm:react@16.7.0-alpha.2",
+      "react": "npm:react",
       "redux": "npm:redux@^3.5.2",
       "stream": "npm:jspm-nodelibs-stream@^0.2.0",
       "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
