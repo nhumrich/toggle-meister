@@ -1,6 +1,6 @@
 import * as types from './toggles.types.js';
 import { property } from 'lodash';
-import toasts from 'toast-service!sofe';
+import toasts from '../common/simple-toast/simple-toast.js';
 
 export function getToggles() {
 	return dispatch => {

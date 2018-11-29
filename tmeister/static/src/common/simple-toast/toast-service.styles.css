@@ -1,0 +1,70 @@
+/* entry.styles.css */
+.toaster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 200px;
+  width: 240px;
+  transition: 300ms ease-in all;
+  padding: 12px;
+  padding-top: 4px;
+  position: fixed;
+  left: 15px;
+}
+
+/* dismiss 'X' */
+.dismiss {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 100%;
+  opacity: 0;
+}
+
+.dupes {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  width: 100%;
+}
+
+.toaster:hover .dismiss {
+  opacity: 1;
+  transition: 300ms ease-in all;
+}
+
+/* general */
+.general {
+  border-top: solid 5px #919191;
+}
+
+.toaster:hover.general {
+  border-color: #919191;
+}
+
+/* info */
+.info {
+  border-top: solid 5px #3399FF;
+}
+
+.toaster:hover.info {
+  border-color: #3399FF;
+}
+
+/* success */
+.success {
+  border-top: solid 5px #00BF4B;
+}
+
+.toaster:hover.success {
+  border-color: #00BF4B;
+}
+
+/* warning */
+.warning {
+  border-top: solid 5px #FF345E;
+}
+
+.toaster:hover.warning {
+  border-color: #FF345E;
+}

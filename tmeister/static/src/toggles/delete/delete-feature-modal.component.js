@@ -1,5 +1,5 @@
 import React from 'react';
-import {CprButton} from 'canopy-styleguide!sofe';
+import SimpleButton from '../../common/simple-button/simple-button.component.js'
 
 export default class DeleteFeatureModal extends React.Component {
 	render() {
@@ -19,12 +19,12 @@ export default class DeleteFeatureModal extends React.Component {
 						feature toggle after the delete occurs.
 					</div>
 					<div className="cps-modal__dialog__actions">
-						<CprButton actionType="primary" onClick={this.props.performDelete} disableOnClick={true}>
+						<SimpleButton actionType="primary" onClick={this.props.performDelete} disableOnClick={true}>
 							Delete feature toggle
-						</CprButton>
-						<CprButton actionType="flat" onClick={this.props.close}>
+						</SimpleButton>
+						<SimpleButton actionType="flat" onClick={this.props.close}>
 							Nevermind
-						</CprButton>
+						</SimpleButton>
 					</div>
 				</div>
 			</div>

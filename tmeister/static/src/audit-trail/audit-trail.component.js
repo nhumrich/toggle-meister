@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { generalToast } from 'toast-service!sofe';
+import { generalToast } from '../common/simple-toast/simple-toast.js';
 
 export default class AuditTrail extends React.Component {
 	constructor() {
