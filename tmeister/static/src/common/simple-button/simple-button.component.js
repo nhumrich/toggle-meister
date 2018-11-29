@@ -11,7 +11,7 @@ export default class SimpleButton extends React.Component {
   render () {
     if (this.props.showLoader) {
       return (
-        <span className={`cps-loader ${styles.loader} ${this.props.customElement.disabled ? styles.disabledWithLoader : ''}`}>
+        <span className={`cps-loader ${styles.loader} ${this.props.disabled ? styles.disabledWithLoader : ''}`}>
           <span />
           <span />
           <span />
