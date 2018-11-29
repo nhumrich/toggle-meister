@@ -7,7 +7,7 @@ import RootRoutes from './root.routes.js';
 import toggleReducer from './toggles/toggles.reducer.js';
 import toggleSearchReducer from './toggles/search/search.reducer.js';
 import createReducer from './toggles/create/create.reducer.js';
-import 'canopy-styleguide!sofe';
+// import 'canopy-styleguide!sofe';
 
 const reducer = combineReducers({
 	toggles: toggleReducer,
