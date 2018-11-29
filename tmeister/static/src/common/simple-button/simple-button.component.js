@@ -32,7 +32,7 @@ export default class SimpleButton extends React.Component {
     if (this.props.disableOnClick) {
       this.setState({disabled: true}, this.callOnClick)
     } else {
-      this.callOnClick
+      this.callOnClick()
     }
   }
 
