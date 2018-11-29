@@ -1,5 +1,6 @@
 import React from 'react';
-import {CprButton} from 'canopy-styleguide!sofe';
+// import {CprButton} from 'canopy-styleguide!sofe';
+import SimpleButton from 'src/common/simple-button.component.js'
 
 export default class ToggleProdModal extends React.PureComponent {
 	render() {
@@ -18,12 +19,12 @@ export default class ToggleProdModal extends React.PureComponent {
 						This really will have an immediate impact on the production environment and could potentially break things for customers.
 					</div>
 					<div className="cps-modal__dialog__actions">
-						<CprButton actionType="primary" onClick={this.props.performChange} disableOnClick={true}>
+						<SimpleButton actionType="primary" onClick={this.props.performChange} disableOnClick={true}>
 							I know what I am doing
-						</CprButton>
-						<CprButton actionType="flat" onClick={this.props.close}>
+						</SimpleButton>
+						<SimpleButton actionType="flat" onClick={this.props.close}>
 							Nevermind
-						</CprButton>
+						</SimpleButton>
 					</div>
 				</div>
 			</div>
