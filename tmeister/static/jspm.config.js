@@ -904,62 +904,6 @@ SystemJS.config({
         "deepmerge": "npm:deepmerge@1.5.2"
       }
     },
-    "npm:react-router@3.2.1": {
-      "map": {
-        "invariant": "npm:invariant@2.2.4",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@2.5.5",
-        "create-react-class": "npm:create-react-class@15.6.3",
-        "prop-types": "npm:prop-types@15.6.2",
-        "warning": "npm:warning@3.0.0",
-        "loose-envify": "npm:loose-envify@1.4.0",
-        "history": "npm:history@3.3.0"
-      }
-    },
-    "npm:react-redux@4.4.9": {
-      "map": {
-        "invariant": "npm:invariant@2.2.4",
-        "hoist-non-react-statics": "npm:hoist-non-react-statics@2.5.5",
-        "create-react-class": "npm:create-react-class@15.6.3",
-        "prop-types": "npm:prop-types@15.6.2",
-        "lodash": "npm:lodash@4.17.11",
-        "loose-envify": "npm:loose-envify@1.4.0"
-      }
-    },
-    "npm:react-dom@next": {
-      "map": {
-        "prop-types": "npm:prop-types@15.6.2",
-        "scheduler": "npm:scheduler@0.12.0-alpha.2",
-        "object-assign": "npm:object-assign@4.1.1",
-        "loose-envify": "npm:loose-envify@1.4.0"
-      }
-    },
-    "npm:prop-types@15.6.2": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.1",
-        "loose-envify": "npm:loose-envify@1.4.0"
-      }
-    },
-    "npm:create-react-class@15.6.3": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.1",
-        "loose-envify": "npm:loose-envify@1.4.0",
-        "fbjs": "npm:fbjs@0.8.17"
-      }
-    },
-    "npm:scheduler@0.12.0-alpha.2": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.1",
-        "loose-envify": "npm:loose-envify@1.4.0"
-      }
-    },
-    "npm:history@3.3.0": {
-      "map": {
-        "warning": "npm:warning@3.0.0",
-        "invariant": "npm:invariant@2.2.4",
-        "loose-envify": "npm:loose-envify@1.4.0",
-        "query-string": "npm:query-string@4.3.4"
-      }
-    },
     "npm:invariant@2.2.4": {
       "map": {
         "loose-envify": "npm:loose-envify@1.4.0"
@@ -979,12 +923,6 @@ SystemJS.config({
         "core-js": "npm:core-js@1.2.7",
         "isomorphic-fetch": "npm:isomorphic-fetch@2.2.1",
         "setimmediate": "npm:setimmediate@1.0.5"
-      }
-    },
-    "npm:query-string@4.3.4": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.1",
-        "strict-uri-encode": "npm:strict-uri-encode@1.1.0"
       }
     },
     "npm:readable-stream@2.3.6": {
@@ -1138,12 +1076,53 @@ SystemJS.config({
         "minimalistic-assert": "npm:minimalistic-assert@1.0.1"
       }
     },
-    "npm:react@16.7.0-alpha.2": {
+    "npm:react-redux@4.4.5": {
       "map": {
+        "lodash": "npm:lodash@4.17.11",
+        "invariant": "npm:invariant@2.2.4",
         "loose-envify": "npm:loose-envify@1.4.0",
-        "object-assign": "npm:object-assign@4.1.1",
-        "prop-types": "npm:prop-types@15.6.2",
-        "scheduler": "npm:scheduler@0.12.0-alpha.2"
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0"
+      }
+    },
+    "npm:prop-types@15.6.0": {
+      "map": {
+        "fbjs": "npm:fbjs@0.8.17",
+        "loose-envify": "npm:loose-envify@1.4.0",
+        "object-assign": "npm:object-assign@4.1.1"
+      }
+    },
+    "npm:react-router@2.6.0": {
+      "map": {
+        "warning": "npm:warning@3.0.0",
+        "loose-envify": "npm:loose-envify@1.4.0",
+        "invariant": "npm:invariant@2.2.4",
+        "hoist-non-react-statics": "npm:hoist-non-react-statics@1.2.0",
+        "history": "npm:history@2.1.2"
+      }
+    },
+    "npm:react@15.3.2": {
+      "map": {
+        "fbjs": "npm:fbjs@0.8.17",
+        "loose-envify": "npm:loose-envify@1.4.0",
+        "object-assign": "npm:object-assign@4.1.1"
+      }
+    },
+    "npm:history@2.1.2": {
+      "map": {
+        "invariant": "npm:invariant@2.2.4",
+        "deep-equal": "npm:deep-equal@1.0.1",
+        "warning": "npm:warning@2.1.0",
+        "query-string": "npm:query-string@3.0.3"
+      }
+    },
+    "npm:warning@2.1.0": {
+      "map": {
+        "loose-envify": "npm:loose-envify@1.4.0"
+      }
+    },
+    "npm:query-string@3.0.3": {
+      "map": {
+        "strict-uri-encode": "npm:strict-uri-encode@1.1.0"
       }
     }
   }
