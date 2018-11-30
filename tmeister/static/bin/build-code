@@ -1,7 +1,8 @@
 #!/bin/bash -e
+cp stylesheet.css build/stylesheet.css
+
 ./node_modules/jspm/jspm.js bundle \
-  sofe \
-  + react \
+  react \
   + react-dom \
   + prop-types \
   + jquery \
