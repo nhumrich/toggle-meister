@@ -25,7 +25,7 @@ class Action(Enum):
 
 async def check_permissions(username: str, action: Action):
     employee = await employeeda.get_employee(username)
-    role = Role(employee.role_id)
+    role = Role(employee['role_id'])
     if role == Role.read_only:
         raise InsufficientPermissionsError
     if (action in (Action.create_env, Action.delete_env) and

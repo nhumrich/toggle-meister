@@ -1,6 +1,7 @@
-from aiohttp import web
 import json
 import os
+
+from starlette.responses import JSONResponse, PlainTextResponse
 
 from .permissions import InsufficientPermissionsError
 
@@ -8,13 +9,13 @@ LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
 
 
 async def error_middleware(app, handler):
-    async def middleware_handler(request: web.Request):
+    async def middleware_handler(request):
         try:
             response = await handler(request)
         except InsufficientPermissionsError:
-            return web.HTTPForbidden()
+            return PlainTextResponse(status_code=403)
         except json.decoder.JSONDecodeError as e:
-            return web.json_response(data={'Message': e.msg}, status=400)
+            return JSONResponse({'Message': e.msg}, status_code=400)
         except Exception as e:
             if app.raven:
                 data = {

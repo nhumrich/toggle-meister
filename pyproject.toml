@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "tmeister"
+version = "0.1.0"
+description = ""
+authors = ["Nick Humrich <nick.humrich@gmail.com>"]
+license = "apache-2.0"
+
+[tool.poetry.dependencies]
+python = "3.7"
+starlette = "^0.11.4"
+asyncpgsa = "^0.26.0"
+sentry-sdk = "^0.7.7"
+uvicorn = "^0.6.1"
+aiofiles = "^0.4.0"
+aioauth_client = "^0.16.0"
+pyjwt = "^1.7"
+itsdangerous = "^1.1"
+invoke = "^1.2"
+psycopg2 = "^2.7"
+ujson = "^1.35"
+sentry-asgi = "^0.1.5"
+
+[tool.poetry.dev-dependencies]
+pytest = "^4.3"
+pyresttest = "^1.7"
+invoke = "^1.2"
+

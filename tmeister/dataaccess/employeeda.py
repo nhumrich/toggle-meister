@@ -16,7 +16,7 @@ async def get_employee_usernames(employee_list=None):
 
     results = await pg.fetch(query)
 
-    return [r.username for r in results]
+    return [r['username'] for r in results]
 
 
 async def add_employee(username: str, *,

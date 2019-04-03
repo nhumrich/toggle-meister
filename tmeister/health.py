@@ -1,8 +1,9 @@
-from aiohttp import web
+# from aiohttp import web
+from starlette import responses
 from asyncpgsa import pg
 
 
-async def get_health(request: web.Request) -> web.Response:
+async def get_health(request):
     try:
         await pg.fetch('SELECT 42')
 
@@ -12,6 +13,7 @@ async def get_health(request: web.Request) -> web.Response:
         request.app.raven.captureException(
             extra={'health_check': True},
             level='warning')
-        return web.HTTPServiceUnavailable(reason='cant access db')
+        return responses.PlainTextResponse('cant access db', status_code=503)
+        # return web.HTTPServiceUnavailable(reason='cant access db')
 
-    return web.Response(text="All is well")
+    return responses.PlainTextResponse("All is well")

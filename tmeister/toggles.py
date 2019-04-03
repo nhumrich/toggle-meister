@@ -1,6 +1,8 @@
 import asyncio
 
-from aiohttp import web
+# from aiohttp import web
+from starlette.responses import JSONResponse
+from starlette.requests import Request
 
 from .dataaccess import toggleda
 from .dataaccess import environmentda
@@ -9,14 +11,14 @@ from . import auditing
 from . import permissions
 
 
-async def get_toggle_states_for_env(request):
-    params = request.GET
+async def get_toggle_states_for_env(request: Request):
+    params = request.query_params
 
-    env = request.match_info['name']
-    features = params.getall('feature', tuple())
+    env = request.path_params.get('name')
+    features = params.getlist('feature')
     if not features:
-        return web.json_response({'Message': "No features provided"},
-                                 status=400)
+        return JSONResponse({'Message': "No features provided"},
+                            status_code=400)
     else:
         result = await toggleda.get_toggle_states_for_env(env, features)
         for f in features:
@@ -24,33 +26,33 @@ async def get_toggle_states_for_env(request):
                 # Everything not in the database is assumed off,
                 # even if it doesn't exist
                 result[f] = False
-    return web.json_response(result,
-                             headers={'Access-Control-Allow-Origin': '*'})
+    return JSONResponse(result,
+                        headers={'Access-Control-Allow-Origin': '*'})
 
 
 async def set_toggle_state(request):
     body = await request.json()
     toggle = body.get('toggle')
     if not toggle:
-        return web.json_response({'Message': "No toggle provided"},
-                                 status=400)
+        return JSONResponse({'Message': "No toggle provided"},
+                                 status_code=400)
 
     env = toggle.get('env')
     feature = toggle.get('feature')
     state = toggle.get('state')
-    user = request.get('user')
+    user = request.user.display_name
 
     if (not env or not env.isidentifier() or
             not await environmentda.get_envs(env_list=[env])):
-        return web.json_response({'Message': "No valid environment provided"},
-                                 status=400)
+        return JSONResponse({'Message': "No valid environment provided"},
+                                 status_code=400)
     if (not feature or not feature.isidentifier() or
             not await featureda.get_features(feature_list=[feature])):
-        return web.json_response({'Message': "No valid feature provided"},
-                                 status=400)
+        return JSONResponse({'Message': "No valid feature provided"},
+                                 status_code=400)
     if state not in ('OFF', 'ON'):
-        return web.json_response({'Message': "No valid state provided"},
-                                 status=400)
+        return JSONResponse({'Message': "No valid state provided"},
+                                 status_code=400)
 
     # get current state
     current = await toggleda.get_toggle_states_for_env(env, [feature])
@@ -74,7 +76,7 @@ async def set_toggle_state(request):
 
 async def get_all_toggle_states(request=None):
     toggle_list = await toggleda.get_all_toggles()
-    return web.json_response(toggle_list)
+    return JSONResponse(toggle_list)
 
 
 async def _toggle_all_for_feature(feature, *, state):

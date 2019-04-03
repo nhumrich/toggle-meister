@@ -1,5 +1,5 @@
-from aiohttp import web
-
+# from aiohttp import web
+from starlette.responses import JSONResponse
 from asyncpg.exceptions import UniqueViolationError
 
 from .dataaccess import featureda
@@ -11,10 +11,10 @@ from . import auditing
 async def create_feature(request):
     body = await request.json()
     feature_name = body.get('name', None)
-    user = request.get('user')
+    user = request.user.display_name
     if not feature_name.isidentifier():
-        return web.json_response({'Message': "Not a valid name"},
-                                 status=400)
+        return JSONResponse({'Message': "Not a valid name"},
+                                 status_code=400)
 
     await permissions.check_permissions(
         user, permissions.Action.create_feature)
@@ -22,20 +22,19 @@ async def create_feature(request):
         response = await featureda.add_feature(feature_name)
         await auditing.audit_event(
             'feature.add', user, {'feature_name': feature_name})
-        return web.json_response(response, status=201)
+        return JSONResponse(response, status_code=201)
 
     except UniqueViolationError as e:
-        return web.json_response(
+        return JSONResponse(
             {'Message': "The feature name '{}' already exists"
                 .format(feature_name)},
-            status=409)
+            status_code=409)
 
 
 async def get_features(request):
     feature_list = await featureda.get_features()
     features = {'features': [{'name': f} for f in feature_list]}
-    return web.json_response(features,
-                             headers={'Access-Control-Allow-Origin': '*'})
+    return JSONResponse(features, headers={'Access-Control-Allow-Origin': '*'})
 
 
 async def delete_feature(request):
@@ -45,10 +44,10 @@ async def delete_feature(request):
         TODO: implement a soft-delete, and hard-delete only when safe
     """
     feature = request.match_info['name']
-    user = request.get('user')
+    user = request.user.display_name
 
     if not feature.isidentifier():
-        return web.json_response({'Message': 'No valid feature provided'})
+        return JSONResponse({'Message': 'No valid feature provided'})
 
     await permissions.check_permissions(
         user, permissions.Action.delete_feature)
@@ -61,4 +60,4 @@ async def delete_feature(request):
 
     await auditing.audit_event(
         'feature.remove', user, {'feature_name': feature})
-    return web.json_response(None, status=204)
+    return JSONResponse(None, status_code=204)
