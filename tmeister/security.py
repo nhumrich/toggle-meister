@@ -1,12 +1,10 @@
-import binascii
-import hashlib
-import hmac
 import time
 import re
 
 import jwt
 from aioauth_client import GoogleClient
-from starlette.authentication import AuthenticationBackend, AuthenticationError, SimpleUser, UnauthenticatedUser, AuthCredentials
+from starlette.authentication import AuthenticationBackend, \
+    AuthenticationError, SimpleUser, UnauthenticatedUser, AuthCredentials
 from starlette.responses import PlainTextResponse, JSONResponse, RedirectResponse
 from starlette.requests import Request
 
@@ -41,7 +39,8 @@ class GoogleAuthBackend(AuthenticationBackend):
             host = f'{request.url.scheme}://{request.url.hostname}'
             if request.url.port:
                 host += f':{request.url.port}'
-            r = RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?client_id={self.id}&'
+            r = RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?'
+                                 f'client_id={self.id}&'
                                  f'response_type=code&scope=openid profile email&'
                                  f'redirect_uri={host}/oauth_callback/google'
                                  f'&state={state}&'
@@ -75,7 +74,9 @@ class GoogleAuthBackend(AuthenticationBackend):
             host = f'{request.url.scheme}://{request.url.hostname}'
             if request.url.port:
                 host += f':{request.url.port}'
-            otoken, other = await gc.get_access_token(code, redirect_uri=f'{host}/oauth_callback/google')
+            otoken, other = await gc.get_access_token(
+                code,
+                redirect_uri=f'{host}/oauth_callback/google')
 
             idt = other['id_token']
             id_token = jwt.decode(idt, verify=False)

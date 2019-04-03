@@ -14,7 +14,7 @@ async def create_feature(request):
     user = request.user.display_name
     if not feature_name.isidentifier():
         return JSONResponse({'Message': "Not a valid name"},
-                                 status_code=400)
+                            status_code=400)
 
     await permissions.check_permissions(
         user, permissions.Action.create_feature)
@@ -24,7 +24,7 @@ async def create_feature(request):
             'feature.add', user, {'feature_name': feature_name})
         return JSONResponse(response, status_code=201)
 
-    except UniqueViolationError as e:
+    except UniqueViolationError:
         return JSONResponse(
             {'Message': "The feature name '{}' already exists"
                 .format(feature_name)},

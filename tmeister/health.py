@@ -7,7 +7,7 @@ async def get_health(request):
     try:
         await pg.fetch('SELECT 42')
 
-    except Exception as e:
+    except Exception:
         # Just making sure we can get a successful connection/query
         # if we cant, we are not healthy
         request.app.raven.captureException(

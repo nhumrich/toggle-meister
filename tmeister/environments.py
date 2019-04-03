@@ -21,7 +21,7 @@ async def add_env(request):
 
     if not env_name.isidentifier():
         return JSONResponse({'Message': "Not a valid name"},
-                                 status_code=400)
+                            status_code=400)
 
     await permissions.check_permissions(user, permissions.Action.create_env)
     try:
@@ -30,7 +30,7 @@ async def add_env(request):
             'environment.add', user, {'env_name': env_name})
         return JSONResponse(response, status_code=201)
 
-    except UniqueViolationError as e:
+    except UniqueViolationError:
         return JSONResponse(
             {'Message': "The environment name '{}' already exists"
                 .format(env_name)},

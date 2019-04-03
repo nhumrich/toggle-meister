@@ -35,7 +35,7 @@ async def set_toggle_state(request):
     toggle = body.get('toggle')
     if not toggle:
         return JSONResponse({'Message': "No toggle provided"},
-                                 status_code=400)
+                            status_code=400)
 
     env = toggle.get('env')
     feature = toggle.get('feature')
@@ -45,14 +45,14 @@ async def set_toggle_state(request):
     if (not env or not env.isidentifier() or
             not await environmentda.get_envs(env_list=[env])):
         return JSONResponse({'Message': "No valid environment provided"},
-                                 status_code=400)
+                            status_code=400)
     if (not feature or not feature.isidentifier() or
             not await featureda.get_features(feature_list=[feature])):
         return JSONResponse({'Message': "No valid feature provided"},
-                                 status_code=400)
+                            status_code=400)
     if state not in ('OFF', 'ON'):
         return JSONResponse({'Message': "No valid state provided"},
-                                 status_code=400)
+                            status_code=400)
 
     # get current state
     current = await toggleda.get_toggle_states_for_env(env, [feature])
