@@ -1,24 +1,28 @@
 import os
-import signal
+import pathlib
+import secrets
 
-import aiohttp_oauth
-from aiohttp import web
-from aiohttp_index import IndexMiddleware
+import uvicorn
 from asyncpgsa import pg
-from raven import Client
-from raven_aiohttp import AioHttpTransport
+from starlette.applications import Starlette
+from starlette.staticfiles import StaticFiles
+from starlette.middleware.sessions import SessionMiddleware
+from starlette.responses import HTMLResponse
+from starlette.middleware.authentication import AuthenticationMiddleware
+from sentry_asgi import SentryMiddleware
+import sentry_sdk
 
-from . import toggles, features, environments, auditing, employees, health
-from .errorhandling import error_middleware
-from .security import security_middleware
+from . import toggles, features, environments, auditing, health
+from .security import GoogleAuthBackend
+
 
 DEBUG = os.getenv('DEBUG', 'false').lower() == 'true'
 LOCAL_DEV = os.getenv('IS_LOCAL', 'false').lower() == 'true'
-GH_ID = os.getenv('GITHUB_ID')
-GH_SECRET = os.getenv('GITHUB_SECRET')
-GH_ORG = os.getenv('GITHUB_ORG')
+GOOGLE_ID = os.getenv('GOOGLE_ID')
+GOOGLE_SECRET = os.getenv('GOOGLE_SECRET')
+GOOGLE_ORG = os.getenv('GOOGLE_ORG')
 COOKIE_NAME = os.getenv('COOKIE_NAME', 'tmeister-auth')
-COOKIE_KEY = os.getenv('COOKIE_KEY')
+COOKIE_KEY = os.getenv('COOKIE_KEY') or secrets.randbits(60)
 POSTGRES_URL = os.getenv('DATABASE_URL', 'localhost')
 POSTGRES_USERNAME = os.getenv('DATABASE_USER', 'postgres')
 POSTGRES_PASSWORD = os.getenv('DATABASE_PASS', 'password')
@@ -29,79 +33,58 @@ SENTRY_URL = os.getenv('SENTRY_URL')
 ENV_NAME = os.getenv('ENV_LOCATION', 'Local')
 
 
-if (not LOCAL_DEV) and None in (GH_ID, GH_SECRET, GH_ORG):
+if (not LOCAL_DEV) and None in (GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG):
     raise ValueError('GITHUB_ID, GITHUB_SECRET or GITHUB_ORG'
                      ' environment variables are missing')
 
 
-async def async_setup(app):
-
-    await pg.init(
-        user=POSTGRES_USERNAME,
-        password=POSTGRES_PASSWORD,
-        host=POSTGRES_URL,
-        database=POSTGRES_DB_NAME,
-        min_size=POSTGRES_MIN_POOL_SIZE,
-        max_size=POSTGRES_MAX_POOL_SIZE,
-    )
-
-
 def init():
-    app = web.Application(middlewares=[
-        IndexMiddleware(),
-        error_middleware,
-        security_middleware,
-    ])
+    app = Starlette()
 
-    app.on_startup.append(async_setup)
+    @app.on_event("startup")
+    async def async_setup():
+        await pg.init(
+            user=POSTGRES_USERNAME,
+            password=POSTGRES_PASSWORD,
+            host=POSTGRES_URL,
+            database=POSTGRES_DB_NAME,
+            min_size=POSTGRES_MIN_POOL_SIZE,
+            max_size=POSTGRES_MAX_POOL_SIZE,
+        )
 
-    oauth_kwargs = dict(
-        github_id=GH_ID,
-        github_secret=GH_SECRET,
-        github_org=GH_ORG,
-        cookie_name=COOKIE_NAME,
-        cookie_key=COOKIE_KEY,
-        whitelist_handlers=[
-            toggles.get_toggle_states_for_env,
-            features.get_features,
-            health.get_health
-        ],
-        oauth_url='/oauth_callback/github',
-        auth_callback=employees.check_employee,
-    )
-    if LOCAL_DEV:
-        oauth_kwargs['dummy'] = True
+    # auth stuff
+    auth = GoogleAuthBackend(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG)
+    app.add_middleware(AuthenticationMiddleware,
+                       backend=auth,
+                       on_error=auth.on_error)
 
-    aiohttp_oauth.add_oauth_middleware(
-        app,
-        **oauth_kwargs
-    )
+    app.add_middleware(SessionMiddleware, session_cookie=COOKIE_NAME,
+                       secret_key=COOKIE_KEY, https_only=not LOCAL_DEV,
+                       max_age=2 * 24 * 60 * 60)  # 2 days
 
-    # make index middleware very first one
-    # app._middlewares = [IndexMiddleware()] + app.middlewares
+    # sentry stuff
+    sentry_sdk.init(dsn=SENTRY_URL)
+    app.add_middleware(SentryMiddleware)
 
-    app.router.add_get('/api/envs/{name}/toggles',
-                       toggles.get_toggle_states_for_env)
-    app.router.add_get('/api/toggles', toggles.get_all_toggle_states)
-    app.router.add_patch('/api/toggles', toggles.set_toggle_state)
-    app.router.add_get('/api/features', features.get_features)
-    app.router.add_post('/api/features', features.create_feature)
-    app.router.add_delete('/api/features/{name}',
-                          features.delete_feature)
-    app.router.add_get('/api/envs', environments.get_envs)
-    app.router.add_post('/api/envs', environments.add_env)
-    app.router.add_delete('/api/envs/{name}', environments.delete_env)
-    app.router.add_get('/api/auditlog', auditing.get_audit_events)
-    app.router.add_get('/heartbeat', health.get_health)
+    async def index_html(request):
+        static = pathlib.Path('tmeister/static/index.html')
+        return HTMLResponse(static.read_text())
 
-    # Add static handler
-    app.router.add_static('/', os.path.dirname(__file__) + '/static')
+    app.add_route('/api/envs/{name}/toggle', toggles.get_toggle_states_for_env, methods=['GET'])
+    app.add_route('/api/toggles', toggles.get_all_toggle_states, methods=['GET'])
+    app.add_route('/api/toggles', toggles.set_toggle_state, methods=['PATCH'])
+    app.add_route('/api/features', features.get_features)
+    app.add_route('/api/features', features.create_feature, methods=['POST'])
+    app.add_route('/api/features/{name}', features.delete_feature, methods=['DELETE'])
+    app.add_route('/api/envs', environments.get_envs)
+    app.add_route('/api/envs', environments.add_env, methods=['POST'])
+    app.add_route('/api/envs/{name}', environments.delete_env, methods=['DELETE'])
+    app.add_route('/api/auditlog', auditing.get_audit_events)
+    app.add_route('/heartbeat', health.get_health)
+    app.add_route('/', index_html)
 
-    client = None
-    if SENTRY_URL:
-        client = Client(SENTRY_URL, transport=AioHttpTransport,
-                        environment=ENV_NAME)
-    app.raven = client
+    app.mount('/', app=StaticFiles(directory='tmeister/static'), name='static')
+
     return app
 
 
@@ -110,17 +93,7 @@ def main(app=None):
     if app is None:
         app = init()
 
-    if DEBUG:
-        import aiohttp_autoreload
-        print('debug enabled, auto-reloading enabled')
-        aiohttp_autoreload.start()
-
-    # Run server
-    def handle_signal(*args):
-        raise KeyboardInterrupt
-
-    signal.signal(signal.SIGINT, handle_signal)
-    web.run_app(app, port=8445)
+    uvicorn.run(app, host='0.0.0.0', port=8445, headers=[('Server', 'tmeister')])
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ async def get_features(*, feature_list=None):
         query = query.where(db.features.c.name.in_(feature_list))
 
     features = await pg.fetch(query)
-    return [row.name for row in features]
+    return [row['name'] for row in features]
 
 
 async def add_feature(feature_name):

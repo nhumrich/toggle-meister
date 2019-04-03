@@ -8,15 +8,15 @@ async def get_employees(request):
     pass
 
 
-async def check_employee(user: dict):
+async def check_employee(user: str):
     """ Check that the user exists """
-    username = user.get('username')
+    email = user
+    username, _ = user.split('@')
+    name = username.replace('.', ' ').title()
     exists = await employeeda.get_employee_usernames((username,))
     if exists:
-        return
+        return username
 
-    email = user.get('email')
-    name = user.get('name')
     usernames = await employeeda.get_employee_usernames()
     if not usernames:
         # No users yet, this user gets to be an admin!
@@ -29,3 +29,4 @@ async def check_employee(user: dict):
         role_id=role.value,
         name=name,
         email=email)
+    return username

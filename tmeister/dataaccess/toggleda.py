@@ -8,7 +8,7 @@ async def get_toggle_states_for_env(env, list_of_features):
         .where(db.toggles.c.env == env) \
         .where(db.toggles.c.feature.in_(list_of_features))
 
-    return {r.feature: r.state == 'ON'
+    return {r['feature']: r['state'] == 'ON'
             for r in await pg.fetch(query)}
 
 
@@ -55,9 +55,9 @@ LEFT OUTER JOIN toggles ON feature = features.name
 
     toggles = await pg.fetch(query)
     results = [
-        {'toggle': {'env': row.env,
-                    'feature': row.feature,
-                    'state': row.state}
+        {'toggle': {'env': row['env'],
+                    'feature': row['feature'],
+                    'state': row['state']}
          }
         for row in toggles
         ]
@@ -67,9 +67,9 @@ LEFT OUTER JOIN toggles ON feature = features.name
 def _transform_toggles(toggles):
     return [{
                 'toggle': {
-                    'env': row.env,
-                    'feature': row.feature,
-                    'state': row.state
+                    'env': row['env'],
+                    'feature': row['feature'],
+                    'state': row['state']
                 }
             }
             for row in toggles]

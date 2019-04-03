@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM python:3.7-alpine
 
 ENV PYCURL_SSL_LIBRARY=openssl \
     PYTHONPATH=. \
@@ -6,15 +6,16 @@ ENV PYCURL_SSL_LIBRARY=openssl \
 
 # compile requirements for some python libraries
 RUN apk --no-cache add curl-dev bash postgresql-dev \
-    build-base libffi-dev libressl-dev && \
-    python3 -m pip install gunicorn "invoke==0.13.0" alembic dumb-init
+    build-base libffi-dev libressl-dev tini && \
+    python3 -m pip install "invoke==0.13.0" alembic poetry
 
 # install python reqs
-COPY requirements.txt /app/
+COPY ["pyproject.toml", "pyproject.lock", "/app/"]
 WORKDIR /app
 
 RUN export PYCURL_SSL_LIBRARY=openssl && \
-    pip3 install -r requirements.txt
+    poetry config settings.virtualenvs.create false && \
+    poetry install -vvv --no-dev
 
 
 # build frontend
@@ -30,5 +31,5 @@ RUN apk --no-cache add nodejs npm git && \
 
 
 EXPOSE 8445
-CMD ["dumb-init", "./startup.sh"]
+CMD ["tini", "./startup.sh"]
 COPY . /app
