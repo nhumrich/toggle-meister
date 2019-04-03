@@ -19,6 +19,9 @@ invoke = "^1.2"
 psycopg2 = "^2.7"
 ujson = "^1.35"
 sentry-asgi = "^0.1.5"
+flake8 = "^3.7"
+six = "^1.12"
+pyresttest = "^1.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^4.3"
