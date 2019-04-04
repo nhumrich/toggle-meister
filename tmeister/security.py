@@ -19,6 +19,14 @@ class RedirectAuthError(AuthenticationError):
     """ Signals that authentication is done and we should redirect """
 
 
+def get_hostname(request):
+    scheme = request.url.scheme
+    if request.headers.get('X-Forwarded-Proto') == 'https' or \
+            request.headers.get('X-Scheme') == 'https':
+        scheme = 'https'
+    return f'{scheme}://{request.url.hostname}'
+
+
 class GoogleAuthBackend(AuthenticationBackend):
     allowed_patterns = [re.compile(r'^/api/envs/.*/toggles$'),
                         re.compile(r'^/api/features'),
@@ -36,11 +44,7 @@ class GoogleAuthBackend(AuthenticationBackend):
                 return JSONResponse({'error': 'Unauthenticated'}, status_code=401)
 
             state = str(request.url)
-            scheme = request.url.scheme
-            if request.headers.get('X-Forwarded-Proto') == 'https' or \
-                    request.headers.get('X-Scheme') == 'https':
-                scheme = 'https'
-            host = f'{scheme}://{request.url.hostname}'
+            host = get_hostname(request)
             if request.url.port:
                 host += f':{request.url.port}'
             r = RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?'
@@ -75,7 +79,7 @@ class GoogleAuthBackend(AuthenticationBackend):
 
             gc = GoogleClient(client_id=self.id,
                               client_secret=self.secret)
-            host = f'{request.url.scheme}://{request.url.hostname}'
+            host = get_hostname(request)
             if request.url.port:
                 host += f':{request.url.port}'
             otoken, other = await gc.get_access_token(

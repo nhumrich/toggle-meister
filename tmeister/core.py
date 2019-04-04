@@ -61,11 +61,6 @@ def init():
     async def bad_json(request, exc):
         return JSONResponse({'reason': 'invalid json', 'details': str(exc)}, status_code=400)
 
-    @app.exception_handler(Exception)
-    async def handle_it_all(request, exc):
-        print('yo', exc)
-        return JSONResponse({'nope': '0'})
-
     # auth stuff
     auth = GoogleAuthBackend(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG)
     app.add_middleware(AuthenticationMiddleware,
