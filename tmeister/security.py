@@ -36,7 +36,11 @@ class GoogleAuthBackend(AuthenticationBackend):
                 return JSONResponse({'error': 'Unauthenticated'}, status_code=401)
 
             state = str(request.url)
-            host = f'{request.url.scheme}://{request.url.hostname}'
+            scheme = request.url.scheme
+            if request.headers.get('X-Forwarded-Proto') == 'https' or \
+                    request.headers.get('X-Scheme') == 'https':
+                scheme = 'https'
+            host = f'{scheme}://{request.url.hostname}'
             if request.url.port:
                 host += f':{request.url.port}'
             r = RedirectResponse(f'https://accounts.google.com/o/oauth2/v2/auth?'
