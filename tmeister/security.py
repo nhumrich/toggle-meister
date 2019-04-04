@@ -21,9 +21,9 @@ class RedirectAuthError(AuthenticationError):
 
 def get_hostname(request):
     scheme = request.url.scheme
-    if request.headers.get('X-Forwarded-Proto') == 'https' or \
-            request.headers.get('X-Scheme') == 'https':
-        scheme = 'https'
+    # if request.headers.get('X-Forwarded-Proto') == 'https' or \
+    #         request.headers.get('X-Scheme') == 'https':
+    #     scheme = 'https'
     return f'{scheme}://{request.url.hostname}'
 
 

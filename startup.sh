@@ -5,4 +5,4 @@ then
 ./migrate-db.sh
 fi
 
-exec python3 -u run.py
+python3 -u run.py

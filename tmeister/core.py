@@ -102,7 +102,14 @@ def main(app=None):
     if app is None:
         app = init()
 
-    uvicorn.run(app, host='0.0.0.0', port=8445, headers=[('Server', 'tmeister')])
+    kwargs = {}
+    if LOCAL_DEV:
+        kwargs['reload'] = True
+    else:
+        kwargs['workers'] = 2
+
+    uvicorn.run(app, host='0.0.0.0', port=8445, headers=[('Server', 'tmeister')],
+                proxy_headers=True, **kwargs)
 
 
 if __name__ == '__main__':
