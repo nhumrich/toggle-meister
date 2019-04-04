@@ -1,13 +1,14 @@
 import os
 import pathlib
 import secrets
+from json import JSONDecodeError
 
 import uvicorn
 from asyncpgsa import pg
 from starlette.applications import Starlette
 from starlette.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, JSONResponse
 from starlette.middleware.authentication import AuthenticationMiddleware
 from sentry_asgi import SentryMiddleware
 import sentry_sdk
@@ -38,19 +39,32 @@ if (not LOCAL_DEV) and None in (GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG):
                      ' environment variables are missing')
 
 
+async def pg_init():
+    await pg.init(
+        user=POSTGRES_USERNAME,
+        password=POSTGRES_PASSWORD,
+        host=POSTGRES_URL,
+        database=POSTGRES_DB_NAME,
+        min_size=POSTGRES_MIN_POOL_SIZE,
+        max_size=POSTGRES_MAX_POOL_SIZE,
+    )
+
+
 def init():
     app = Starlette()
 
     @app.on_event("startup")
     async def async_setup():
-        await pg.init(
-            user=POSTGRES_USERNAME,
-            password=POSTGRES_PASSWORD,
-            host=POSTGRES_URL,
-            database=POSTGRES_DB_NAME,
-            min_size=POSTGRES_MIN_POOL_SIZE,
-            max_size=POSTGRES_MAX_POOL_SIZE,
-        )
+        await pg_init()
+
+    @app.exception_handler(JSONDecodeError)
+    async def bad_json(request, exc):
+        return JSONResponse({'reason': 'invalid json', 'details': str(exc)}, status_code=400)
+
+    @app.exception_handler(Exception)
+    async def handle_it_all(request, exc):
+        print('yo', exc)
+        return JSONResponse({'nope': '0'})
 
     # auth stuff
     auth = GoogleAuthBackend(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG)
@@ -63,14 +77,14 @@ def init():
                        max_age=2 * 24 * 60 * 60)  # 2 days
 
     # sentry stuff
-    sentry_sdk.init(dsn=SENTRY_URL)
+    sentry_sdk.init(dsn=SENTRY_URL, environment=ENV_NAME)
     app.add_middleware(SentryMiddleware)
 
     async def index_html(request):
         static = pathlib.Path('tmeister/static/index.html')
         return HTMLResponse(static.read_text())
 
-    app.add_route('/api/envs/{name}/toggle', toggles.get_toggle_states_for_env, methods=['GET'])
+    app.add_route('/api/envs/{name}/toggles', toggles.get_toggle_states_for_env, methods=['GET'])
     app.add_route('/api/toggles', toggles.get_all_toggle_states, methods=['GET'])
     app.add_route('/api/toggles', toggles.set_toggle_state, methods=['PATCH'])
     app.add_route('/api/features', features.get_features)

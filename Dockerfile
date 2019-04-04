@@ -7,7 +7,7 @@ ENV PYCURL_SSL_LIBRARY=openssl \
 # compile requirements for some python libraries
 RUN apk --no-cache add curl-dev bash postgresql-dev \
     build-base libffi-dev libressl-dev tini && \
-    python3 -m pip install "invoke==0.13.0" alembic poetry
+    python3 -m pip install invoke alembic poetry
 
 # install python reqs
 COPY ["pyproject.toml", "pyproject.lock", "/app/"]

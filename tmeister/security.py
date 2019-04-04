@@ -20,7 +20,7 @@ class RedirectAuthError(AuthenticationError):
 
 
 class GoogleAuthBackend(AuthenticationBackend):
-    allowed_patterns = [re.compile(r'^/api/envs/.*/toggle$'),
+    allowed_patterns = [re.compile(r'^/api/envs/.*/toggles$'),
                         re.compile(r'^/api/features'),
                         re.compile(r'^/heartbeat$')]
 

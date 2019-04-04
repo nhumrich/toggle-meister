@@ -38,7 +38,7 @@ async def add_env(request):
 
 
 async def delete_env(request):
-    env = request.match_info['name']
+    env = request.path_params.get('name')
     user = request.user.display_name
 
     await permissions.check_permissions(user, permissions.Action.delete_env)

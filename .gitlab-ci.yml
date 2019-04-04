@@ -37,14 +37,7 @@ test:
     - export DATABASE_URL=postgres
     - export IS_LOCAL=true
     - alembic upgrade head
-    - python3 -m coverage run run.py &
-    - tm_pid=$!
-    # wait for 8445 to be open
-    - while ! nc -z localhost 8445; do echo "."; sleep 2; done
-    - pyresttest http://localhost:8445 tests/api/test.yaml
-    - kill -SIGINT $tm_pid
-    - sleep 2
-    - python3 -m coverage report --include "tmeister/*"
+    - python3 -m pytest --cov tmeister
 
 push-to-dockerhub:
   stage: push-to-dockerhub

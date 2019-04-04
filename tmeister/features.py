@@ -1,4 +1,4 @@
-# from aiohttp import web
+from starlette.requests import Request
 from starlette.responses import JSONResponse
 from asyncpg.exceptions import UniqueViolationError
 
@@ -37,13 +37,13 @@ async def get_features(request):
     return JSONResponse(features, headers={'Access-Control-Allow-Origin': '*'})
 
 
-async def delete_feature(request):
+async def delete_feature(request: Request):
     """ This method currently deletes EVERYTHING for a given feature.
         It should be used only for cleanup, and requires admin permissions
         A better way to clean up is to do a soft-delete
         TODO: implement a soft-delete, and hard-delete only when safe
     """
-    feature = request.match_info['name']
+    feature = request.path_params.get('name')
     user = request.user.display_name
 
     if not feature.isidentifier():

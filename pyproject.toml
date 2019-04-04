@@ -20,13 +20,11 @@ psycopg2 = "^2.7"
 ujson = "^1.35"
 sentry-asgi = "^0.1.5"
 flake8 = "^3.7"
-six = "^1.12"
-pyresttest = "^1.7"
 pytest = "^4.4"
-pytest-coverage = "^0.0.0"
+jmespath = "^0.9.4"
+requests = "^2.21"
+pytest-cov = "^2.6"
 
 [tool.poetry.dev-dependencies]
-pytest = "^4.3"
-pyresttest = "^1.7"
-invoke = "^1.2"
+
 

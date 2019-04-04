@@ -39,8 +39,8 @@ def test(ctx):
     :param v: use -v to increase verbosity
     :return:
     """
-    cmd = 'pyresttest http://localhost:8445 tests/api/test.yaml'
-    ctx.run(cmd)
+    cmd = 'python3 -m pytest --cov tmeister'
+    ctx.run(cmd, env={'IS_LOCAL': 'true'})
 
 
 @task
@@ -51,7 +51,7 @@ def install(ctx):
     :param ctx:
     :param docker: if this is installing in a docker container
     """
-    ctx.run('python3 -m pip install -r requirements.txt -t .pip', pty=IS_TTY)
+    ctx.run('poetry install --no-dev', pty=IS_TTY)
 
 
 @task
