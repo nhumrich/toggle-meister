@@ -14,6 +14,7 @@ from sentry_asgi import SentryMiddleware
 import sentry_sdk
 
 from . import toggles, features, environments, auditing, health
+from .permissions import InsufficientPermissionsError
 from .security import GoogleAuthBackend
 
 
@@ -60,6 +61,10 @@ def init():
     @app.exception_handler(JSONDecodeError)
     async def bad_json(request, exc):
         return JSONResponse({'reason': 'invalid json', 'details': str(exc)}, status_code=400)
+
+    @app.exception_handler(InsufficientPermissionsError)
+    async def bad_json(request, exc):
+        return JSONResponse({'reason': 'you are not authorized to do that dave'}, status_code=403)
 
     # auth stuff
     auth = GoogleAuthBackend(GOOGLE_ID, GOOGLE_SECRET, GOOGLE_ORG)
