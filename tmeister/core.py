@@ -63,7 +63,7 @@ def init():
         return JSONResponse({'reason': 'invalid json', 'details': str(exc)}, status_code=400)
 
     @app.exception_handler(InsufficientPermissionsError)
-    async def bad_json(request, exc):
+    async def handle_permissions(request, exc):
         return JSONResponse({'reason': 'you are not authorized to do that dave'}, status_code=403)
 
     # auth stuff
