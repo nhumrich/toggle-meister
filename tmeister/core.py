@@ -113,7 +113,7 @@ def main(app=None):
     else:
         kwargs['workers'] = 2
 
-    uvicorn.run(app, host='0.0.0.0', port=8445, headers=[('Server', 'tmeister'), ('Connection', 'close')],
+    uvicorn.run(app, host='0.0.0.0', http='h11', port=8445, headers=[('Server', 'tmeister')],
                 proxy_headers=True, **kwargs)
 
 

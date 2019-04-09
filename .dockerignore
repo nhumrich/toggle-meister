@@ -2,11 +2,18 @@
 .gitignore
 Dockerfile
 docker-compose.yml
-Dockerfile-dev
-wercker.yml
 .gitlab-ci.yml
 cnpy-deployment.yaml
 tests/
+
+
+# js stuff
+**/babel-helpers.js
+jspm_packages
+node_modules
+tmeister/static/build/
+tmeister/static/coverage/
+
 .vscode/
 .idea/
 readme.md
@@ -16,6 +23,7 @@ readme.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.pytest_cache/
 *.py[cod]
 
 # C extensions
