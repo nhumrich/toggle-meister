@@ -6,9 +6,6 @@ import sqlalchemy
 import schedule
 import requests
 
-from .dataaccess import db
-
-
 
 SLACK_WEBHOOK_URL = os.getenv('SLACK_WEBHOOK_URL')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL')
