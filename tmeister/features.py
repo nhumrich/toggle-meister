@@ -19,7 +19,7 @@ async def create_feature(request):
     await permissions.check_permissions(
         user, permissions.Action.create_feature)
     try:
-        response = await featureda.add_feature(feature_name)
+        response = await featureda.add_feature(feature_name, user)
         await auditing.audit_event(
             'feature.add', user, {'feature_name': feature_name})
         return JSONResponse(response, status_code=201)

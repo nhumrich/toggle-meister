@@ -7,6 +7,8 @@ expose: True
 healthcheck_url: /heartbeat
 port: 8445
 
+worker_commmand: ['tini', './cron.sh']
+
 environment:
   default:
     GOOGLE_ORG: canopytax.com
@@ -20,6 +22,9 @@ environment:
   production:
     COOKIE_NAME: canopytoggles
     ENV_LOCATION: Prod
+    SLACK_CHANNEL: '#dev-camp'
+    SLACK_REMINDER_TIME: '15:15'
+    SLACK_REMINDER_DAY: 'wednesday'
 
 secrets:
   tmeister:
@@ -29,6 +34,7 @@ secrets:
     GOOGLE_SECRET: google_secret
     COOKIE_KEY: cookie_key
     SENTRY_URL: sentry_dsn
+    SLACK_WEBHOOK_URL: slack_webhook_url
 
 
 migration:

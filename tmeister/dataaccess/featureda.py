@@ -1,4 +1,5 @@
 from asyncpgsa import pg
+from sqlalchemy.sql import functions
 
 from . import db
 
@@ -12,8 +13,10 @@ async def get_features(*, feature_list=None):
     return [row['name'] for row in features]
 
 
-async def add_feature(feature_name):
-    await pg.fetchval(db.features.insert().values(name=feature_name))
+async def add_feature(feature_name, username):
+    await pg.fetchval(db.features.insert().values(name=feature_name,
+                                                  created_on=functions.now(),
+                                                  created_by=username))
     return {'name': feature_name}
 
 

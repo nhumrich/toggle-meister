@@ -24,6 +24,7 @@ pytest = "^4.4"
 jmespath = "^0.9.4"
 requests = "^2.21"
 pytest-cov = "^2.6"
+schedule = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 

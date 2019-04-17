@@ -587,7 +587,7 @@ SystemJS.config({
     "net": "npm:jspm-nodelibs-net@0.2.0",
     "os": "npm:jspm-nodelibs-os@0.2.0",
     "path": "npm:jspm-nodelibs-path@0.2.0",
-    "process": "npm:jspm-nodelibs-process@0.2.0",	
+    "process": "npm:jspm-nodelibs-process@0.2.0",
     "prop-types": "npm:prop-types@15.6.0",
     "react": "npm:react@15.3.2",
     "react-dom": "npm:react-dom@15.2.1",
