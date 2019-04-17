@@ -77,7 +77,6 @@ def report_to_slack():
 
 
 def run():
-    report_to_slack()
     s = schedule.every(1).week
     s.start_day = SLACK_REMINDER_DAY
     s.at(SLACK_REMINDER_TIME).do(report_to_slack)
