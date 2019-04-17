@@ -7,7 +7,7 @@ expose: True
 healthcheck_url: /heartbeat
 port: 8445
 
-worker_commmand: ['tini', './cron.sh']
+worker_command: ['tini', './cron.sh']
 
 environment:
   default:
