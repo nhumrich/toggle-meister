@@ -1,5 +1,7 @@
 # Toggle Meister!
 
+![logo](![alt text](https://raw.githubusercontent.com/canopytax/toggle-meister/master/ToggleLogo.png))
+
 Toggle-Meister is a Feature toggle service gone awesome.
 
 Why Feature toggles as a service? When you have many micro services,
