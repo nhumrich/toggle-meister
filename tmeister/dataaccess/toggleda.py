@@ -1,4 +1,5 @@
 from asyncpgsa import pg
+from sqlalchemy.sql import functions
 
 from . import db
 
@@ -22,7 +23,7 @@ async def set_toggle_state(env, feature, state):
         if state == 'ON':
             await pg.fetchval(
                 db.toggles.insert()
-                    .values(feature=feature, env=env, state='ON')
+                    .values(feature=feature, env=env, state='ON', date_on=functions.now())
             )
     elif state == 'OFF':
         await pg.fetchval(db.toggles
