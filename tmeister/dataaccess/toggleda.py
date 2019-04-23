@@ -15,6 +15,16 @@ async def get_toggle_states_for_env(env, list_of_features):
 
 
 async def set_toggle_state(env, feature, state):
+    if env == 'production':
+        # are we currently at `Production` or `production`?
+        envs = [e['name'] for e in await pg.fetch(db.environments.select())]
+        if 'production' in envs:
+            real_env = 'production'
+        elif 'Production' in envs:
+            real_env = 'Production'
+    else:
+        real_env = env
+
     results = await pg.fetch(db.toggles.select()
                              .where(db.toggles.c.feature == feature)
                              .where(func.lower(db.toggles.c.env) == env))
@@ -24,7 +34,7 @@ async def set_toggle_state(env, feature, state):
         if state == 'ON':
             await pg.fetchval(
                 db.toggles.insert()
-                    .values(feature=feature, env=env, state='ON', date_on=functions.now())
+                    .values(feature=feature, env=real_env, state='ON', date_on=functions.now())
             )
     elif state == 'OFF':
         await pg.fetchval(db.toggles

@@ -8,14 +8,14 @@ describe('toggle-table.helpers.js', () => {
 		toggles = [
 			{
 				"toggle": {
-					"env": "Production",
+					"env": "production",
 					"feature": "f1",
 					"state": "OFF"
 				},
 			},
 		];
 
-		envList = 'Production';
+		envList = 'production';
 	});
 
 	describe('getEnvList function', () => {
@@ -23,98 +23,98 @@ describe('toggle-table.helpers.js', () => {
 			toggles = [
 				{
 					"toggle": {
-						"env": "Production",
+						"env": "production",
 						"feature": "f1",
 						"state": "OFF"
 					},
 				},
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f2",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f3",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f4",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f5",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f6",
 						state: "OFF",
 					},
 				},
 			];
 
-			expect(getEnvList(toggles)).toEqual(["Production", "Stage"]);
+			expect(getEnvList(toggles)).toEqual(["production", "stage"]);
 		});
 
 		it('always puts production first in the list', () => {
 			toggles = [
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f4",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f5",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f6",
 						state: "OFF",
 					},
 				},
 				{
 					"toggle": {
-						"env": "Production",
+						"env": "production",
 						"feature": "f1",
 						"state": "OFF"
 					},
 				},
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f2",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f3",
 						state: "OFF",
 					},
 				},
 			];
 
-			expect(getEnvList(toggles)).toEqual(["Production", "Stage"]);
+			expect(getEnvList(toggles)).toEqual(["production", "stage"]);
 		});
 	});
 
@@ -130,49 +130,49 @@ describe('toggle-table.helpers.js', () => {
 			toggles = [
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f2",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Integration",
+						env: "integ",
 						feature: "f2",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f2",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Production",
+						env: "production",
 						feature: "f1",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Stage",
+						env: "stage",
 						feature: "f1",
 						state: "OFF",
 					},
 				},
 				{
 					toggle: {
-						env: "Integration",
+						env: "integ",
 						feature: "f1",
 						state: "OFF",
 					},
 				},
 			];
 
-			envList = ["Integration", "Stage", "Production"];
+			envList = ["integ", "stage", "production"];
 
 			const expected = [
 				[toggles[1], toggles[2], toggles[0]],

@@ -115,7 +115,7 @@ export default class ToggleTable extends React.Component {
 		});
 	}
 	handleToggleClick = (evt, toggle) => {
-		if (toggle.toggle.env === 'Production') {
+		if (toggle.toggle.env === 'production') {
 			this.setState({
 				toggleProd: {
 					showModal: true,

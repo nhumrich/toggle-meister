@@ -26,7 +26,8 @@ def test_index(client):
 
 def test_get_envs(client):
     response = client.get('/api/envs')
-    assert response.json()['envs'][0]['name'] == 'production'
+    envs = [e['name'] for e in response.json()['envs']]
+    assert 'production' in envs
 
 
 def test_invalid_post_json(client):

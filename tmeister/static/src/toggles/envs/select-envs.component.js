@@ -26,7 +26,7 @@ function toPillboxItem(env) {
 function setSelectedEnvs(action, envItems) {
 	const envs = chain(envItems)
 		.map(item => item.label)
-		.concat("Production")
+		.concat("production")
 		.uniq()
 		.value();
 
