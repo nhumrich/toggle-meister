@@ -5,7 +5,7 @@ import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 const sortOrder = {
 	integ: 1,
 	stage: 2,
-	Production: 3,
+	production: 3,
 }
 
 export function getEnvList(toggles) {
@@ -18,7 +18,7 @@ export function getEnvList(toggles) {
 					result.concat(env)
 				:
 					result
-		}, ["Production"])
+		}, ["production"])
 		.sort((first, second) => {
 			if (sortOrder[first] && sortOrder[second]) {
 				return sortOrder[first] < sortOrder[second] ? -1 : 1;

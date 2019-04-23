@@ -10,7 +10,7 @@ from . import auditing
 
 async def create_feature(request):
     body = await request.json()
-    feature_name = body.get('name', None)
+    feature_name = body.get('name', '').lower()
     user = request.user.display_name
     if not feature_name.isidentifier():
         return JSONResponse({'Message': "Not a valid name"},
@@ -43,7 +43,7 @@ async def delete_feature(request: Request):
         A better way to clean up is to do a soft-delete
         TODO: implement a soft-delete, and hard-delete only when safe
     """
-    feature = request.path_params.get('name')
+    feature = request.path_params.get('name').lower()
     user = request.user.display_name
 
     if not feature.isidentifier():

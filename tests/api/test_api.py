@@ -26,7 +26,7 @@ def test_index(client):
 
 def test_get_envs(client):
     response = client.get('/api/envs')
-    assert response.json()['envs'][0]['name'] == 'Production'
+    assert response.json()['envs'][0]['name'] == 'production'
 
 
 def test_invalid_post_json(client):
@@ -125,14 +125,14 @@ def test_turn_toggle_on_for_production(client):
     # should turn all toggles on for other envs
     response = client.patch(
         '/api/toggles',
-        json={'toggle': {'env': 'Production', 'feature': 'bobbytables', 'state': 'ON'}})
+        json={'toggle': {'env': 'production', 'feature': 'bobbytables', 'state': 'ON'}})
 
     toggle = [t for t in response.json()['toggles']
               if t['toggle']['env'] == 'bob2' and t['toggle']['feature'] == 'bobbytables'][0]
     assert toggle['toggle']['state'] == 'ON'
 
     toggle = [t for t in response.json()['toggles']
-              if t['toggle']['env'] == 'Production' and t['toggle']['feature'] == 'bobbytables'][0]
+              if t['toggle']['env'] == 'production' and t['toggle']['feature'] == 'bobbytables'][0]
     assert toggle['toggle']['state'] == 'ON'
 
 
@@ -144,7 +144,7 @@ def test_get_audit_logs(client):
 def test_turn_toggles_off(client):
     response = client.patch(
         '/api/toggles',
-        json={'toggle': {'env': 'Production', 'feature': 'bobbytables', 'state': 'OFF'}})
+        json={'toggle': {'env': 'production', 'feature': 'bobbytables', 'state': 'OFF'}})
     assert response.status_code == 200
 
     response = client.patch(

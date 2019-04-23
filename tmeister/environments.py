@@ -16,7 +16,7 @@ async def get_envs(request):
 
 async def add_env(request):
     body = await request.json()
-    env_name = body.get('name', None)
+    env_name = body.get('name', '').lower()
     user = request.user.display_name
 
     if not env_name.isidentifier():
@@ -38,7 +38,7 @@ async def add_env(request):
 
 
 async def delete_env(request):
-    env = request.path_params.get('name')
+    env = request.path_params.get('name').lower()
     user = request.user.display_name
 
     await permissions.check_permissions(user, permissions.Action.delete_env)

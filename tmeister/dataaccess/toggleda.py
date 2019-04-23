@@ -1,12 +1,13 @@
 from asyncpgsa import pg
 from sqlalchemy.sql import functions
+from sqlalchemy import func
 
 from . import db
 
 
 async def get_toggle_states_for_env(env, list_of_features):
     query = db.toggles.select() \
-        .where(db.toggles.c.env == env) \
+        .where(func.lower(db.toggles.c.env) == env) \
         .where(db.toggles.c.feature.in_(list_of_features))
 
     return {r['feature']: r['state'] == 'ON'
@@ -16,7 +17,7 @@ async def get_toggle_states_for_env(env, list_of_features):
 async def set_toggle_state(env, feature, state):
     results = await pg.fetch(db.toggles.select()
                              .where(db.toggles.c.feature == feature)
-                             .where(db.toggles.c.env == env))
+                             .where(func.lower(db.toggles.c.env) == env))
 
     results = _transform_toggles(results)
     if not results:
@@ -29,7 +30,7 @@ async def set_toggle_state(env, feature, state):
         await pg.fetchval(db.toggles
                           .delete()
                           .where(db.toggles.c.feature == feature)
-                          .where(db.toggles.c.env == env))
+                          .where(func.lower(db.toggles.c.env) == env))
     return {
         'toggle': {
             'env': env,
@@ -55,22 +56,35 @@ LEFT OUTER JOIN toggles ON feature = features.name
 """
 
     toggles = await pg.fetch(query)
-    results = [
-        {'toggle': {'env': row['env'],
-                    'feature': row['feature'],
-                    'state': row['state']}
-         }
-        for row in toggles
-        ]
+    results = []
+    for row in toggles:
+        env = row['env']
+        if env == 'Production':
+            env = 'production'
+
+        results.append(
+            {'toggle': {'env': env,
+                        'feature': row['feature'],
+                        'state': row['state']}
+             }
+        )
     return {'toggles': results}
 
 
 def _transform_toggles(toggles):
-    return [{
+    results = []
+    for row in toggles:
+        env = row['env']
+        if env == 'Production':
+            env = 'production'
+        results.append(
+            {
                 'toggle': {
-                    'env': row['env'],
+                    'env': env,
                     'feature': row['feature'],
                     'state': row['state']
                 }
             }
-            for row in toggles]
+        )
+
+    return results

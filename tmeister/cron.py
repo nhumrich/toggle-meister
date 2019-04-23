@@ -33,7 +33,7 @@ def get_database_url():
 def get_production_toggles():
     pg = sqlalchemy.create_engine(get_database_url())
     toggles = pg.execute("SELECT feature, date_on FROM toggles "
-                         "WHERE env = 'Production' and state = 'ON' and "
+                         "WHERE lower(env) = 'production' and state = 'ON' and "
                          "DATE_PART('day', now() - date_on) > 14")
 
     features = []

@@ -16,7 +16,7 @@ that doesnt suck by focusing on a couple key principles
  * Customer toggles get out of hand and create an impossible test scenario
  * Toggles can only be switched on/off per environment, not per person
 * Toggles must be short lived. 
- * After a toggle is stable on Production it needs to be removed from the codebase
+ * After a toggle is stable on production it needs to be removed from the codebase
 
 A stretch goal of this project is also to provide "rolling releases" 
 of features, a percentage of the users at a time.
@@ -40,11 +40,11 @@ docker-compose up
 
 ## current endpoints
 
-`http :8445/api/envs/Production/toggles`
+`http :8445/api/envs/production/toggles`
 
 `http :8445/api/toggles`
 
-`http PATCH :8445/api/toggles toggle:='{"env": "Production", "feature": "foo", "state": "ON"}'`
+`http PATCH :8445/api/toggles toggle:='{"env": "production", "feature": "foo", "state": "ON"}'`
 
 `http :8445/api/features`
 

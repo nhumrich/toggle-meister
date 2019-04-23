@@ -14,8 +14,8 @@ from . import permissions
 async def get_toggle_states_for_env(request: Request):
     params = request.query_params
 
-    env = request.path_params.get('name')
-    features = params.getlist('feature')
+    env = request.path_params.get('name').lower()
+    features = [feature.lower() for feature in params.getlist('feature')]
     if not features:
         return JSONResponse({'Message': "No features provided"},
                             status_code=400)
@@ -37,8 +37,8 @@ async def set_toggle_state(request):
         return JSONResponse({'Message': "No toggle provided"},
                             status_code=400)
 
-    env = toggle.get('env')
-    feature = toggle.get('feature')
+    env = toggle.get('env').lower()
+    feature = toggle.get('feature').lower()
     state = toggle.get('state')
     user = request.user.display_name
 
@@ -63,7 +63,7 @@ async def set_toggle_state(request):
 
     if current_state != state:
         await permissions.check_permissions(user, permissions.Action.toggle)
-        if env == 'Production' and state == 'ON':
+        if env == 'production' and state == 'ON':
             await _toggle_all_for_feature(feature, state='ON')
         else:
             await toggleda.set_toggle_state(env, feature, state)
