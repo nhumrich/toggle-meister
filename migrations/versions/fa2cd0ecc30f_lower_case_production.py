@@ -19,11 +19,11 @@ import sqlalchemy as sa
 def upgrade():
     bind = op.get_bind()
     bind.execute("""
+        ALTER TABLE toggles ALTER CONSTRAINT toggles_env_fkey DEFERRABLE;
         BEGIN;
-        ALTER TABLE toggles disable TRIGGER ALL;
+        SET CONSTRAINTS toggles_env_fkey DEFERRED;
         UPDATE toggles SET env='production' where env='Production';
         UPDATE environments set name='production' where name='Production';
-        ALTER TABLE toggles enable trigger all; 
         COMMIT;
     """)
 
@@ -32,9 +32,9 @@ def downgrade():
     bind = op.get_bind()
     bind.execute("""
             BEGIN;
+            SET CONSTRAINTS toggles_env_fkey DEFERRED;
             ALTER TABLE toggles disable TRIGGER ALL;
             UPDATE toggles SET env='Production' where env='production';
             UPDATE environments set name='Production' where name='production';
-            ALTER TABLE toggles enable trigger all;
             COMMIT; 
         """)
