@@ -21,6 +21,7 @@ class Action(Enum):
     delete_env = 4
     create_feature = 5
     delete_feature = 6
+    hard_delete_feature = 7
 
 
 async def check_permissions(username: str, action: Action):
@@ -31,6 +32,6 @@ async def check_permissions(username: str, action: Action):
     role = Role(employee['role_id'])
     if role == Role.read_only:
         raise InsufficientPermissionsError
-    if (action in (Action.create_env, Action.delete_env) and
+    if (action in (Action.create_env, Action.delete_env, Action.hard_delete_feature) and
             role != Role.admin):
         raise InsufficientPermissionsError
