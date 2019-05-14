@@ -71,6 +71,11 @@ def test_get_toggles(client):
     assert toggle['toggle']['state'] == 'OFF'
 
 
+def test_get_single_toggle(client):
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == False
+
+
 def test_turn_toggle_on(client):
     response = client.patch(
         '/api/toggles',
@@ -79,6 +84,11 @@ def test_turn_toggle_on(client):
     toggle = [t for t in response.json()['toggles']
               if t['toggle']['env'] == 'bob2' and t['toggle']['feature'] == 'bobbytables'][0]
     assert toggle['toggle']['state'] == 'ON'
+
+
+def test_get_single_toggle_on(client):
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == True
 
 
 def test_turn_toggle_on_thats_already_on(client):
@@ -154,14 +164,36 @@ def test_turn_toggles_off(client):
     assert response.status_code == 200
 
 
+def test_soft_delete_feature(client):
+    # first set toggle to on
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ON'}})
+
+    # now delete feature
+    response = client.delete('/api/features/bobbytables')
+    assert response.status_code == 204
+
+    # now get toggles - should still be "on"
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == True
+
+
+def test_creating_feature_that_is_soft_deleted(client):
+    # creating a feature that is soft deleted should work
+    response = client.post('/api/features', json={'name': 'bobbytables'})
+    assert response.json()['name'] == 'bobbytables'
+
+
+def test_delete_features(client):
+    response = client.delete('/api/features/bobbytables?hard=true')
+    assert response.status_code == 204
+
+    response = client.delete('/api/features/bobbytables2?hard=true')
+    assert response.status_code == 204
+
+
 def test_delete_env(client):
     response = client.delete('/api/envs/bob2')
     assert response.status_code == 204
 
-
-def test_delete_features(client):
-    response = client.delete('/api/features/bobbytables')
-    assert response.status_code == 204
-
-    response = client.delete('/api/features/bobbytables2')
-    assert response.status_code == 204

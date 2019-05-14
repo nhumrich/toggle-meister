@@ -13,6 +13,13 @@ features = Table(
     Column('created_by', ForeignKey('employees.username'))
 )
 
+deleted_features = Table(
+    'deleted_features', METADATA,
+    Column('name', String(50), unique=True, primary_key=True),
+    Column('deleted_on', TIMESTAMP),
+    Column('deleted_by', String, ForeignKey('employees.username'))
+)
+
 environments = Table(
     'environments', METADATA,
     Column('name', type_=String(40), primary_key=True, unique=True),
@@ -22,7 +29,7 @@ environments = Table(
 
 toggles = Table(
     'toggles', METADATA,
-    Column('feature', String, ForeignKey('features.name')),
+    Column('feature', String),
     Column('env', String, ForeignKey('environments.name')),
     Column('state', String(5)),
     Column('date_on', TIMESTAMP),

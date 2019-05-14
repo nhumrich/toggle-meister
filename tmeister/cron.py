@@ -6,6 +6,8 @@ import sqlalchemy
 import schedule
 import requests
 
+from .dataaccess import db
+
 
 SLACK_WEBHOOK_URL = os.getenv('SLACK_WEBHOOK_URL')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL')
@@ -44,6 +46,30 @@ def get_production_toggles():
     return features
 
 
+def delete_removed_features():
+    pg = sqlalchemy.create_engine(get_database_url())
+
+    features = [(f['name'], f['deleted_by'], f['deleted_on']) for f in pg.execute(
+        "SELECT name, deleted_by, deleted_on from deleted_features "
+        "WHERE DATE_PART('day', now() - date_on) > 14")]
+
+    for feature, user, date in features:
+        # first, turn off all toggles (this cleans up the toggle db)
+        envs = [result['name'] for result in pg.execute("SELECT name from environments;")]
+        for e in envs:
+            pg.execute(f"DELETE FROM toggles where feature='{feature}' and env='{e}';")
+
+        # now delete the feature
+        pg.execute(db.features.delete().where(db.features.c.name == feature))
+
+        # mark the event
+        pg.execute(db.auditing.insert().values(
+            event='feature.remove',
+            user='cron.user',
+            date=datetime.now(),
+            event_data={'feature_name': feature}))
+
+
 def report_to_slack():
     toggs = get_production_toggles()
     for feature, user, date in toggs:
@@ -77,9 +103,14 @@ def report_to_slack():
 
 
 def run():
-    s = schedule.every(1).week
-    s.start_day = SLACK_REMINDER_DAY
-    s.at(SLACK_REMINDER_TIME).do(report_to_slack)
+    # schedule slack shaming
+    s1 = schedule.every(1).week
+    s1.start_day = SLACK_REMINDER_DAY
+    s1.at(SLACK_REMINDER_TIME).do(report_to_slack)
+
+    # schedule feature cleanup
+    s2 = schedule.every(1).day
+    s2.at(SLACK_REMINDER_TIME).do(delete_removed_features)
 
     while True:
         sleep_time = schedule.next_run() - datetime.now()
