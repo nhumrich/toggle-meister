@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, String, \
-    ForeignKey, Index
-from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB
+    ForeignKey, Index, text
+from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE
 import sqlalchemy as sa
 
 METADATA = sa.MetaData()
@@ -59,3 +59,12 @@ employees = Table(
     Column('email', type_=String),
     Column('role_id', Integer)
 )
+
+metrics = Table(
+    'metrics', METADATA,
+    Column('feature', String, index=True, nullable=False),
+    Column('env', String, index=True, nullable=False),
+    Column('date', DATE, nullable=False),
+    Column('hit_count', Integer, nullable=False, server_default=text('1')),
+)
+Index('metrics_index', metrics.c.feature, metrics.c.env, metrics.c.date, unique=True)

@@ -33,12 +33,9 @@ async def delete_feature(feature_name, _soft=False):
 
 
 async def is_feature_soft_deleted(feature_name):
-    try:
-        result = await pg.fetchval(
-            db.deleted_features.select().where(db.deleted_features.c.name == feature_name)
-        )
-    except Exception as e:
-        pass
+    result = await pg.fetchval(
+        db.deleted_features.select().where(db.deleted_features.c.name == feature_name)
+    )
     if result and len(result) > 0:
         return True
     return False

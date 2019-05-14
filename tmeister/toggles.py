@@ -9,6 +9,7 @@ from .dataaccess import environmentda
 from .dataaccess import featureda
 from . import auditing
 from . import permissions
+from . import metrics
 
 
 async def get_toggle_states_for_env(request: Request):
@@ -16,6 +17,7 @@ async def get_toggle_states_for_env(request: Request):
 
     env = request.path_params.get('name').lower()
     features = [feature.lower() for feature in params.getlist('feature')]
+    track = params.get('metrics', 'true').lower() == 'true'
     if not features:
         return JSONResponse({'Message': "No features provided"},
                             status_code=400)
@@ -26,6 +28,10 @@ async def get_toggle_states_for_env(request: Request):
                 # Everything not in the database is assumed off,
                 # even if it doesn't exist
                 result[f] = False
+
+    if track:
+        metrics.track_metrics(features, env)
+
     return JSONResponse(result,
                         headers={'Access-Control-Allow-Origin': '*'})
 

@@ -6,6 +6,7 @@ from .dataaccess import featureda
 from . import permissions
 from . import toggles
 from . import auditing
+from . import metrics
 
 
 async def create_feature(request):
@@ -41,11 +42,6 @@ async def get_features(request):
 
 
 async def delete_feature(request: Request):
-    """ This method currently deletes EVERYTHING for a given feature.
-        It should be used only for cleanup, and requires admin permissions
-        A better way to clean up is to do a soft-delete
-        TODO: implement a soft-delete, and hard-delete only when safe
-    """
     feature = request.path_params.get('name').lower()
     user = request.user.display_name
     hard_delete = request.query_params.get('hard', '') == 'true'
@@ -78,6 +74,9 @@ async def delete_feature(request: Request):
 async def _do_hard_feature_delete(feature):
     # first, turn off all toggles (this cleans up the toggle db)
     await toggles._toggle_all_for_feature(feature, state='OFF')
+
+    # remove the metrics
+    await metrics.remove_metrics(feature=feature)
 
     # now delete the feature
     await featureda.delete_feature(feature)
