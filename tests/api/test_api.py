@@ -73,7 +73,7 @@ def test_get_toggles(client):
 
 def test_get_single_toggle(client):
     response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
-    assert response.json()['bobbytables'] == False
+    assert response.json()['bobbytables'] == False  # noqa
 
 
 def test_turn_toggle_on(client):
@@ -88,7 +88,7 @@ def test_turn_toggle_on(client):
 
 def test_get_single_toggle_on(client):
     response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
-    assert response.json()['bobbytables'] == True
+    assert response.json()['bobbytables'] == True  # noqa
 
 
 def test_turn_toggle_on_thats_already_on(client):
@@ -176,7 +176,7 @@ def test_soft_delete_feature(client):
 
     # now get toggles - should still be "on"
     response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
-    assert response.json()['bobbytables'] == True
+    assert response.json()['bobbytables'] == True  # noqa
 
 
 def test_creating_feature_that_is_soft_deleted(client):
@@ -196,4 +196,3 @@ def test_delete_features(client):
 def test_delete_env(client):
     response = client.delete('/api/envs/bob2')
     assert response.status_code == 204
-

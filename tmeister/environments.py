@@ -6,6 +6,7 @@ from asyncpg.exceptions import UniqueViolationError
 from . import permissions
 from .dataaccess import environmentda
 from . import auditing
+from . import metrics
 
 
 async def get_envs(request):
@@ -42,6 +43,9 @@ async def delete_env(request):
     user = request.user.display_name
 
     await permissions.check_permissions(user, permissions.Action.delete_env)
+
+    # remove metrics
+    await metrics.remove_metrics(environment=env)
 
     await environmentda.delete_env(env)
     await auditing.audit_event(
