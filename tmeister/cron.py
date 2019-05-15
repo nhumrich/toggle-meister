@@ -40,8 +40,11 @@ def get_production_toggles():
 
     features = []
     for feature, date_on in toggles:
-        _, user = next(pg.execute(f"SELECT name, created_by FROM features WHERE name = '{feature}';"))
-        features.append((feature, user, date_on))
+        try:
+            _, user = next(pg.execute(f"SELECT name, created_by FROM features WHERE name = '{feature}';"))
+            features.append((feature, user, date_on))
+        except StopIteration:
+            pass
 
     return features
 
