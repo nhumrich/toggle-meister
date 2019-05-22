@@ -23,7 +23,6 @@ COPY tmeister/static /app/tmeister/static
 RUN apk --no-cache add nodejs npm git && \
     cd /app/tmeister/static && \
     npm install && \
-    npm run postinstall && \
     npm run build && \
     apk --no-cache del nodejs git && \
     rm -rf node_modules spec src bin &&  \

@@ -27,6 +27,12 @@
   box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.26);
 }
 
+:global(.cps-loader).loader {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
 .button:hover,
 .button:focus {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 2px 6px 0 rgba(0, 0, 0, 0.26);
@@ -107,12 +113,6 @@
   padding: 8px 28px;
 }
 
-:global(.cps-loader).loader {
-  padding: 0;
-  display: flex;
-  justify-content: center;
-}
-
 .disabledWithLoader > span {
   background-color: #afafaf;
 }
@@ -168,7 +168,7 @@ a.flat:global(.\+align),
 a.flat:global(.\+disabled),
 a.flat:disabled,
 button.flat:global(.\+disabled),
-button.flat.:disabled,
+button.flat:disabled,
 global(.cps-link).flat:disabled,
 .button.flat:disabled,
 .flat:global(.\+disabled),

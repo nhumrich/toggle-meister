@@ -4,269 +4,45 @@
   "description": "",
   "main": "src/toggle-meister.js",
   "scripts": {
-    "build": "./bin/build-code",
-    "watch": "./bin/build-code -dw",
-    "postinstall": "jspm install",
-    "test": "jspmjasmine"
+    "start": "webpack --config ./webpack.dev.js",
+    "build": "webpack --config ./webpack.config.js -p"
   },
-  "author": "Joel Denning",
+  "author": "Canopy Tax",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.16.0",
-    "jasmine": "^2.4.1",
-    "jspm": "0.17.0-beta.32",
-    "node-jspm-jasmine": "^2.4.6"
+    "@babel/core": "^7.4.5",
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/plugin-transform-runtime": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.5.1",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^2.0.2",
+    "copy-webpack-plugin": "^5.0.3",
+    "css-loader": "^2.1.1",
+    "html-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^3.0.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.32.1",
+    "webpack-cli": "^3.3.2",
+    "webpack-dev-server": "^3.4.1"
   },
-  "jspm": {
-    "name": "toggle-meister",
-    "main": "toggle-meister.js",
-    "directories": {
-      "lib": "src"
-    },
-    "dependencies": {
-      "babel-types": "npm:babel-types@6.8.1",
-      "cpr-multiselect": "npm:cpr-multiselect@3.2.0",
-      "cpr-tooltip": "npm:cpr-tooltip@^1.1.2",
-      "fuzzy": "npm:fuzzy@^0.1.1",
-      "jquery": "npm:jquery@^3.1.1",
-      "moment": "npm:moment@^2.15.1",
-      "prop-types": "npm:prop-types@^15.6.0",
-      "react-dom": "npm:react-dom@next",
-      "react-redux": "npm:react-redux@4",
-      "react-router": "npm:react-router@3",
-      "redux-thunk": "npm:redux-thunk@^2.1.0",
-      "rx": "npm:rx@^4.1.0",
-      "rxjs": "npm:rxjs@^6.3.2",
-      "single-spa-canopy": "npm:single-spa-canopy@^1.15.0",
-      "sofe": "npm:sofe@^1.5.5"
-    },
-    "devDependencies": {
-      "babel-plugin-transform-class-properties": "npm:babel-plugin-transform-class-properties@^6.24.1",
-      "babel-plugin-transform-decorators-legacy": "npm:babel-plugin-transform-decorators-legacy@^1.3.4",
-      "babel-plugin-transform-react-jsx": "npm:babel-plugin-transform-react-jsx@^6.8.0",
-      "cluster": "npm:jspm-nodelibs-cluster@^0.2.0",
-      "core-js": "npm:core-js@^2.4.0",
-      "css": "github:MeoMix/jspm-loader-css@master",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.10",
-      "postcss-safe-parser": "npm:postcss-safe-parser@^1.0.7",
-      "punycode": "npm:jspm-nodelibs-punycode@^0.2.0",
-      "vanilla": "github:systemjs/plugin-css@^0.1.21"
-    },
-    "peerDependencies": {
-      "assert": "npm:jspm-nodelibs-assert@^0.2.0",
-      "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
-      "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
-      "constants": "npm:jspm-nodelibs-constants@^0.2.0",
-      "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
-      "domain": "npm:jspm-nodelibs-domain@^0.2.0",
-      "events": "npm:jspm-nodelibs-events@^0.2.0",
-      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
-      "http": "npm:jspm-nodelibs-http@^0.2.0",
-      "https": "npm:jspm-nodelibs-https@^0.2.0",
-      "lodash": "npm:lodash@^4.12.0",
-      "net": "npm:jspm-nodelibs-net@^0.2.0",
-      "os": "npm:jspm-nodelibs-os@^0.2.0",
-      "path": "npm:jspm-nodelibs-path@^0.2.0",
-      "process": "npm:jspm-nodelibs-process@^0.2.0",
-      "react": "npm:react",
-      "redux": "npm:redux@^3.5.2",
-      "stream": "npm:jspm-nodelibs-stream@^0.2.0",
-      "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
-      "tty": "npm:jspm-nodelibs-tty@^0.2.0",
-      "url": "npm:jspm-nodelibs-url@^0.2.0",
-      "util": "npm:jspm-nodelibs-util@^0.2.0",
-      "vm": "npm:jspm-nodelibs-vm@^0.2.0",
-      "zlib": "npm:jspm-nodelibs-zlib@^0.2.0"
-    },
-    "overrides": {
-      "npm:babel-types@6.11.1": {
-        "meta": {
-          "lib/index.js": {
-            "deps": [
-              "./definitions/init.js"
-            ],
-            "cjsDeferDepsExecute": true
-          },
-          "lib/definitions/init.js": {
-            "deps": [
-              "./index",
-              "./core",
-              "./es2015",
-              "./flow",
-              "./jsx",
-              "./misc",
-              "./experimental"
-            ],
-            "cjsDeferDepsExecute": true
-          }
-        }
-      },
-      "npm:babel-types@6.24.1": {
-        "meta": {
-          "lib/index.js": {
-            "deps": [
-              "./definitions/init.js"
-            ],
-            "cjsDeferDepsExecute": true
-          },
-          "lib/definitions/init.js": {
-            "deps": [
-              "./index",
-              "./core",
-              "./es2015",
-              "./flow",
-              "./jsx",
-              "./misc",
-              "./experimental"
-            ],
-            "cjsDeferDepsExecute": true
-          }
-        }
-      },
-      "npm:babel-types@6.8.1": {
-        "meta": {
-          "lib/index.js": {
-            "deps": [
-              "./definitions/init.js"
-            ],
-            "cjsDeferDepsExecute": true
-          },
-          "lib/definitions/init.js": {
-            "deps": [
-              "./index",
-              "./core",
-              "./es2015",
-              "./flow",
-              "./jsx",
-              "./misc",
-              "./experimental"
-            ],
-            "cjsDeferDepsExecute": true
-          }
-        }
-      },
-      "npm:browserify-zlib@0.1.4": {
-        "dependencies": {
-          "readable-stream": "^2.0.2",
-          "pako": "~0.2.0"
-        },
-        "map": {
-          "_stream_transform": "readable-stream/transform"
-        }
-      },
-      "npm:debug@2.2.0": {
-        "main": "browser.js",
-        "jspmNodeConversion": false,
-        "format": "cjs",
-        "map": {
-          "./browser.js": {
-            "node": "./node.js"
-          },
-          "fs": "@node/fs",
-          "net": "@node/net",
-          "tty": "@node/tty",
-          "util": "@node/util"
-        }
-      },
-      "npm:debug@2.6.8": {
-        "main": "browser.js",
-        "jspmNodeConversion": false,
-        "format": "cjs",
-        "map": {
-          "./browser.js": {
-            "node": "./node.js"
-          },
-          "fs": "@node/fs",
-          "net": "@node/net",
-          "tty": "@node/tty",
-          "util": "@node/util"
-        }
-      },
-      "npm:esprima@2.7.2": {
-        "jspmNodeConversion": false
-      },
-      "npm:inherits@2.0.3": {
-        "ignore": [
-          "test.js"
-        ]
-      },
-      "npm:jquery@3.1.1": {
-        "format": "amd"
-      },
-      "npm:lodash@4.17.11": {
-        "map": {
-          "buffer": "@empty",
-          "process": "@empty"
-        }
-      },
-      "npm:moment@2.15.1": {
-        "jspmNodeConversion": false
-      },
-      "npm:ms@0.7.1": {
-        "jspmNodeConversion": false,
-        "format": "cjs"
-      },
-      "npm:pbkdf2@3.0.17": {
-        "main": "browser.js"
-      },
-      "npm:safe-buffer@5.1.2": {
-        "browser": "index.js"
-      },
-      "npm:svgo@0.6.6": {
-        "meta": {
-          "lib/svgo/config.js": {
-            "deps": [
-              "../../plugins/removeDoctype",
-              "../../plugins/removeXMLProcInst",
-              "../../plugins/removeComments",
-              "../../plugins/removeMetadata",
-              "../../plugins/removeEditorsNSData",
-              "../../plugins/cleanupAttrs",
-              "../../plugins/minifyStyles",
-              "../../plugins/convertStyleToAttrs",
-              "../../plugins/cleanupIDs",
-              "../../plugins/removeRasterImages",
-              "../../plugins/removeUselessDefs",
-              "../../plugins/cleanupNumericValues",
-              "../../plugins/cleanupListOfValues",
-              "../../plugins/convertColors",
-              "../../plugins/removeUnknownsAndDefaults",
-              "../../plugins/removeNonInheritableGroupAttrs",
-              "../../plugins/removeUselessStrokeAndFill",
-              "../../plugins/removeViewBox",
-              "../../plugins/cleanupEnableBackground",
-              "../../plugins/removeHiddenElems",
-              "../../plugins/removeEmptyText",
-              "../../plugins/convertShapeToPath",
-              "../../plugins/moveElemsAttrsToGroup",
-              "../../plugins/moveGroupAttrsToElems",
-              "../../plugins/collapseGroups",
-              "../../plugins/convertPathData",
-              "../../plugins/convertTransform",
-              "../../plugins/removeEmptyAttrs",
-              "../../plugins/removeEmptyContainers",
-              "../../plugins/mergePaths",
-              "../../plugins/removeUnusedNS",
-              "../../plugins/transformsWithOnePath",
-              "../../plugins/sortAttrs",
-              "../../plugins/removeTitle",
-              "../../plugins/removeDesc",
-              "../../plugins/removeDimensions",
-              "../../plugins/removeAttrs",
-              "../../plugins/addClassesToSVGElement",
-              "../../plugins/removeStyleElement"
-            ]
-          }
-        }
-      },
-      "npm:tslib@1.9.3": {
-        "format": "cjs",
-        "meta": {
-          "tslib.js": {
-            "esModule": true
-          }
-        }
-      }
-    }
+  "dependencies": {
+    "cpr-multiselect": "^3.3.14",
+    "cpr-tooltip": "^1.2.1",
+    "fuzzy": "^0.1.3",
+    "moment": "^2.24.0",
+    "prop-types": "^15.7.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-redux": "^4.4.10",
+    "react-router": "^3.2.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0",
+    "rx": "^4.1.0",
+    "rxjs": "^6.5.2",
+    "single-spa-canopy": "^1.15.0"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './search-box.css!';
+import styles from './search-box.css';
 
 export default function({actions}) {
 	return (

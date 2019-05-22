@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './create-toggle-modal.css!'
+import styles from './create-toggle-modal.css'
 
 export default function({actions, toggles}) {
 	return (
