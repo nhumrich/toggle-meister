@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/toggle-meister.js",
   "scripts": {
-    "start": "webpack-dev-server --config ./webpack.dev.js --port 8233",
+    "start": "webpack --config ./webpack.dev.js",
     "build": "webpack --config ./webpack.config.js -p",
     "watch": "./bin/build-code -dw"
   },

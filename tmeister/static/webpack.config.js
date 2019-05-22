@@ -2,12 +2,11 @@
 const webpack = require('webpack')
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: path.resolve(__dirname, 'src/toggle-meister.js'),
   output: {
-    filename: 'toggle-meiser.js',
+    filename: 'toggle-meister.js',
     path: path.resolve(__dirname, 'build'),
   },
   mode: 'production',
@@ -17,12 +16,6 @@ module.exports = {
         test: /\.js?$/,
         exclude: [path.resolve(__dirname, 'node_modules')],
         loader: 'babel-loader',
-        options: {
-          plugins: [
-            // // https://github.com/babel/babel-loader#babel-is-injecting-helpers-into-each-file-and-bloating-my-code
-            // "@babel/plugin-transform-runtime",
-          ],
-        },
       },
       {
         test: /\.css$/,
@@ -57,11 +50,6 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new CopyWebpackPlugin([
-      {from: './stylesheet.css'}
-    ])
   ],
   devtool: 'source-map',
 };
-
-

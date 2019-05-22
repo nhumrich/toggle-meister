@@ -11,6 +11,7 @@ config.devServer = {
 }
 
 config.mode = 'development'
+config.watch = true
 
 module.exports = config;
 
