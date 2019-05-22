@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './create-toggle-modal.css'
 
-export default function({actions, toggles}) {
+export default function({toggles, show, hide}) {
 	return (
 		<div className="cps-modal">
 			<div className="cps-modal__screen"></div>
@@ -12,7 +12,7 @@ export default function({actions, toggles}) {
 					</span>
 					<a
 						className="cps-modal__dialog__close cps-icon cps-icon-close"
-						onClick={actions.hideCreateToggleModal}
+						onClick={hide}
 					/>
 				</div>
 				<div className="cps-card__body">
@@ -46,7 +46,7 @@ export default function({actions, toggles}) {
 						>
 						Create feature
 					</button>
-					<a className="cps-link" onClick={actions.hideCreateToggleModal}>
+					<a className="cps-link" onClick={hide}>
 						Nevermind
 					</a>
 				</div>

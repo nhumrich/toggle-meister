@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './search-box.css';
 
-export default function({actions}) {
+export default function({search}) {
 	return (
 		<div>
 			<div className="cps-form-group cps-has-feedback cps-has-feedback-left cps-margin-right-8">
@@ -10,7 +10,7 @@ export default function({actions}) {
 					className={`cps-form-control ${styles.input}`}
 					placeholder="Search features"
 					type="text"
-					onChange={e => actions.newSearchValue(e.target.value)}
+					onChange={e => search(e.target.value)}
 				/>
 			</div>
 		</div>
