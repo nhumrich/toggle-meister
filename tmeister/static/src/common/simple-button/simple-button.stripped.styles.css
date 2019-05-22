@@ -1,0 +1,205 @@
+
+:global(.cps-loader).loader {
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.button:hover,
+.button:focus {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 2px 6px 0 rgba(0, 0, 0, 0.26);
+  text-decoration: none;
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button + .button {
+  margin-left: 24px;
+}
+
+.button + :global(.cps-link),
+.button + .flat {
+  margin-left: 12px;
+}
+
+.primary {
+  background-color: #00bf4b;
+  background-color: var(--cps-color-primary);
+  border: none;
+  box-shadow: none !important;
+  transition: filter .25s ease-in-out;
+}
+
+.unstyled, .unstyled:focus, .unstyled:hover, .unstyled:visited {
+  padding: unset;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  color: inherit;
+  text-align: inherit;
+  font-size: inherit;
+}
+
+.primary:hover, .primary:focus {
+  filter: brightness(95%);
+}
+
+.secondary {
+  background-color: #f9f9f9;
+  color: #777777;
+  color: var(--cps-color-gray1);
+  border: 1px solid #dfdfdf;
+  box-shadow: none !important;
+  transition: filter .25s ease-in-out;
+}
+
+.secondary:hover, .secondary:focus {
+  filter: brightness(95%);
+}
+
+.secondary .loader span {
+  background-color: #afafaf;
+}
+
+.button :global(.cps-icon) {
+  float: left;
+  padding-right: 4px;
+  color: inherit;
+}
+
+.disabled,
+.button:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: #e2e2e2;
+  color: rgba(0, 0, 0, 0.24);
+  box-shadow: none !important;
+}
+
+.large {
+  padding: 0 28px;
+  font-size: 18px;
+  height: 48px;
+  padding: 8px 28px;
+}
+
+.disabledWithLoader > span {
+  background-color: #afafaf;
+}
+
+a.flat,
+.flat {
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-size: 14px;
+  color: #00bf4b;
+  color: var(--cps-color-primary);
+  text-decoration: none;
+  padding: 4px 12px 4px 12px;
+  border-radius: 5px;
+  line-height: 1.75; /* accounts for icon */
+  font-weight: 700;
+  background-color: transparent;
+}
+
+.flat.tertiary {
+  color: var(--cps-color-cool-gray);
+  font-weight: 400;
+}
+
+.flat.mounted {
+  transition: background-color .25s ease-in-out;
+}
+
+a.flat:hover,
+.flat:hover,
+a.flat:focus,
+.flat:focus
+{
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+a.flat + :global(.cps-btn),
+.flat + :global(.cps-btn),
+a.flat + .button,
+.flat + button {
+  margin-left: 12px;
+}
+
+a.flat:global(.\+align),
+.flat:global(.\+align) {
+  margin-left: -12px;
+}
+
+a.flat:global(.\+disabled),
+a.flat:disabled,
+button.flat:global(.\+disabled),
+button.flat.:disabled,
+global(.cps-link).flat:disabled,
+.button.flat:disabled,
+.flat:global(.\+disabled),
+.flat:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.24) !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+a.flat:focus,
+.flat:focus {
+  background-color: rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+.a.flat :global(.cps-icon),
+.flat :global(.cps-icon) {
+  float: left;
+  padding-right: 4px;
+  color: inherit;
+}
+
+button.flat {
+  border: none;
+}
+
+button.flat::-moz-focus-inner {
+  border: 0;
+}
+
+button.button {
+  padding: 0px 24px;
+  height: 32px;
+}
+
+button.button::-moz-focus-inner {
+  border: 0;
+}
+
+fieldset:disabled .flat {
+  pointer-events: none;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 0.24);
+  box-shadow: none !important;
+}
+
+:global(.cps-btn-icon) a.flat,
+:global(.cps-btn-icon) .flat {
+  padding: 4px !important; /* 8px + 24px icon height = 32px */
+}
+
+button.phat {
+  font-size: 18px;
+  height: 48px;
+  padding: 0 28px;
+}
+
+.buttonLetterSpacing {
+  letter-spacing: inherit;
+}

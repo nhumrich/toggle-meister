@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './create-env-modal.css!';
+import styles from './create-env-modal.css';
 
 export default function({actions, toggles}) {
 	return (

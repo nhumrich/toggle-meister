@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './toggle-controls.css!';
+import styles from './toggle-controls.css';
 import SearchBox from './search/search-box.component.js';
 import CreateToggle from './create/create-toggle.component.js';
 import CreateEnv from './create/create-env.component.js';

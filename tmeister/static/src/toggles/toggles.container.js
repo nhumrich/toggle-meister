@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 
 import ToggleControls from './toggle-controls.component.js';
 import ToggleTable from './table/toggle-table.component.js';
-import styles from './toggles.container.css!';
+import styles from './toggles.container.css';
 
 import * as toggleActions from './toggles.actions.js';
 import * as searchActions from './search/search.actions.js';
