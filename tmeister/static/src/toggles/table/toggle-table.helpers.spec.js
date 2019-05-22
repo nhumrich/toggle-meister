@@ -105,6 +105,13 @@ describe('toggle-table.helpers.js', () => {
 						state: "OFF",
 					},
 				},
+        {
+          toggle: {
+            env: "nonproduction",
+            feature: "f7",
+            state: "OFF",
+          },
+        },
 				{
 					toggle: {
 						env: "production",
@@ -114,7 +121,7 @@ describe('toggle-table.helpers.js', () => {
 				},
 			];
 
-			expect(getEnvList(toggles)).toEqual(["production", "stage"]);
+			expect(getEnvList(toggles)).toEqual(["production", "stage", "nonproduction"]);
 		});
 	});
 
