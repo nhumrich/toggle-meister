@@ -64,13 +64,4 @@ module.exports = {
   devtool: 'source-map',
 };
 
-// new HtmlWebpackPlugin({
-//   template: './index.html'
-// })
-// resolve: {
-//   modules: [
-//     __dirname,
-//     'node_modules',
-//   ],
-// },
 
