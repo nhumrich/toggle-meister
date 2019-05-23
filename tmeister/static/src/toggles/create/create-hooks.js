@@ -1,8 +1,31 @@
-import toasts from '../../../common/simple-toast/simple-toast.js';
 import {useState, useEffect} from 'react'
+import toasts from '../../common/simple-toast/simple-toast.js';
 
-export function useCreateToggle(name) {
+export function useCreateEnv(name) {
+  const [ saving, saved ] = useCreate(
+    {
+      name,
+      api: 'api/envs',
+      visibleError: `Could not create environment`,
+    }
+  )
 
+  return [saving, saved]
+}
+
+export function useCreateToggle (name) {
+  const [ saving, saved ] = useCreate(
+    {
+      name,
+      api: 'api/features',
+      visibleError: `Could not create toggle`,
+    }
+  )
+
+  return [saving, saved]
+}
+
+function useCreate({name, api, visibleError}) {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
@@ -11,7 +34,7 @@ export function useCreateToggle(name) {
       setSaving(true)
       const controller = new AbortController()
       const signal = controller.signal
-      fetch(`/api/features`, {
+      fetch(api, {
         method: 'POST',
         body: JSON.stringify({
           name,
@@ -26,7 +49,7 @@ export function useCreateToggle(name) {
           throw new Error(`Server responded with status ${response.status}`);
         }
       }).catch(err => {
-        toasts.generalToast(`Could not create toggle: ${JSON.stringify(err)}`)
+        toasts.generalToast(`${visibleError}: ${JSON.stringify(err)}`)
         setSaving(false)
         setSaved(false)
         throw new Error(err);
@@ -35,8 +58,8 @@ export function useCreateToggle(name) {
         controller.abort()
       }
     }
-  }, [name])
+  }, [name, api, visibleError])
 
   return [ saving, saved ]
-
 }
+

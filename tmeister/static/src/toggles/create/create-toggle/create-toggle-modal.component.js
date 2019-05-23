@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './create-toggle-modal.css'
-import { useCreateToggle } from './create-toggle.hooks.js'
+import { useCreateToggle } from '../create-hooks.js'
 
 export default function CreateToggleModal (props) {
   const { hide, refetchToggles } = props
@@ -26,7 +26,7 @@ export default function CreateToggleModal (props) {
         </div>
         <div className="cps-card__body">
           <div className="cps-form-group">
-            <label htmlFor="new_feature_name">
+            <label htmlFor="create-toggle-modal-input">
               Feature Toggle Name
             </label>
             <input

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './create-env-modal.css';
-import { useCreateEnv } from './create-env.hooks.js'
+import { useCreateEnv } from '../create-hooks.js'
 
 export default function CreateEnvModal (props) {
   const { hide, refetchToggles } = props
@@ -26,7 +26,7 @@ export default function CreateEnvModal (props) {
         </div>
         <div className="cps-card__body">
           <div className="cps-form-group">
-            <label htmlFor="new_feature_name">
+            <label htmlFor="new-environment-name">
               Environment Name
             </label>
             <input
