@@ -22,14 +22,7 @@ export default function IndividualToggle (props) {
             <input
               type="checkbox"
               checked={toggle.toggle.state === 'ON'}
-              onChange={(e) => {
-                if (toggle.toggle.state === 'ON') {
-                  setNewState('OFF')
-                } else {
-                  setNewState('ON')
-                }
-                setToggleToChange(toggle.toggle)
-              }}
+              onChange={() => changeToggle(toggle)}
             />
 
           )
@@ -45,18 +38,20 @@ export default function IndividualToggle (props) {
               setToggleToChange()
               setToggleConfirmModal(false)}
             }
-            performChange={() => {
-              if (toggle.toggle.state === 'ON') {
-                setNewState('OFF')
-              } else {
-                setNewState('ON')
-              }
-              setToggleToChange(toggle.toggle)
-              setToggleConfirmModal(false)
-            }}
+            performChange={() => changeToggle(toggle)}
           />
         )
       }
     </td>
   );
+
+  function changeToggle(toggle) {
+    if (toggle.toggle.state === 'ON') {
+      setNewState('OFF')
+    } else {
+      setNewState('ON')
+    }
+    setToggleToChange(toggle.toggle)
+    setToggleConfirmModal(false)
+  }
 }
