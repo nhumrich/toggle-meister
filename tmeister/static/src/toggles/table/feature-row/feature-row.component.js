@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './feature-row.styles.css'
+import DeleteFeatureModal from '../../delete/delete-feature-modal.component.js'
 import { useDeleteToggle } from '../../toggles.hooks.js'
 
 export default function FeatureRow (props) {
   const { featureName, groupOfToggles, refetchToggles } = props
+  const [ deleteConfirmModal, setDeleteConfirmModal ] = useState(false)
   const [ deleteFeatureByName, deleteInProgress ] = useDeleteToggle(refetchToggles)
   return (
     <tr className="+hover">
@@ -12,7 +14,7 @@ export default function FeatureRow (props) {
           {featureName}
         </div>
         <div className={`cps-btn-icon ${styles.buttonIcon}`}>
-          <a className="cps-link" onClick={() => {deleteFeatureByName(featureName)}} >
+          <a className="cps-link" onClick={() => {setDeleteConfirmModal(true)}} >
             <span className="cps-icon cps-icon-close" />
           </a>
         </div>
@@ -33,6 +35,15 @@ export default function FeatureRow (props) {
               </td>
             );
           })
+      }
+      {
+        deleteConfirmModal && (
+          <DeleteFeatureModal
+            featureName={featureName}
+            close={() => setDeleteConfirmModal(false)}
+            performDelete={() => deleteFeatureByName(featureName)}
+          />
+        )
       }
     </tr>
   );
