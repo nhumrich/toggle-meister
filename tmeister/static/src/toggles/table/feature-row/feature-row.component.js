@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import styles from './feature-row.styles.css'
 import DeleteFeatureModal from '../../delete/delete-feature-modal.component.js'
-import { useDeleteFeature, useChangeFeatureStatus } from '../../toggles.hooks.js'
+import { useDeleteFeature } from '../../toggles.hooks.js'
+import IndividualToggle from './individual-toggle/individual-toggle.component.js'
 
 export default function FeatureRow (props) {
   const { featureName, groupOfToggles, refetchToggles } = props
   const [ deleteConfirmModal, setDeleteConfirmModal ] = useState(false)
   const [ deleteFeatureByName, deleteInProgress ] = useDeleteFeature(refetchToggles)
-  const [ setToggleToChange, setNewState ] = useChangeFeatureStatus(refetchToggles)
   return (
     <tr className="+hover">
       <td className={styles.featureName}>
@@ -22,27 +22,13 @@ export default function FeatureRow (props) {
       </td>
       {
         groupOfToggles
-          .map(toggle => {
-            return (
-              <td key={toggle.toggle.env}>
-                <label className="cps-toggle">
-                  <input
-                    type="checkbox"
-                    checked={toggle.toggle.state === 'ON'}
-                    onChange={() => {
-                      if (toggle.toggle.state === 'ON') {
-                        setNewState('OFF')
-                      } else {
-                        setNewState('ON')
-                      }
-                      setToggleToChange(toggle.toggle)
-                    }}
-                  />
-                  <span />
-                </label>
-              </td>
-            );
-          })
+          .map(toggle => (
+            <IndividualToggle
+              refetchToggles={refetchToggles}
+              key={toggle.toggle.env}
+              toggle={toggle}
+            />
+          ))
       }
       {
         deleteConfirmModal && (
