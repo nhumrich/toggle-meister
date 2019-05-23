@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './create-env-modal.css';
+import { useCreateEnv } from './create-env.hooks.js'
 
-export default function({actions, toggles}) {
+export default function CreateEnvModal (props) {
+  const { hide, refetchToggles } = props
+  const [ newEnv, setNewEnv ] = useState('')
+  const [ createName, setCreateName ] = useState('')
+  const [ saving, saveCompleted ] = useCreateEnv(createName)
+  if (saveCompleted) {
+    refetchToggles()
+    hide()
+  }
 	return (
 		<div className="cps-modal">
 			<div className="cps-modal__screen"></div>
@@ -12,7 +21,7 @@ export default function({actions, toggles}) {
 					</span>
 					<a
 						className="cps-modal__dialog__close cps-icon cps-icon-close"
-						onClick={actions.hideCreateEnvModal}
+						onClick={hide}
 					/>
 				</div>
 				<div className="cps-card__body">
@@ -23,6 +32,9 @@ export default function({actions, toggles}) {
 						<input
 							id="create-environment-name"
 							type="text"
+              disabled={saving}
+              value={newEnv}
+              onChange={(e) => setNewEnv(e.target.value)}
 							className={`cps-form-control ${styles.input}`}
 							ref={el => {
 								if (el && document.activeElement !== el) {
@@ -30,8 +42,8 @@ export default function({actions, toggles}) {
 								}
 							}}
 							onKeyPress={e => {
-								if (e.charCode === 13) {
-									actions.createEnvironment(e.target.value, toggles)
+								if (e.charCode === 13 && !saving) {
+									setCreateName(newEnv)
 								}
 							}}
 						/>
@@ -39,11 +51,13 @@ export default function({actions, toggles}) {
 				</div>
 				<div className="cps-modal__dialog__actions">
 					<button className="cps-btn +primary" onClick={e => {
-						actions.createEnvironment(document.getElementById('create-environment-name').value, toggles)
-					}}>
+            setCreateName(newEnv)
+          }}
+            disabled={saving}
+          >
 						Create environment
 					</button>
-					<a className="cps-link" onClick={actions.hideCreateEnvModal}>
+					<a className="cps-link" onClick={hide}>
 						Nevermind
 					</a>
 				</div>

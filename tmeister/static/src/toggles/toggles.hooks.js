@@ -31,7 +31,7 @@ export function useFetchToggles (search) {
 
   return [ toggles.filter(t => {
     if (search != undefined) {
-      return t.feature.includes(t)
+      return t.toggle.feature.includes(search)
     } else {
       return t
     }
