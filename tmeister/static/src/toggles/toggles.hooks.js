@@ -39,3 +39,34 @@ export function useFetchToggles (search) {
     () => setCount(count + 1)
   ]
 }
+
+export function useDeleteToggle(callback) {
+  const [ featureToDelete, setFeatureToDelete ] = useState()
+  const [ deleting, setDeleting ] = useState(false)
+  useEffect(() => {
+    if (featureToDelete) {
+      setDeleting(true)
+      const controller = new AbortController()
+      const signal = controller.signal
+      fetch(`/api/features/${featureToDelete}`, {
+        method: 'DELETE',
+        credentials: 'same-origin',
+        signal,
+      }).then(response => {
+        if (response.ok) {
+          setFeatureToDelete()
+          setDeleting(false)
+          callback()
+        } else {
+          throw response.status;
+        }
+      }).catch(ex => {
+        setDeleting(false)
+        setFeatureToDelete()
+        toasts.generalToast(`Error deleting feature - ${ex}`);
+        setTimeout(() => {throw ex});
+      });
+    }
+  }, [featureToDelete, callback])
+  return [setFeatureToDelete, deleting]
+}

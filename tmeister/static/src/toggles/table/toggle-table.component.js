@@ -1,12 +1,12 @@
 import React from 'react';
-import styles from './toggle-table.css';
 import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.helpers.js';
 import DeleteFeatureModal from '../delete/delete-feature-modal.component.js';
 import ToggleProdModal from './toggle-prod-modal.component.js';
 import { infoToast } from '../../common/simple-toast/simple-toast.js';
+import FeatureRow from './feature-row/feature-row.component.js'
 
 export default function ToggleTable (props) {
-  const { toggles } = props
+  const { toggles, refetchToggles } = props
   const envList = getEnvList(toggles);
   const togglesByFeaure = groupTogglesByFeature(toggles, envList)
   return (
@@ -24,38 +24,14 @@ export default function ToggleTable (props) {
           {
             togglesByFeaure.map(groupOfToggles => {
               const featureName = groupOfToggles[0].toggle.feature;
-
               return (
-                <tr key={featureName} className="+hover">
-                  <td className={styles.featureName}>
-                    <div>
-                      {featureName}
-                    </div>
-                    <div className={`cps-btn-icon ${styles.buttonIcon}`}>
-                      <a className="cps-link" onClick={() => {}} >
-                        <span className="cps-icon cps-icon-close" />
-                      </a>
-                    </div>
-                  </td>
-                  {
-                    groupOfToggles
-                      .map(toggle => {
-                        return (
-                          <td key={toggle.toggle.env}>
-                            <label className="cps-toggle">
-                              <input
-                                type="checkbox"
-                                checked={toggle.toggle.state === 'ON'}
-                                onChange={() => {}}
-                              />
-                              <span />
-                            </label>
-                          </td>
-                        );
-                      })
-                  }
-                </tr>
-              );
+                <FeatureRow
+                  key={featureName}
+                  featureName={featureName}
+                  groupOfToggles={groupOfToggles}
+                  refetchToggles={refetchToggles}
+                />
+              )
             })
           }
         </tbody>

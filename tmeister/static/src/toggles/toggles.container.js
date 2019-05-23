@@ -20,6 +20,7 @@ export default function TogglesContainer (props) {
         />
         <ToggleTable
           toggles={toggles}
+          refetchToggles={refetch}
         />
       </div>
     </div>
