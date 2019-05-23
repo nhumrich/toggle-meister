@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import styles from './feature-row.styles.css'
 import DeleteFeatureModal from '../../delete/delete-feature-modal.component.js'
-import { useDeleteToggle } from '../../toggles.hooks.js'
+import { useDeleteFeature, useChangeFeatureStatus } from '../../toggles.hooks.js'
 
 export default function FeatureRow (props) {
   const { featureName, groupOfToggles, refetchToggles } = props
   const [ deleteConfirmModal, setDeleteConfirmModal ] = useState(false)
-  const [ deleteFeatureByName, deleteInProgress ] = useDeleteToggle(refetchToggles)
+  const [ deleteFeatureByName, deleteInProgress ] = useDeleteFeature(refetchToggles)
+  const [ setToggleToChange, setNewState ] = useChangeFeatureStatus(refetchToggles)
   return (
     <tr className="+hover">
       <td className={styles.featureName}>
@@ -28,7 +29,14 @@ export default function FeatureRow (props) {
                   <input
                     type="checkbox"
                     checked={toggle.toggle.state === 'ON'}
-                    onChange={() => {}}
+                    onChange={() => {
+                      if (toggle.toggle.state === 'ON') {
+                        setNewState('OFF')
+                      } else {
+                        setNewState('ON')
+                      }
+                      setToggleToChange(toggle.toggle)
+                    }}
                   />
                   <span />
                 </label>
