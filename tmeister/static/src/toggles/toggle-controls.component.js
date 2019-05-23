@@ -6,25 +6,25 @@ import CreateEnv from './create/create-env/create-env.component.js';
 import SelectEnvs from './envs/select-envs.component.js';
 
 export default function({toggles, searchToggles, refetchToggles}) {
-	return (
-		<div className={styles.root}>
-			<div className={styles.left}>
-				<SearchBox
+  return (
+    <div className={styles.root}>
+      <div className={styles.left}>
+        <SearchBox
           search={searchToggles}
-				/>
+        />
         {/* <SelectEnvs */}
-        {/*   actions={actions} */}
-        {/*   toggles={toggles} */}
-        {/* /> */}
-			</div>
-			<div className={styles.right}>
-				<CreateToggle
+          {/*   actions={actions} */}
+          {/*   toggles={toggles} */}
+          {/* /> */}
+      </div>
+      <div className={styles.right}>
+        <CreateToggle
           refetchToggles={refetchToggles}
-				/>
+        />
         <CreateEnv
           refetchToggles={refetchToggles}
         />
-			</div>
-		</div>
-	);
+      </div>
+    </div>
+  );
 }
