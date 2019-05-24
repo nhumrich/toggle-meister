@@ -1,6 +1,6 @@
 import { filter as fuzzyFilter } from 'fuzzy';
 import { property, includes } from 'lodash'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import toasts from '../common/simple-toast/simple-toast.js';
 
 export function useFetchToggles () {
@@ -116,14 +116,24 @@ export function useChangeFeatureStatus (callback) {
 }
 
 export function useFilterToggles(selectedEnvs, toggles, search) {
-  const filteredToggles = toggles.filter(toggle => includes(selectedEnvs, toggle.toggle.env))
+  const filteredToggles = useMemo(
+    () => toggles.filter(toggle => includes(selectedEnvs, toggle.toggle.env)),
+    [selectedEnvs, toggles]
+  )
 
-  if (search) {
-    return fuzzyFilter(search, filteredToggles, {
-      extract: toggle => toggle.toggle.feature,
-    })
-      .map(fuzzyFilterObj => fuzzyFilterObj.original);
-  } else {
-    return filteredToggles;
-  }
+  const finalFilter = useMemo(
+    () => {
+      if (search) {
+        return fuzzyFilter(search, filteredToggles, {
+          extract: toggle => toggle.toggle.feature,
+        })
+          .map(fuzzyFilterObj => fuzzyFilterObj.original);
+      } else {
+        return filteredToggles;
+      }
+    },
+    [search, filteredToggles]
+  )
+
+  return finalFilter
 }
