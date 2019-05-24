@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import Pillbox from 'cpr-multiselect';
 import MultiSelect from 'cpr-multiselect';
 import "cpr-multiselect/src/multi-selector.css";
@@ -9,6 +9,7 @@ import { chain, uniq, includes, partial } from 'lodash';
 export default function SelectEnvs({toggles = [], setEnvs, envs}) {
   const envList = getEnvList(toggles);
   const selectedEnvs = envs;
+  useInitializeSelectedEnvs(setEnvs)
 
   const items = envList.map(toPillboxItem);
   const selectedItems = items.filter(item => includes(selectedEnvs, item.label));
@@ -45,5 +46,11 @@ function toPillboxItem(env) {
     label: env,
     value: env,
   };
+}
+
+function useInitializeSelectedEnvs(setEnvs) {
+  useEffect(() => {
+    setEnvs(getSelectedEnvs())
+  }, [])
 }
 

@@ -1,5 +1,4 @@
 import { filter as fuzzyFilter } from 'fuzzy';
-import { getSelectedEnvs } from './envs/select-envs.helpers.js'
 import { property, includes } from 'lodash'
 import { useState, useEffect } from 'react'
 import toasts from '../common/simple-toast/simple-toast.js';
@@ -114,12 +113,6 @@ export function useChangeFeatureStatus (callback) {
 
   return [setFeatureToChange, setNewStatus]
 
-}
-
-export function useInitializeSelectedEnvs(setEnvs) {
-  useEffect(() => {
-    setEnvs(getSelectedEnvs())
-  }, [])
 }
 
 export function useFilterToggles(selectedEnvs, toggles, search) {
