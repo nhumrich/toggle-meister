@@ -35,6 +35,7 @@ export default function SelectEnvs({toggles = [], setEnvs, envs}) {
       .uniq()
       .value();
 
+    window.localStorage.setItem(`selected-envs`, JSON.stringify(envs));
     setEnvs(envs)
   }
 }

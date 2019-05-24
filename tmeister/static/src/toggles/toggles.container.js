@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import ToggleControls from './toggle-controls.component.js';
 import ToggleTable from './table/toggle-table.component.js';
 import styles from './toggles.container.css';
-import { useFetchToggles, useFilterToggles } from './toggles.hooks.js'
+import { useFetchToggles, useFilterToggles, useInitializeSelectedEnvs} from './toggles.hooks.js'
 
 export default function TogglesContainer (props) {
   const [ search, setSearch ] = useState()
   const [ toggles, refetch ] = useFetchToggles()
-  const [ envs, setEnvs ] = useState([])
+  const [ envs, setEnvs ] = useState(['production'])
+  useInitializeSelectedEnvs(setEnvs)
   const filteredToggles = useFilterToggles(envs, toggles, search)
 
   return (

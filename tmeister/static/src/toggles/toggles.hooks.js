@@ -116,6 +116,12 @@ export function useChangeFeatureStatus (callback) {
 
 }
 
+export function useInitializeSelectedEnvs(setEnvs) {
+  useEffect(() => {
+    setEnvs(getSelectedEnvs())
+  }, [])
+}
+
 export function useFilterToggles(selectedEnvs, toggles, search) {
   const filteredToggles = toggles.filter(toggle => includes(selectedEnvs, toggle.toggle.env))
 
