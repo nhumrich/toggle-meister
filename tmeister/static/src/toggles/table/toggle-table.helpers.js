@@ -1,5 +1,4 @@
 import { reduce, sortBy, chain, includes, uniq, union } from 'lodash';
-import { filter as fuzzyFilter } from 'fuzzy';
 import { getSelectedEnvs } from '../envs/select-envs.helpers.js';
 
 const sortOrder = {
@@ -41,18 +40,4 @@ export function groupTogglesByFeature(toggles, envList) {
       return [group]
     })
     .value()
-}
-
-export function fuzzySearch(toggles, search) {
-  const selectedEnvs = getSelectedEnvs();
-  const filteredToggles = toggles.filter(toggle => includes(selectedEnvs, toggle.toggle.env))
-
-  if (search) {
-    return fuzzyFilter(search, filteredToggles, {
-      extract: toggle => toggle.toggle.feature,
-    })
-      .map(fuzzyFilterObj => fuzzyFilterObj.original);
-  } else {
-    return filteredToggles;
-  }
 }

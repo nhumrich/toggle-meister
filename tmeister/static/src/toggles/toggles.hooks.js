@@ -1,8 +1,10 @@
-import { property } from 'lodash'
+import { filter as fuzzyFilter } from 'fuzzy';
+import { getSelectedEnvs } from './envs/select-envs.helpers.js'
+import { property, includes } from 'lodash'
 import { useState, useEffect } from 'react'
 import toasts from '../common/simple-toast/simple-toast.js';
 
-export function useFetchToggles (search) {
+export function useFetchToggles () {
   const [toggles, setToggles] = useState([])
   const [ count, setCount ] = useState(1)
   useEffect(() => {
@@ -29,13 +31,8 @@ export function useFetchToggles (search) {
     }
   }, [count])
 
-  return [ toggles.filter(t => {
-    if (search != undefined) {
-      return t.toggle.feature.includes(search)
-    } else {
-      return t
-    }
-  }),
+  return [
+    toggles,
     () => setCount(count + 1)
   ]
 }
@@ -117,4 +114,17 @@ export function useChangeFeatureStatus (callback) {
 
   return [setFeatureToChange, setNewStatus]
 
+}
+
+export function useFilterToggles(selectedEnvs, toggles, search) {
+  const filteredToggles = toggles.filter(toggle => includes(selectedEnvs, toggle.toggle.env))
+
+  if (search) {
+    return fuzzyFilter(search, filteredToggles, {
+      extract: toggle => toggle.toggle.feature,
+    })
+      .map(fuzzyFilterObj => fuzzyFilterObj.original);
+  } else {
+    return filteredToggles;
+  }
 }
