@@ -18,11 +18,13 @@ async def get_toggle_states_for_env(request: Request):
     env = request.path_params.get('name').lower()
     features = [feature.lower() for feature in params.getlist('feature')]
     track = params.get('metrics', 'true').lower() == 'true'
+    enrollment_id = params.get('enrollment_id')
+
     if not features:
         return JSONResponse({'Message': "No features provided"},
                             status_code=400)
     else:
-        result = await toggleda.get_toggle_states_for_env(env, features)
+        result = await toggleda.get_toggle_states_for_env(env, features, user_id=enrollment_id)
         for f in features:
             if f not in result.keys():
                 # Everything not in the database is assumed off,
@@ -47,6 +49,16 @@ async def set_toggle_state(request):
     feature = toggle.get('feature').lower()
     state = toggle.get('state')
     user = request.user.display_name
+    days = 0
+
+    await permissions.check_permissions(user, permissions.Action.toggle)
+
+    if state.startswith('ROLL'):
+        if ':' not in state:
+            return JSONResponse(
+                {'Message': "Rollouts must include number of days, such as 'ROLL:2' for 2 days."})
+
+        state, days, *_ = state.split(':')
 
     if (not env or not env.isidentifier() or
             not await environmentda.get_envs(env_list=[env])):
@@ -56,7 +68,7 @@ async def set_toggle_state(request):
             not await featureda.get_features(feature_list=[feature])):
         return JSONResponse({'Message': "No valid feature provided"},
                             status_code=400)
-    if state not in ('OFF', 'ON'):
+    if state not in ('OFF', 'ON', 'ROLL'):
         return JSONResponse({'Message': "No valid state provided"},
                             status_code=400)
 
@@ -67,15 +79,20 @@ async def set_toggle_state(request):
     else:
         current_state = 'ON'
 
-    if current_state != state:
-        await permissions.check_permissions(user, permissions.Action.toggle)
-        if env == 'production' and state == 'ON':
+    if current_state != 'OFF' and state == 'ROLL':
+        return JSONResponse({'Message': "You can only roll a feature that is currently off"})
+
+    if env == 'production' and state in ('ON', 'ROLL'):
+        if state == 'ON':
             await _toggle_all_for_feature(feature, state='ON')
-        else:
-            await toggleda.set_toggle_state(env, feature, state)
-        await auditing.audit_event(
-            'toggle.switch', user,
-            {'toggle_env': env, 'toggle_feature': feature, 'new_state': state})
+        if state == 'ROLL':
+            await _toggle_all_for_feature(feature, state='ON', except_for='production')
+            await toggleda.set_toggle_state(env, feature, state, rollout_days=days)
+    else:
+        await toggleda.set_toggle_state(env, feature, state, rollout_days=days)
+    await auditing.audit_event(
+        'toggle.switch', user,
+        {'toggle_env': env, 'toggle_feature': feature, 'new_state': state, 'over_x_days': days})
 
     return await get_all_toggle_states()
 
@@ -85,8 +102,10 @@ async def get_all_toggle_states(request=None):
     return JSONResponse(toggle_list)
 
 
-async def _toggle_all_for_feature(feature, *, state):
+async def _toggle_all_for_feature(feature, *, state, except_for=None):
     envs = await environmentda.get_envs()
+    if except_for:
+        envs.remove(except_for)
     await asyncio.wait(
         [toggleda.set_toggle_state(e, feature, state)
          for e in envs]

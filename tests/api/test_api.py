@@ -164,6 +164,35 @@ def test_turn_toggles_off(client):
     assert response.status_code == 200
 
 
+def test_turn_toggle_on_rolling(client):
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ROLL:2'}})
+    assert response.status_code == 200
+
+    # now test getting it, asking without a user should show that its off
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == False  # noqa
+
+    # test getting it on at least once
+    results = []
+    for i in range(200):
+        response = client.get(f'/api/envs/bob2/toggles?feature=bobbytables&enrollment_id={i}')
+        results.append(response.json()['bobbytables'])
+
+    assert any(results)
+
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ON'}})
+
+    # now turn it back off
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'OFF'}})
+    assert response.status_code == 200
+
+
 def test_soft_delete_feature(client):
     # first set toggle to on
     response = client.patch(
