@@ -65,10 +65,10 @@ describe('toggle-table.helpers.js', () => {
         },
       ];
 
-      expect(getEnvList(toggles)).toEqual(["production", "stage"]);
+      expect(getEnvList(toggles)).toEqual(["stage", "production"]);
     });
 
-    it('always puts production first in the list', () => {
+    it('always puts production last in the list', () => {
       toggles = [
         {
           toggle: {
@@ -121,7 +121,7 @@ describe('toggle-table.helpers.js', () => {
         },
       ];
 
-      expect(getEnvList(toggles)).toEqual(["production", "stage", "nonproduction"]);
+      expect(getEnvList(toggles)).toEqual(["nonproduction", "stage", "production"]);
     });
   });
 
