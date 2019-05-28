@@ -20,9 +20,9 @@ export function getEnvList(toggles) {
     }, ["production"])
     .sort((first, second) => {
       if (sortOrder[first] && sortOrder[second]) {
-        return sortOrder[first] > sortOrder[second] ? -1 : 1;
+        return sortOrder[first] < sortOrder[second] ? -1 : 1;
       } else {
-        return first > second ? -1 : 1;
+        return first < second ? -1 : 1;
       }
     })
 }
