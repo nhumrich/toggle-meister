@@ -197,8 +197,8 @@ def report_to_slack():
 
 
 def run():
-    progress_rolled_toggles()
-    return
+    # progress_rolled_toggles()
+    # return
     # schedule slack shaming
     s1 = schedule.every(1).week
     s1.start_day = SLACK_REMINDER_DAY
@@ -207,6 +207,10 @@ def run():
     # schedule feature cleanup
     s2 = schedule.every(1).day
     s2.at(SLACK_REMINDER_TIME).do(delete_removed_features)
+    
+    # Schedule rollouts
+    s3 = schedule.every(1).hour
+    s3.do(progress_rolled_toggles)
 
     while True:
         sleep_time = schedule.next_run() - datetime.now()
