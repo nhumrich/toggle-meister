@@ -5646,7 +5646,6 @@ a.cps-slat-lg.\+active {
 }
 .cps-card-table td {
   border-bottom: 0.1rem solid #E9E9E9;
-  height: 4.0rem;
 }
 .cps-card-table td.cps-card-table__select-column,
 .cps-card-table th.cps-card-table__select-column {

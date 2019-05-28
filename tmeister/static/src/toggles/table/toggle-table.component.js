@@ -3,13 +3,14 @@ import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.h
 import DeleteFeatureModal from '../delete/delete-feature-modal.component.js';
 import ToggleProdModal from './toggle-prod-modal.component.js';
 import FeatureRow from './feature-row/feature-row.component.js'
+import styles from './toggle-table.styles.css'
 
 export default function ToggleTable (props) {
   const { toggles, refetchToggles } = props
   const envList = getEnvList(toggles);
   const togglesByFeaure = groupTogglesByFeature(toggles, envList)
   return (
-    <div className="cps-card-table cps-card cps-margin-top-32">
+    <div className={`${styles.tableWrapper} cps-card-table cps-card cps-margin-top-32`}>
       <table>
         <thead>
           <tr>
