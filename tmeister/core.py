@@ -13,7 +13,7 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 from sentry_asgi import SentryMiddleware
 import sentry_sdk
 
-from . import toggles, features, environments, auditing, health
+from . import toggles, features, environments, auditing, health, metrics
 from .permissions import InsufficientPermissionsError
 from .security import GoogleAuthBackend
 
@@ -94,6 +94,7 @@ def init():
     app.add_route('/api/envs', environments.add_env, methods=['POST'])
     app.add_route('/api/envs/{name}', environments.delete_env, methods=['DELETE'])
     app.add_route('/api/auditlog', auditing.get_audit_events)
+    app.add_route('/api/metrics/{name}', metrics.get_metrics_for_feature, methods=['GET'])
     app.add_route('/heartbeat', health.get_health)
     app.add_route('/', index_html)
 

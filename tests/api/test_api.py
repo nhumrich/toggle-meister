@@ -109,6 +109,19 @@ def test_get_toggles_again(client):
     assert toggle['toggle']['state'] == 'ON'
 
 
+def test_get_metrics(client):
+    response = client.get('/api/metrics/bobbytables?environment=bob2')
+    json = response.json()
+    assert isinstance(json, dict)
+    metrics = json.get('metrics')
+    assert isinstance(metrics, list)
+    metric_1 = metrics[0]
+    assert isinstance(metric_1, dict)
+    assert 'date' in metric_1
+    assert 'hit_count' in metric_1
+    assert 'environment' in metric_1
+
+
 def test_add_another_feature(client):
     response = client.post('/api/features', json={'name': 'bobbytables2'})
     assert response.json()['name'] == 'bobbytables2'

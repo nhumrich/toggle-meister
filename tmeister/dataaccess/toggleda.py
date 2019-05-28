@@ -136,7 +136,7 @@ LEFT OUTER JOIN toggles ON feature = features.name
     results = [{'toggle': {'env': row['env'],
                            'feature': row['feature'],
                            'state': row['state'],
-                           'over_x_days': int(row['hours'] / 24) if row['hours'] else 0,
+                           'over_x_days': int(row['hours']) / 24 if row['hours'] else 0,
                            'current_percent': row['percent'] if row['percent'] else 100,
                            },
                 }
