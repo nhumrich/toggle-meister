@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, String, \
     ForeignKey, Index, text
-from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE, ARRAY
+from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE
 import sqlalchemy as sa
 
 METADATA = sa.MetaData()

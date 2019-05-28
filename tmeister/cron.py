@@ -84,8 +84,8 @@ def progress_rolled_toggles():
 
     envs = [r['name'] for r in pg.execute(db.environments.select())]
     for env in envs:
-        rolling_toggles = pg.execute(db.toggles.select()\
-                                     .where(db.toggles.c.env == env)\
+        rolling_toggles = pg.execute(db.toggles.select()
+                                     .where(db.toggles.c.env == env)
                                      .where(db.toggles.c.state == 'ROLL'))
 
         for row in rolling_toggles:
@@ -93,7 +93,7 @@ def progress_rolled_toggles():
             env = row['env']
             schedule = row['schedule']
             total_hours = schedule.get('total_hours')
-            current_percent = schedule.get('current_percent')
+            # current_percent = schedule.get('current_percent')
             current_hour = schedule.get('hours_count')
 
             hour_diff = int(total_hours / 24)
@@ -115,8 +115,8 @@ def progress_rolled_toggles():
                     # delete toggle
                     conn.execute(
                         db.toggles.delete()
-                            .where(db.toggles.c.feature == feature)
-                            .where(db.toggles.c.env == env))
+                        .where(db.toggles.c.feature == feature)
+                        .where(db.toggles.c.env == env))
 
                     # turn on
                     conn.execute(
@@ -127,11 +127,11 @@ def progress_rolled_toggles():
                 continue
 
             num_user_on = next(pg.execute(f"SELECT count(1) FROM rollout_users "
-                                     f"WHERE env='{env}' and "
-                                     f"features->>'{feature}' = 'true'"))['count']
+                                          f"WHERE env='{env}' and "
+                                          f"features->>'{feature}' = 'true'"))['count']
             num_users_off = next(pg.execute(f"SELECT count(1) FROM rollout_users "
-                                       f"WHERE env='{env}' and "
-                                       f"features->>'{feature}' = 'false'"))['count']
+                                            f"WHERE env='{env}' and "
+                                            f"features->>'{feature}' = 'false'"))['count']
             if num_users_off + num_user_on == 0:
                 new_increment = new_percent
             else:

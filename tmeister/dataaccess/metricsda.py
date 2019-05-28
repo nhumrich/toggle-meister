@@ -2,7 +2,6 @@ from datetime import date
 import traceback
 
 from sqlalchemy import text
-import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert
 from asyncpgsa import pg
 from . import db

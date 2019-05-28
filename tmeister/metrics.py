@@ -37,4 +37,3 @@ async def get_metrics_for_feature(request: Request):
         date = d['date']
         d['date'] = f'{date}'
     return JSONResponse({'metrics': results})
-
