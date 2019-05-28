@@ -1,6 +1,6 @@
 from sqlalchemy import Table, Column, Integer, String, \
     ForeignKey, Index, text
-from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE
+from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE, ARRAY
 import sqlalchemy as sa
 
 METADATA = sa.MetaData()
@@ -30,9 +30,10 @@ environments = Table(
 toggles = Table(
     'toggles', METADATA,
     Column('feature', String),
-    Column('env', String, ForeignKey('environments.name')),
+    Column('env', String, ForeignKey('environments.name', deferrable=True)),
     Column('state', String(5)),
     Column('date_on', TIMESTAMP),
+    Column('schedule', JSONB, nullable=True)
 )
 Index('on_togs', toggles.c.feature, toggles.c.env, unique=True)
 
@@ -68,3 +69,10 @@ metrics = Table(
     Column('hit_count', Integer, nullable=False, server_default=text('1')),
 )
 Index('metrics_index', metrics.c.feature, metrics.c.env, metrics.c.date, unique=True)
+
+rollout_users = Table(
+    'rollout_users', METADATA,
+    Column('userid', String, index=True, nullable=False),
+    Column('features', JSONB, index=True),
+    Column('env', String, index=True)
+)

@@ -109,6 +109,19 @@ def test_get_toggles_again(client):
     assert toggle['toggle']['state'] == 'ON'
 
 
+def test_get_metrics(client):
+    response = client.get('/api/metrics/bobbytables?environment=bob2')
+    json = response.json()
+    assert isinstance(json, dict)
+    metrics = json.get('metrics')
+    assert isinstance(metrics, list)
+    metric_1 = metrics[0]
+    assert isinstance(metric_1, dict)
+    assert 'date' in metric_1
+    assert 'hit_count' in metric_1
+    assert 'environment' in metric_1
+
+
 def test_add_another_feature(client):
     response = client.post('/api/features', json={'name': 'bobbytables2'})
     assert response.json()['name'] == 'bobbytables2'
@@ -158,6 +171,35 @@ def test_turn_toggles_off(client):
         json={'toggle': {'env': 'production', 'feature': 'bobbytables', 'state': 'OFF'}})
     assert response.status_code == 200
 
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'OFF'}})
+    assert response.status_code == 200
+
+
+def test_turn_toggle_on_rolling(client):
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ROLL:2'}})
+    assert response.status_code == 200
+
+    # now test getting it, asking without a user should show that its off
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == False  # noqa
+
+    # test getting it on at least once
+    results = []
+    for i in range(200):
+        response = client.get(f'/api/envs/bob2/toggles?feature=bobbytables&enrollment_id={i}')
+        results.append(response.json()['bobbytables'])
+
+    assert any(results)
+
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ON'}})
+
+    # now turn it back off
     response = client.patch(
         '/api/toggles',
         json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'OFF'}})

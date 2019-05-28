@@ -1,6 +1,8 @@
 import asyncio
 
 from datetime import date
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 from .dataaccess import metricsda
 
@@ -21,8 +23,18 @@ async def remove_metrics(*, feature=None, environment=None):
     await metricsda.remove_metrics(feature=None, environment=None)
 
 
-async def get_metrics_for_feature(request):
-    """ TODO finish this method """
-    pass
-    # feature = request.path_params.get('name').lower()
-    # user = request.user.display_name
+async def get_metrics_for_feature(request: Request):
+    feature = request.path_params.get('name').lower()
+    envs = [env.lower() for env in
+            request.query_params.getlist('environment') if env.isidentifier()]
+
+    if not feature.isidentifier():
+        return JSONResponse({'Message': "Not a valid feature name"},
+                            status_code=400)
+
+    results = await metricsda.get_metrics_for_feature(feature, environments=envs)
+    for d in results:
+        date = d['date']
+        d['date'] = f'{date}'
+    return JSONResponse({'metrics': results})
+

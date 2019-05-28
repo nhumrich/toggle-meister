@@ -2,6 +2,7 @@ from datetime import date
 import traceback
 
 from sqlalchemy import text
+import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import insert
 from asyncpgsa import pg
 from . import db
@@ -30,3 +31,18 @@ async def remove_metrics(feature=None, environment=None):
         delete.where(db.metrics.c.env == environment)
 
     await pg.fetchval(delete)
+
+
+async def get_metrics_for_feature(feature, environments=None):
+    query = db.metrics.select().where(db.metrics.c.feature == feature)
+    if environments:
+        query.where(db.metrics.c.env.in_(environments))
+
+    results = await pg.fetch(query)
+
+    metrics = []
+    for row in results:
+        metrics.append({'date': row['date'], 'hit_count': row['hit_count'],
+                        'environment': row['env']})
+
+    return metrics
