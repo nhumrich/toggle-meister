@@ -2,11 +2,13 @@ import React, {useState} from 'react';
 import ToggleControls from './toggle-controls.component.js';
 import ToggleTable from './table/toggle-table.component.js';
 import styles from './toggles.container.css';
-import { useFetchToggles } from './toggles.hooks.js'
+import { useFetchToggles, useFilterToggles } from './toggles.hooks.js'
 
 export default function TogglesContainer (props) {
   const [ search, setSearch ] = useState()
-  const [ toggles, refetch ] = useFetchToggles(search)
+  const [ toggles, refetch ] = useFetchToggles()
+  const [ envs, setEnvs ] = useState(['production'])
+  const filteredToggles = useFilterToggles(envs, toggles, search)
 
   return (
     <div className={`${styles.root}`}>
@@ -15,11 +17,14 @@ export default function TogglesContainer (props) {
       </h2>
       <div className={`cps-card cps-padding-16`}>
         <ToggleControls
+          toggles={toggles}
           searchToggles={setSearch}
           refetchToggles={refetch}
+          setEnvs={setEnvs}
+          envs={envs}
         />
         <ToggleTable
-          toggles={toggles}
+          toggles={filteredToggles}
           refetchToggles={refetch}
         />
       </div>

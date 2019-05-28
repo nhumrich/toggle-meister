@@ -5,17 +5,19 @@ import CreateToggle from './create/create-toggle/create-toggle.component.js';
 import CreateEnv from './create/create-env/create-env.component.js';
 import SelectEnvs from './envs/select-envs.component.js';
 
-export default function({toggles, searchToggles, refetchToggles}) {
+export default function TogglesControls (props) {
+  const {toggles, searchToggles, refetchToggles, envs, setEnvs} = props
   return (
     <div className={styles.root}>
       <div className={styles.left}>
         <SearchBox
           search={searchToggles}
         />
-        {/* <SelectEnvs */}
-          {/*   actions={actions} */}
-          {/*   toggles={toggles} */}
-          {/* /> */}
+        <SelectEnvs
+          envs={envs}
+          setEnvs={setEnvs}
+          toggles={toggles}
+        />
       </div>
       <div className={styles.right}>
         <CreateToggle
