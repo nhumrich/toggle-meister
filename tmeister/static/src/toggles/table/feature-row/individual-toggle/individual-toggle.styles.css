@@ -1,5 +1,6 @@
 .ToggleAndStatus {
   display: flex;
+  align-items: center;
 }
 
 .status_info {
