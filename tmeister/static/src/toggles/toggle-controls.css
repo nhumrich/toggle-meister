@@ -3,12 +3,15 @@
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
+  margin: 0px 8px;
 }
 
 .left {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
+  align-items: center;
 }
 
 .right {

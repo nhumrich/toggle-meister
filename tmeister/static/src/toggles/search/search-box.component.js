@@ -4,11 +4,12 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles({
   root: {
-    margin: '0px 8px',
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
     width: 400,
+    height: 40,
+    marginRight: 8,
   },
   input: {
     marginLeft: 8,
