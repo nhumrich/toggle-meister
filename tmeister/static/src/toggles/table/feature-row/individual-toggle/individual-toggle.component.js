@@ -25,7 +25,7 @@ export default function IndividualToggle (props) {
           ) : (
             <Switch
               checked={toggle.toggle.state === 'ON'}
-              onChange={() => changeToggle(toggle)}
+              onChange={() => changeToggle(toggle.toggle)}
             />
 
           )
