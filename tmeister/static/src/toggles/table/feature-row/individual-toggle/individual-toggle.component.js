@@ -3,7 +3,7 @@ import ToggleProdModal from '../../toggle-prod-modal.component.js'
 import { useChangeFeatureStatus } from '../../../toggles.hooks.js'
 import styles from './individual-toggle.styles.css'
 import ToggleAndStatus from './actual-toggle-and-percentage.component.js'
-import { TableRow, TableCell } from '@material-ui/core'
+import { TableRow, TableCell, Switch } from '@material-ui/core'
 
 export default function IndividualToggle (props) {
   const { toggle, refetchToggles } = props
@@ -16,16 +16,14 @@ export default function IndividualToggle (props) {
       <label className="cps-toggle">
         {
           toggle.toggle.env === 'production' ? (
-            <input
-              type="checkbox"
+            <Switch
               checked={toggle.toggle.state === 'ON'}
               onChange={(e) => {
                 setToggleConfirmModal(true)
               }}
             />
           ) : (
-            <input
-              type="checkbox"
+            <Switch
               checked={toggle.toggle.state === 'ON'}
               onChange={() => changeToggle(toggle)}
             />
