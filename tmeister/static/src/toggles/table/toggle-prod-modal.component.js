@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import SimpleButton from '../../common/simple-button/simple-button.component.js'
+import Modal from '../../common/modal/modal.component.js'
 
 export default function ToggleProdModal (props) {
   const { toggle, performChange, close, toggleWillBeOn } = props
@@ -91,3 +92,27 @@ export default function ToggleProdModal (props) {
     </div>
   );
 }
+  // export default class ToggleProdModal extends React.PureComponent {
+  //   render() {
+  //     return (
+  //       <Modal
+  //         headerText='Alter Production feature toggle'
+  //         closeAction={this.props.close}
+  //       >
+  //         <div>
+  //           <div>
+  //             Are you sure you want to <strong>turn '{this.props.toggle.toggle.feature}' {this.props.toggleWillBeOn ? 'on' : 'off'}</strong>?
+  //             This really will have an immediate impact on the production environment and could potentially break things for customers.
+  //           </div>
+  //           <div>
+  //             <SimpleButton actionType="primary" onClick={this.props.performChange} disableOnClick={true}>
+  //               I know what I am doing
+  //             </SimpleButton>
+  //             <SimpleButton actionType="flat" onClick={this.props.close}>
+  //               Nevermind
+  //             </SimpleButton>
+  //           </div>
+  //         </div>
+  //       </Modal>
+  //     );
+  //   }
