@@ -1,5 +1,6 @@
 import React from 'react'
 import styles from './simple-button.styles.css'
+import Button from '@material-ui/core/Button';
 
 export default class SimpleButton extends React.Component {
   state = {
@@ -19,11 +20,12 @@ export default class SimpleButton extends React.Component {
       )
     } else {
       return (
-        <button
+        <Button
+          variant='contained'
           onClick={this.handleClick}
         >
           {this.props.children}
-        </button>
+        </Button>
       )
     }
   }
