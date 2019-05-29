@@ -32,8 +32,9 @@ async def remove_metrics(feature=None, environment=None):
     await pg.fetchval(delete)
 
 
-async def get_metrics_for_feature(feature, environments=None):
-    query = db.metrics.select().where(db.metrics.c.feature == feature)
+async def get_metrics_for_feature(feature, num_days=7, environments=None):
+    query = db.metrics.select().where(db.metrics.c.feature == feature)\
+        .where(text(f"DATE_PART('day', now() - date) <= {num_days}"))
     if environments:
         query.where(db.metrics.c.env.in_(environments))
 

@@ -27,13 +27,16 @@ async def get_metrics_for_feature(request: Request):
     feature = request.path_params.get('name').lower()
     envs = [env.lower() for env in
             request.query_params.getlist('environment') if env.isidentifier()]
+    num_days = int(request.query_params.get('num_days', 7))
 
     if not feature.isidentifier():
         return JSONResponse({'Message': "Not a valid feature name"},
                             status_code=400)
 
-    results = await metricsda.get_metrics_for_feature(feature, environments=envs)
+    results = await metricsda.get_metrics_for_feature(feature,
+                                                      num_days=num_days,
+                                                      environments=envs)
     for d in results:
-        date = d['date']
-        d['date'] = f'{date}'
+        date_ = d['date']
+        d['date'] = f'{date_}'
     return JSONResponse({'metrics': results})
