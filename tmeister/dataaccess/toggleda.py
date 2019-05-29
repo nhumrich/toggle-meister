@@ -21,14 +21,24 @@ def calculate_toggle_state(feature, results):
     raise ValueError("feature not found in results")
 
 
-async def get_toggle_states_for_env(env, list_of_features, user_id=None):
+async def get_real_toggle_states(env, list_of_features, _with_results=False):
     query = db.toggles.select() \
         .where(db.toggles.c.env == env) \
         .where(db.toggles.c.feature.in_(list_of_features))
 
     results = await pg.fetch(query)
 
+    if _with_results:
+        return results
+    else:
+        return {r['feature']: r['state'] for r in results}
+
+
+async def get_toggle_states_for_env(env, list_of_features, user_id=None):
+    results = await get_real_toggle_states(env, list_of_features, _with_results=True)
+
     states = {r['feature']: r['state'] for r in results}
+
     if user_id and any(v == 'ROLL' for k, v in states.items()):
         # we have a user and at least one feature is in a rolling state
         user_query = db.rollout_users.select()\
@@ -100,10 +110,14 @@ async def set_toggle_state(env, feature, state, rollout_days=0):
             schedule['hours_count'] = 0
             schedule['total_hours'] = int(rollout_days) * 24
             schedule['current_percent'] = 1
+        elif state == 'PAUSE':
+            schedule['hours_count'] = 0
+            schedule['total_hours'] = 48
+            schedule['rolling_state'] = json.loads(results[0]['schedule'])
         else:
             schedule['dirty'] = True
 
-        if state in ('ON', 'ROLL'):
+        if state in ('ON', 'ROLL', 'PAUSE'):
             await conn.fetchval(
                 db.toggles.insert().values(feature=feature, env=env, state=state,
                                            date_on=functions.now(), schedule=schedule)

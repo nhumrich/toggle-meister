@@ -56,7 +56,8 @@ async def set_toggle_state(request):
     if state.startswith('ROLL'):
         if ':' not in state:
             return JSONResponse(
-                {'Message': "Rollouts must include number of days, such as 'ROLL:2' for 2 days."})
+                {'Message': "Rollouts must include number of days, such as 'ROLL:2' for 2 days."},
+                status_code=400)
 
         state, days, *_ = state.split(':')
 
@@ -68,19 +69,25 @@ async def set_toggle_state(request):
             not await featureda.get_features(feature_list=[feature])):
         return JSONResponse({'Message': "No valid feature provided"},
                             status_code=400)
-    if state not in ('OFF', 'ON', 'ROLL'):
+    if state not in ('OFF', 'ON', 'ROLL', 'PAUSE'):
         return JSONResponse({'Message': "No valid state provided"},
                             status_code=400)
 
     # get current state
-    current = await toggleda.get_toggle_states_for_env(env, [feature])
+    states = await toggleda.get_real_toggle_states(env, [feature])
+    current = states.get(feature)
     if not current:
         current_state = 'OFF'
     else:
-        current_state = 'ON'
+        current_state = current
 
     if current_state != 'OFF' and state == 'ROLL':
-        return JSONResponse({'Message': "You can only roll a feature that is currently off"})
+        return JSONResponse({'Message': "You can only roll a feature that is currently off"},
+                            status_code=400)
+
+    if current_state != 'ROLL' and state == 'PAUSE':
+        return JSONResponse({'Message': "You can only pause a feature currently in rollout"},
+                            status_code=400)
 
     if env == 'production' and state in ('ON', 'ROLL'):
         if state == 'ON':
@@ -90,6 +97,9 @@ async def set_toggle_state(request):
             await toggleda.set_toggle_state(env, feature, state, rollout_days=days)
     else:
         await toggleda.set_toggle_state(env, feature, state, rollout_days=days)
+
+    if state == 'PAUSE':
+        days = 2
     await auditing.audit_event(
         'toggle.switch', user,
         {'toggle_env': env, 'toggle_feature': feature, 'new_state': state, 'over_x_days': days})

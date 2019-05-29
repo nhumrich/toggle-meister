@@ -195,9 +195,36 @@ def test_turn_toggle_on_rolling(client):
 
     assert any(results)
 
+    # now turn it back off
     response = client.patch(
         '/api/toggles',
-        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ON'}})
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'OFF'}})
+    assert response.status_code == 200
+
+
+def test_pausing_toggle(client):
+    # first, turn it on roll
+    client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'ROLL:2'}})
+
+    # now pause it
+    response = client.patch(
+        '/api/toggles',
+        json={'toggle': {'env': 'bob2', 'feature': 'bobbytables', 'state': 'PAUSE'}})
+    assert response.status_code == 200
+
+    # should have pause state in the all api
+    response = client.get('/api/toggles')
+    assert response.status_code == 200
+    toggles = response.json()['toggles']
+    toggle = [t for t in toggles
+              if t['toggle']['env'] == 'bob2' and t['toggle']['feature'] == 'bobbytables'][0]
+    assert toggle['toggle']['state'] == 'PAUSE'
+
+    # now test getting it, asking without a user should show that its off
+    response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
+    assert response.json()['bobbytables'] == False  # noqa
 
     # now turn it back off
     response = client.patch(

@@ -148,6 +148,44 @@ def progress_rolled_toggles():
                 .where(db.toggles.c.env == env)
             pg.execute(query)
 
+    # progress "paused" features
+    for env in envs:
+        paused_toggles = pg.execute(db.toggles.select()
+                                    .where(db.toggles.c.env == env)
+                                    .where(db.toggles.c.state == 'PAUSE'))
+
+        for row in paused_toggles:
+            feature = row['feature']
+            env = row['env']
+            schedule = row['schedule']
+            total_hours = schedule.get('total_hours')
+            current_hour = schedule.get('hours_count')
+            rolling_state = schedule.get('rolling_state')
+
+            new_hour = current_hour + 1
+            update = {'hours_count': new_hour}
+            if new_hour >= total_hours:
+                # return to normal
+                with pg.begin() as conn:
+                    # delete toggle
+                    conn.execute(
+                        db.toggles.delete()
+                        .where(db.toggles.c.feature == feature)
+                        .where(db.toggles.c.env == env))
+
+                    # back to rolling
+                    conn.execute(
+                        db.toggles.insert().values(feature=feature, env=env, state='ROLL',
+                                                   date_on=functions.now(),
+                                                   schedule=rolling_state)
+                    )
+            else:
+                # increment hour counter
+                pg.execute(db.toggles.update().values(
+                    schedule=sqlalchemy.text(f"schedule || '{json.dumps(update)}'"))
+                           .where(db.toggles.c.env == env)
+                           .where(db.toggles.c.feature == feature))
+
     # clean up on toggles
     dirty_toggles = pg.execute("SELECT * FROM toggles WHERE schedule->>'dirty'='true';")
     for row in dirty_toggles:
