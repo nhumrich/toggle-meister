@@ -15,6 +15,7 @@ const useStyles = makeStyles(theme => ({
   },
   header: {
     display: 'flex',
+    alignItems: 'center',
     justifyContent: 'space-between'
   }
 }));

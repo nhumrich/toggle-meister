@@ -1,8 +1,23 @@
 import React, { useState } from 'react';
 import SimpleButton from '../../common/simple-button/simple-button.component.js'
 import Modal from '../../common/modal/modal.component.js'
+import { TextField, Switch, FormGroup, FormControlLabel } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  cancelButton: {
+    marginLeft: '8px'
+  },
+  buttonBar: {
+    marginTop: '16px'
+  },
+  rollingInputs: {
+    margin: '8px 0px',
+  }
+}))
 
 export default function ToggleProdModal (props) {
+  const classes = useStyles();
   const { toggle, performChange, close, toggleWillBeOn } = props
   const [ days, setDays ] = useState(3)
   const [ rolling, setRolling ] = useState(false)
@@ -11,43 +26,34 @@ export default function ToggleProdModal (props) {
       headerText='Alter Production feature toggle'
       closeAction={close}
     >
-      <div className="cps-card__body">
+      <div>
         <div>
           This really will have an immediate impact on the production environment and could potentially break things for customers.
         </div>
         {
           toggleWillBeOn && false /*toggled off */ && (
-            <div className='cps-margin-top-16'>
-              <div className='cps-form-group'>
-                <label htmlFor="is-rolling-deploy">
-                  <input
-                    id='is-rolling-deploy'
-                    className='cps-checkbox'
-                    type='checkbox'
-                    checked={rolling}
-                    onChange={(e) => setRolling(e.target.checked)}
-                  />
-                  <span className='cps-margin-left-8'>
-                    Rolling deployment?
-                  </span>
-                </label>
-              </div>
+            <div className={classes.rollingInputs}>
+              <FormGroup row>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={rolling}
+                      onChange={(e) => setRolling(e.target.checked)}
+                    />
+                  }
+                  label='Rolling Deployment'
+                />
+              </FormGroup>
               {
                 rolling && (
-                  <div className='cps-form-group'>
-                    <label htmlFor="days-for-full-deployment">
-                      Days until 100% deployed
-                    </label>
-                    <input
-                      id={'days-for-full-deployment'}
-                      className='cps-form-control'
-                      type='number'
-                      min={1}
-                      max={50}
-                      value={days}
-                      onChange={(e) => setDays(e.target.value)}
-                    />
-                  </div>
+                  <TextField
+                    label='Days until 100% deployed'
+                    type='number'
+                    min={1}
+                    max={50}
+                    value={days}
+                    onChange={(e) => setDays(e.target.value)}
+                  />
                 )
               }
             </div>
@@ -65,7 +71,7 @@ export default function ToggleProdModal (props) {
           )
         }
       </div>
-      <div className="cps-modal__dialog__actions">
+      <div className={classes.buttonBar}>
         <SimpleButton
           actionType="primary"
           onClick={() => {
@@ -79,7 +85,7 @@ export default function ToggleProdModal (props) {
         >
           I know what I am doing
         </SimpleButton>
-        <SimpleButton actionType="flat" onClick={close}>
+        <SimpleButton className={classes.cancelButton} actionType="flat" onClick={close}>
           Nevermind
         </SimpleButton>
       </div>
