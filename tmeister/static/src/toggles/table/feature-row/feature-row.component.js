@@ -9,7 +9,7 @@ export default function FeatureRow (props) {
   const [ deleteConfirmModal, setDeleteConfirmModal ] = useState(false)
   const [ deleteFeatureByName, deleteInProgress ] = useDeleteFeature(refetchToggles)
   return (
-    <tr className="+hover">
+    <tr className={`+hover ${styles.row}`}>
       <td className={styles.featureName}>
         <div>
           {featureName}

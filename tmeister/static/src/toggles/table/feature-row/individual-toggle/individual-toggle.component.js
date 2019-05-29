@@ -1,57 +1,54 @@
 import React, { useState } from 'react'
 import ToggleProdModal from '../../toggle-prod-modal.component.js'
 import { useChangeFeatureStatus } from '../../../toggles.hooks.js'
+import styles from './individual-toggle.styles.css'
+import ToggleAndStatus from './actual-toggle-and-percentage.component.js'
 
 export default function IndividualToggle (props) {
   const { toggle, refetchToggles } = props
   const [ toggleConfirmModal, setToggleConfirmModal ] = useState(false)
   const [ setToggleToChange, setNewState ] = useChangeFeatureStatus(refetchToggles)
+  const { state, env } = toggle.toggle
+  const isOn = state === 'ROLL' || state === 'PAUSE' || state === 'ON'
   return (
     <td key={toggle.toggle.env}>
-      <label className="cps-toggle">
-        {
-          toggle.toggle.env === 'production' ? (
-            <input
-              type="checkbox"
-              checked={toggle.toggle.state === 'ON'}
-              onChange={(e) => {
-                setToggleConfirmModal(true)
-              }}
-            />
-          ) : (
-            <input
-              type="checkbox"
-              checked={toggle.toggle.state === 'ON'}
-              onChange={() => changeToggle(toggle)}
-            />
-
-          )
+      <ToggleAndStatus
+        isOn={isOn}
+        toggle={toggle.toggle}
+        onChange={env === 'production' ?
+            () => setToggleConfirmModal(true) :
+            () => changeToggle(toggle.toggle)
         }
-        <span />
-      </label>
+        changeToggle={changeToggle}
+      />
       {
         toggleConfirmModal && (
           <ToggleProdModal
-            toggle={toggle}
+            toggle={toggle.toggle}
             toggleWillBeOn={toggle.toggle.state === 'OFF'}
             close={() => {
               setToggleToChange()
               setToggleConfirmModal(false)}
             }
-            performChange={() => changeToggle(toggle)}
+            performChange={(state) => {
+              changeToggle(toggle.toggle, state)
+            }}
           />
         )
       }
     </td>
   );
 
-  function changeToggle(toggle) {
-    if (toggle.toggle.state === 'ON') {
+  function changeToggle(toggle, state) {
+    if (state) {
+      setNewState(state)
+    } else if (toggle.state === 'ON' || toggle.state === 'ROLL' || toggle.state === 'PAUSE') {
       setNewState('OFF')
     } else {
       setNewState('ON')
     }
-    setToggleToChange(toggle.toggle)
+    setToggleToChange(toggle)
     setToggleConfirmModal(false)
   }
 }
+

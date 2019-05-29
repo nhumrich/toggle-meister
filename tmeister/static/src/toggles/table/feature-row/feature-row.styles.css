@@ -1,3 +1,5 @@
+.row {}
+
 .featureName {
   display: flex;
   align-items: center;

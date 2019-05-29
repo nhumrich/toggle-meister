@@ -1,0 +1,7 @@
+.ToggleAndStatus {
+  display: flex;
+}
+
+.status_info {
+  margin-left: 4px;
+}
