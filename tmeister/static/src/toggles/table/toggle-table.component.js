@@ -12,7 +12,7 @@ import { Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@materi
 export default function ToggleTable (props) {
   const { toggles, refetchToggles } = props
   const envList = getEnvList(toggles);
-  const togglesByFeaure = groupTogglesByFeature(toggles, envList)
+  const togglesByFeature = groupTogglesByFeature(toggles, envList)
   return (
 <<<<<<< HEAD
     <div className={`${styles.tableWrapper} cps-card-table cps-card cps-margin-top-32`}>
@@ -34,7 +34,7 @@ export default function ToggleTable (props) {
         </TableHead>
         <TableBody>
           {
-            togglesByFeaure.map(groupOfToggles => {
+            togglesByFeature.map(groupOfToggles => {
               const featureName = groupOfToggles[0].toggle.feature;
               return (
                 <FeatureRow
