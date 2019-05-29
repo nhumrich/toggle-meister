@@ -3,23 +3,26 @@ import styles from './feature-row.styles.css'
 import DeleteFeatureModal from '../../delete/delete-feature-modal.component.js'
 import { useDeleteFeature } from '../../toggles.hooks.js'
 import IndividualToggle from './individual-toggle/individual-toggle.component.js'
+import { TableRow, TableCell, IconButton, Icon } from '@material-ui/core'
 
 export default function FeatureRow (props) {
   const { featureName, groupOfToggles, refetchToggles } = props
   const [ deleteConfirmModal, setDeleteConfirmModal ] = useState(false)
   const [ deleteFeatureByName, deleteInProgress ] = useDeleteFeature(refetchToggles)
   return (
-    <tr className={`+hover ${styles.row}`}>
-      <td className={styles.featureName}>
-        <div>
-          {featureName}
+    <TableRow className="+hover">
+      <TableCell>
+        <div className={styles.featureName}>
+          <div>
+            {featureName}
+          </div>
+          <IconButton onClick={() => setDeleteConfirmModal(true)}>
+            <Icon fontSize='small'>
+              delete
+            </Icon>
+          </IconButton>
         </div>
-        <div className={`cps-btn-icon ${styles.buttonIcon}`}>
-          <a className="cps-link" onClick={() => {setDeleteConfirmModal(true)}} >
-            <span className="cps-icon cps-icon-close" />
-          </a>
-        </div>
-      </td>
+      </TableCell>
       {
         groupOfToggles
           .map(toggle => (
@@ -39,6 +42,6 @@ export default function FeatureRow (props) {
           />
         )
       }
-    </tr>
+    </TableRow>
   );
 }
