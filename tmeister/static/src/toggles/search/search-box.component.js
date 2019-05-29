@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './search-box.css';
 import { InputBase, Paper, Icon, Divider } from '@material-ui/core'
 import { makeStyles } from '@material-ui/styles'
 
