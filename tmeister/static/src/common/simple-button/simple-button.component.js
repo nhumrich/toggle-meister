@@ -21,6 +21,7 @@ export default class SimpleButton extends React.Component {
     } else {
       return (
         <Button
+          color={this.props.color}
           className={this.props.className}
           variant='contained'
           onClick={this.handleClick}

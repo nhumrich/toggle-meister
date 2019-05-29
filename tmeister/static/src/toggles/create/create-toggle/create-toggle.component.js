@@ -10,7 +10,7 @@ export default function CreateToggle (props) {
   return (
     <div>
       <Button
-        className="cps-btn +primary"
+        color='primary'
         onClick={() => setShowCreateModal(true)}
       >
         Create feature

@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
   },
   controls: {
     marginBottom: '16px'
+  },
+  container: {
+    padding: 16,
   }
 }))
 
@@ -24,7 +27,7 @@ export default function TogglesContainer (props) {
 
   return (
     <Container className={`${styles.root}`}>
-      <Paper>
+      <Paper className={classes.container}>
         <Typography className={classes.header} variant='h2'>
           Manage feature toggles
         </Typography>

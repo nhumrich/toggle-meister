@@ -5,15 +5,13 @@ import RootContainer from './menu/root.container.js';
 import AuditTrail from './audit-trail/audit-trail.container.js';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles'
-import { green, blue } from '@material-ui/core/colors'
-console.log('green', green)
 
-const theme = createMuiTheme({
-  palette: {
-    primary: green,
-    secondary: blue,
-  }
-})
+const palette = {
+  primary: { main: '#00BF4B' },
+  secondary: { main: '#3399ff' }
+};
+
+const theme = createMuiTheme({palette})
 
 export default class RootComponent extends React.Component {
 

@@ -11,7 +11,7 @@ export default function ToggleTable (props) {
   const togglesByFeature = groupTogglesByFeature(toggles, envList)
   return (
     <Paper>
-      <Table>
+      <Table size='small'>
         <TableHead>
           <TableRow>
             <TableCell>
