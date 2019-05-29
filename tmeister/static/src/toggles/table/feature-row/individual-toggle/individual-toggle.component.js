@@ -14,22 +14,15 @@ export default function IndividualToggle (props) {
   return (
     <TableCell key={toggle.toggle.env}>
       <label className="cps-toggle">
-        {
-          toggle.toggle.env === 'production' ? (
-            <Switch
-              checked={toggle.toggle.state === 'ON'}
-              onChange={(e) => {
-                setToggleConfirmModal(true)
-              }}
-            />
-          ) : (
-            <Switch
-              checked={toggle.toggle.state === 'ON'}
-              onChange={() => changeToggle(toggle.toggle)}
-            />
-
-          )
-        }
+        <ToggleAndStatus
+          isOn={isOn}
+          toggle={toggle.toggle}
+          onChange={env === 'production' ?
+              () => setToggleConfirmModal(true) :
+              () => changeToggle(toggle.toggle)
+          }
+          changeToggle={changeToggle}
+        />
       </label>
       {
         toggleConfirmModal && (
@@ -62,12 +55,3 @@ export default function IndividualToggle (props) {
   }
 }
 
-  {/* <ToggleAndStatus */}
-  {/*   isOn={isOn} */}
-  {/*   toggle={toggle.toggle} */}
-  {/*   onChange={env === 'production' ? */}
-  {/*       () => setToggleConfirmModal(true) : */}
-  {/*       () => changeToggle(toggle.toggle) */}
-  {/*   } */}
-  {/*   changeToggle={changeToggle} */}
-  {/* /> */}
