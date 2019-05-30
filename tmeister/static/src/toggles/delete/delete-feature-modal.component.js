@@ -3,12 +3,10 @@ import SimpleButton from '../../common/simple-button/simple-button.component.js'
 import Modal from '../../common/modal/modal.component.js'
 import DeleteModalMetrics from './delete-modal-metrics.component.js'
 import { useMetricsForToggle } from '../metrics/metrics.hooks.js'
-import useLocalStorageAsToggle from '../../common/use-localstorage-as-toggle.hook.js'
 
 export default function DeleteFeatureModal (props) {
   const { close, featureName, performDelete } = props
-  const metricsActive = useLocalStorageAsToggle('metrics')
-  const [metrics, loading, refetch]= useMetricsForToggle(metricsActive ? featureName : undefined)
+  const [metrics, loading, refetch]= useMetricsForToggle(featureName)
   return (
     <Modal
       headerText={`Delete feature ${featureName}`}
@@ -20,18 +18,11 @@ export default function DeleteFeatureModal (props) {
           doing this. If it is referenced in code after this is deleted, the toggle meister will return a value of "OFF" for this
           feature toggle after the delete occurs.
         </div>
-        {
-
-          metricsActive && (
-            <>
-              <br />
-              <DeleteModalMetrics
-                metrics={metrics}
-                loading={loading}
-              />
-            </>
-        )
-        }
+        <br />
+        <DeleteModalMetrics
+          metrics={metrics}
+          loading={loading}
+        />
         <div className="cps-modal__dialog__actions">
           <SimpleButton actionType="primary" onClick={performDelete} disableOnClick={true}>
             Delete feature toggle

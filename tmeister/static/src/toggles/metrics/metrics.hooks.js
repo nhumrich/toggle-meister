@@ -10,14 +10,28 @@ export function useMetricsForToggle (toggle) {
     if (toggle) {
       // make api call
       setLoading(true)
-      const mockP = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          const grouped = groupBy(mockResponse.metrics, (item) => item.environment)
-          console.log('grouped', grouped)
-          resolve(grouped)
-        }, 3000)
+      const controller = new AbortController()
+      const signal = controller.signal
+      const req = fetch(`api/metrics/${toggle}`, {
+        credentials: 'same-origin',
+        signal,
+      }).then(response => {
+        if (response.ok) {
+          return response.json()
+            .then(property('metrics'))
+            .then(v => {
+              setMetrics(v)
+              setLoading(false)
+            })
+        } else {
+          throw response.status;
+        }
+      }).catch(err => {
+        setLoading(false)
       })
-      mockP.then((results) => {setMetrics(results); setLoading(false)})
+      return () => {
+        controller.abort()
+      }
     }
   }, [count, toggle])
 
