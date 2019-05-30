@@ -33,8 +33,7 @@
     "webpack-dev-server": "^3.4.1"
   },
   "dependencies": {
-    "cpr-multiselect": "^3.3.14",
-    "cpr-tooltip": "^1.2.1",
+    "@material-ui/core": "^4.0.1",
     "fuzzy": "^0.1.3",
     "moment": "^2.24.0",
     "prop-types": "^15.7.2",

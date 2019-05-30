@@ -3,6 +3,7 @@ import ToggleProdModal from '../../toggle-prod-modal.component.js'
 import { useChangeFeatureStatus } from '../../../toggles.hooks.js'
 import styles from './individual-toggle.styles.css'
 import ToggleAndStatus from './actual-toggle-and-percentage.component.js'
+import { TableRow, TableCell, Switch } from '@material-ui/core'
 
 export default function IndividualToggle (props) {
   const { toggle, refetchToggles } = props
@@ -11,16 +12,18 @@ export default function IndividualToggle (props) {
   const { state, env } = toggle.toggle
   const isOn = state === 'ROLL' || state === 'PAUSE' || state === 'ON'
   return (
-    <td key={toggle.toggle.env}>
-      <ToggleAndStatus
-        isOn={isOn}
-        toggle={toggle.toggle}
-        onChange={env === 'production' ?
-            () => setToggleConfirmModal(true) :
-            () => changeToggle(toggle.toggle)
-        }
-        changeToggle={changeToggle}
-      />
+    <TableCell key={toggle.toggle.env}>
+      <label className="cps-toggle">
+        <ToggleAndStatus
+          isOn={isOn}
+          toggle={toggle.toggle}
+          onChange={env === 'production' ?
+              () => setToggleConfirmModal(true) :
+              () => changeToggle(toggle.toggle)
+          }
+          changeToggle={changeToggle}
+        />
+      </label>
       {
         toggleConfirmModal && (
           <ToggleProdModal
@@ -36,7 +39,7 @@ export default function IndividualToggle (props) {
           />
         )
       }
-    </td>
+    </TableCell>
   );
 
   function changeToggle(toggle, state) {

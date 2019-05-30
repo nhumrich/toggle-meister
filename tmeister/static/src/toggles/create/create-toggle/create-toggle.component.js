@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import CreateToggleModal from './create-toggle-modal.component.js';
+import Button from '../../../common/simple-button/simple-button.component.js'
 
 export default function CreateToggle (props) {
 
@@ -8,12 +9,12 @@ export default function CreateToggle (props) {
 
   return (
     <div>
-      <button
-        className="cps-btn +primary"
+      <Button
+        color='primary'
         onClick={() => setShowCreateModal(true)}
       >
         Create feature
-      </button>
+      </Button>
       {
         showCreateModal && (
           <CreateToggleModal

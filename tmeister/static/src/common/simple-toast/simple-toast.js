@@ -110,10 +110,12 @@ export function buildToast(type, state, links, toastObj, actionText, actionCallb
 export function buildToastString(type, stackSize, links = []) {
   const toastTypeMeta = getToastTypeMeta(type);
 
-  return `<div class="cps-card__height-3 ${styles.toaster} ${styles[type]}" style="z-index: ${110000 - stackSize}; bottom: ${stackSize * 15 + 15}px;">
+  return `<div class="MuiPaper-root MuiPaper-elevation3 MuiPaper-rounded ${styles.toaster} ${styles[type]}" style="z-index: ${110000 - stackSize}; bottom: ${stackSize * 15 + 15}px;">
       <div class="${styles.dismiss}">
         <a id="dismissIcon">
-          <i class="cps-icon cps-icon-sm-neg"></i>
+          <i class="material-icons MuiIcon-root" aria-hidden="true">
+            close
+          </i>
         </a>
       </div>
       <div>

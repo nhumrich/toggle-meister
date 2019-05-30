@@ -2,8 +2,20 @@ import React, { useState } from 'react';
 import styles from './create-env-modal.css';
 import { useCreateEnv } from '../create-hooks.js'
 import Modal from '../../../common/modal/modal.component.js'
+import { Button, TextField } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  cancelButton: {
+    marginLeft: '8px'
+  },
+  buttonBar: {
+    marginTop: '16px'
+  }
+}))
 
 export default function CreateEnvModal (props) {
+  const classes = useStyles();
   const { hide, refetchToggles } = props
   const [ newEnv, setNewEnv ] = useState('')
   const [ createName, setCreateName ] = useState('')
@@ -13,58 +25,45 @@ export default function CreateEnvModal (props) {
     hide()
   }
   return (
-    <Modal>
-      <div className="cps-modal">
-        <div className="cps-modal__screen"></div>
-        <div className="cps-modal__dialog cps-card">
-          <div className="cps-card__header cps-subheader-sm">
-            <span>
-              Create a new Environment
-            </span>
-            <a
-              className="cps-modal__dialog__close cps-icon cps-icon-close"
-              onClick={hide}
-            />
-          </div>
-          <div className="cps-card__body">
-            <div className="cps-form-group">
-              <label htmlFor="new-environment-name">
-                Environment Name
-              </label>
-              <input
-                id="create-environment-name"
-                type="text"
-                disabled={saving}
-                value={newEnv}
-                onChange={(e) => setNewEnv(e.target.value)}
-                className={`cps-form-control ${styles.input}`}
-                ref={el => {
-                  if (el && document.activeElement !== el) {
-                    el.focus()
-                  }
-                }}
-                onKeyPress={e => {
-                  if (e.charCode === 13 && !saving) {
-                    setCreateName(newEnv)
-                  }
-                }}
-              />
-            </div>
-          </div>
-          <div className="cps-modal__dialog__actions">
-            <button className="cps-btn +primary" onClick={e => {
+    <Modal
+      headerText='Create a new environment'
+      closeAction={hide}
+    >
+      <div>
+        <TextField
+          id='new-environment-name'
+          label='Environment name'
+          disabled={saving}
+          value={newEnv}
+          onChange={(e) => setNewEnv(e.target.value)}
+          autoFocus
+          onKeyPress={e => {
+            if (e.charCode === 13) {
+              setCreateName(e.target.value)
+            }
+          }}
+        >
+        </TextField>
+        <div className={classes.buttonBar}>
+          <Button
+            variant='contained'
+            color='primary'
+            disabled={saving}
+            onClick={() => {
               setCreateName(newEnv)
             }}
-            disabled={saving}
           >
-            Create environment
-          </button>
-          <a className="cps-link" onClick={hide}>
+            Create Environment
+          </Button>
+          <Button
+            color='secondary'
+            className={classes.cancelButton}
+            onClick={hide}
+          >
             Nevermind
-          </a>
+          </Button>
         </div>
       </div>
-    </div>
-  </Modal>
+    </Modal>
   );
 }
