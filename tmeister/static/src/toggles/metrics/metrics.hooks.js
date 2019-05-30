@@ -20,8 +20,9 @@ export function useMetricsForToggle (toggle) {
         if (response.ok) {
           return response.json()
             .then(property('metrics'))
-            .then(v => {
-              setMetrics(v)
+            .then(metrics => {
+              const grouped = groupBy(metrics, (item) => item.environment)
+              setMetrics(grouped)
               setLoading(false)
             })
         } else {
