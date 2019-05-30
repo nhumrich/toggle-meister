@@ -29,6 +29,7 @@ export function getEnvList(toggles) {
 
 export function groupTogglesByFeature(toggles, envList) {
   return chain(toggles)
+    .sortBy((t) => t.toggle.feature)
     .groupBy('toggle.feature')
     .map(group => {
       return reduce(group, (newGroup, el) => {
