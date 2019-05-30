@@ -80,14 +80,16 @@ export function useChangeFeatureStatus (callback) {
       setPending(true)
       const controller = new AbortController()
       const signal = controller.signal
+      const body = JSON.stringify({
+        toggle: {
+          feature: featureToChange.feature,
+          env: featureToChange.env,
+          state: newStatus,
+        }
+      })
       fetch(`/api/toggles`, {
         method: 'PATCH',
-        body: JSON.stringify({
-          toggle: {
-            ...featureToChange,
-            state: newStatus
-          }
-        }),
+        body,
         credentials: 'same-origin',
         signal,
       }).then(response => {

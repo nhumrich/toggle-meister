@@ -31,7 +31,7 @@ export default function ToggleProdModal (props) {
           This really will have an immediate impact on the production environment and could potentially break things for customers.
         </div>
         {
-          toggleWillBeOn && false /*toggled off */ && (
+          toggleWillBeOn && (
             <div className={classes.rollingInputs}>
               <FormGroup row>
                 <FormControlLabel

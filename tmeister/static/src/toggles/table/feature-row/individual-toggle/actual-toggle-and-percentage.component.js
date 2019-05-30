@@ -13,7 +13,7 @@ export default function ToggleAndStatus (props) {
         onChange={onChange}
       />
       {
-        (isOn && state === 'ROLL' || state === 'PAUSE') && false /*toggled off */ && (
+        (isOn && state === 'ROLL' || state === 'PAUSE') && (
           <Percentage
             changeToggle={changeToggle}
             toggle={toggle}
