@@ -23,6 +23,7 @@ export default function DeleteFeatureModal (props) {
           metrics={metrics}
           loading={loading}
         />
+        <br />
         <div className="cps-modal__dialog__actions">
           <SimpleButton actionType="primary" onClick={performDelete} disableOnClick={true}>
             Delete feature toggle

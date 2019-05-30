@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
-import { groupBy } from 'lodash'
+import { groupBy, property } from 'lodash'
 
 export function useMetricsForToggle (toggle) {
   const [metrics, setMetrics] = useState([])
