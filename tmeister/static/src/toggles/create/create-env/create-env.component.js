@@ -8,7 +8,6 @@ export default function CreateEnv (props) {
   return (
     <div>
       <Button
-        className="cps-btn +secondary"
         onClick={() => setShowCreateModal(true)}
       >
         Create environment
