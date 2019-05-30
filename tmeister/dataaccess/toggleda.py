@@ -111,9 +111,11 @@ async def set_toggle_state(env, feature, state, rollout_days=0):
             schedule['total_hours'] = int(rollout_days) * 24
             schedule['current_percent'] = 1
         elif state == 'PAUSE':
+            roll_schedule = json.loads(results[0]['schedule'])
             schedule['hours_count'] = 0
             schedule['total_hours'] = 48
-            schedule['rolling_state'] = json.loads(results[0]['schedule'])
+            schedule['current_percent'] = roll_schedule.get('current_percent')
+            schedule['rolling_state'] = roll_schedule
         else:
             schedule['dirty'] = True
 
