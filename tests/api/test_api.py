@@ -221,6 +221,7 @@ def test_pausing_toggle(client):
     toggle = [t for t in toggles
               if t['toggle']['env'] == 'bob2' and t['toggle']['feature'] == 'bobbytables'][0]
     assert toggle['toggle']['state'] == 'PAUSE'
+    assert toggle['toggle']['current_percent'] == 1
 
     # now test getting it, asking without a user should show that its off
     response = client.get('/api/envs/bob2/toggles?feature=bobbytables')
