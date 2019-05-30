@@ -3,7 +3,6 @@ import SimpleButton from '../../common/simple-button/simple-button.component.js'
 import Modal from '../../common/modal/modal.component.js'
 import DeleteModalMetrics from './delete-modal-metrics.component.js'
 import { useMetricsForToggle } from '../metrics/metrics.hooks.js'
-import useLocalStorageAsToggle from '../../common/use-localstorage-as-toggle.hook.js'
 
 export default function DeleteFeatureModal (props) {
   const { close, featureName, performDelete } = props
