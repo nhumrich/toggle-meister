@@ -12,20 +12,30 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     width: 700,
+    display: 'flex',
+    flexDirection: 'column',
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4),
     outline: 'none',
+    maxHeight: `calc(100% - 88px)`,
   },
   header: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between'
+  },
+  modalContents: {
+    overflowY: 'auto',
+  },
+  bottomRow: {
+    marginTop: '16px',
+    height: '48px',
   }
 }));
 
 export default function ModalWrapper (props) {
-  const { headerText, closeAction, children } = props
+  const { headerText, closeAction, children, bottomRowContents } = props
   const classes = useStyles();
   return (
     <Modal open={true}>
@@ -39,7 +49,16 @@ export default function ModalWrapper (props) {
               </Icon>
             </IconButton>
           </div>
-          {children}
+          <div className={classes.modalContents}>
+            {children}
+          </div>
+          {
+            bottomRowContents && (
+              <div className={classes.bottomRow}>
+                {bottomRowContents}
+              </div>
+            )
+          }
         </Paper>
       </div>
     </Modal>
