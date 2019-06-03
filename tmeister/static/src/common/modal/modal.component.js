@@ -3,15 +3,19 @@ import { makeStyles } from '@material-ui/core/styles'
 import { Typography, Paper, Modal, IconButton, Icon } from '@material-ui/core'
 
 const useStyles = makeStyles(theme => ({
+  positioning: {
+    width: '100vw',
+    height: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   paper: {
-    position: 'absolute',
     width: 700,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing(4),
     outline: 'none',
-    left: '33%',
-    top: '46%',
   },
   header: {
     display: 'flex',
@@ -25,17 +29,19 @@ export default function ModalWrapper (props) {
   const classes = useStyles();
   return (
     <Modal open={true}>
-      <Paper className={classes.paper}>
-        <div className={classes.header}>
-          <Typography variant='h6'>{headerText}</Typography>
-          <IconButton onClick={closeAction}>
-            <Icon>
-              close
-            </Icon>
-          </IconButton>
-        </div>
-        {children}
-      </Paper>
+      <div className={classes.positioning}>
+        <Paper className={classes.paper}>
+          <div className={classes.header}>
+            <Typography variant='h6'>{headerText}</Typography>
+            <IconButton onClick={closeAction}>
+              <Icon>
+                close
+              </Icon>
+            </IconButton>
+          </div>
+          {children}
+        </Paper>
+      </div>
     </Modal>
   )
 }
