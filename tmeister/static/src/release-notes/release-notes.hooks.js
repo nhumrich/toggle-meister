@@ -28,25 +28,36 @@ export function useFetchReleaseNotes () {
   ]
 }
 
-export function useCreateEditReleaseNote(isEdit) {
+export function useCreateEditReleaseNote(isEdit, successFn) {
   const [ note, setNote ] = useState()
   const [ requestInProgress, setRequestInProgress] = useState(false)
   const [ response, setResponse] = useState()
   useEffect(() => {
     if (note) {
       setRequestInProgress(true)
-      const req = new Promise((resolve, reject) => {
-        setTimeout(() => {
+      let timeout, reject
+      const req = new Promise((resolve, rej) => {
+        reject = rej
+        timeout = setTimeout(() => {
           resolve({id: uniqueId(), ...note})
         }, 2000)
       })
       req.then(r => {
         setResponse(r)
         setRequestInProgress(false)
+      }).then((r) => {
+        successFn && successFn(r)
+      }).catch((err) => {
+        if (err !== 'cancelled') {
+          console.error('err', err)
+        }
       })
-      return () => {}
+      return () => {
+        clearTimeout(timeout)
+        reject('cancelled')
+      }
     }
-  }, [note, isEdit])
+  }, [note, isEdit, successFn])
 
   return [setNote, requestInProgress, response]
 }

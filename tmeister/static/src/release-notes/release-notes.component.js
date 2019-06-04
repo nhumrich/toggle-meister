@@ -50,10 +50,7 @@ export default function Releases(props) {
             createNote && (
               <CreateEditReleaseNote
                 close={() => setCreateNote(false)}
-                onSuccess={() => {
-                  console.log('yay')
-                  refetchReleaseNotes()
-                }}
+                onSuccess={refetchReleaseNotes}
               />
             )
           }
