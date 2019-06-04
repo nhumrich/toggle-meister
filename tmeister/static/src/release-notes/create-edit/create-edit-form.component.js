@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function CreateEditReleaseNoteForm (props) {
-  const { close, isEdit, releaseNote, title, setTitle, body, setBody } = props
+  const { close, isEdit, releaseNote, title, setTitle, body, setBody, onSuccess } = props
   const classes = useStyles()
   const [ feature, setFeature ] = useState('')
   const [toggles, refetch] = useFetchToggles()
@@ -20,6 +20,10 @@ export default function CreateEditReleaseNoteForm (props) {
     .map(r => r.toggle.feature)
 
   const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit)
+  if (responseNote && requestInProgress === false) {
+    onSuccess()
+    close()
+  }
 
   return (
     <form

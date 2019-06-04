@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => {
 
 export default function CreateEditReleaseNote (props) {
   const classes = useStyles()
-  const { releaseNote = {}, close} = props
+  const { releaseNote = {}, close, onSuccess} = props
   const isEdit = !!props.releaseNote
   const [ title, setTitle ] = useState(() => releaseNote.title || '')
   const [ body, setBody] = useState(() => releaseNote.body || '')
@@ -81,6 +81,7 @@ export default function CreateEditReleaseNote (props) {
                 releaseNote={releaseNote}
                 isEdit={isEdit}
                 close={close}
+                onSuccess={onSuccess}
               />
             )
           }
