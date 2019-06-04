@@ -5,6 +5,7 @@ import { Tabs, Tab, Button } from '@material-ui/core'
 import Modal from '../../common/modal/modal.component.js'
 import CreateEditReleaseNoteForm from './create-edit-form.component.js'
 import ReleaseNotePreview from '../release-note-preview/release-note-preview.component.js'
+import { useCreateEditReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => {
   return {
@@ -31,12 +32,17 @@ const useStyles = makeStyles(theme => {
 
 export default function CreateEditReleaseNote (props) {
   const classes = useStyles()
-  const { releaseNote = {}, close} = props
+  const { releaseNote = {}, close, onSuccess} = props
   const isEdit = !!props.releaseNote
   const [ title, setTitle ] = useState(() => releaseNote.title || '')
   const [ body, setBody] = useState(() => releaseNote.body || '')
   const [ preview, setPreview ] = useState(false)
   const [ tabValue, setTabValue ] = useState(0)
+  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit, () => {
+    createEditNote()
+    onSuccess && onSuccess()
+    close()
+  })
   return (
     <Modal
       headerText={isEdit ? `Edit Note` : 'Create Note'}
@@ -81,6 +87,8 @@ export default function CreateEditReleaseNote (props) {
                 releaseNote={releaseNote}
                 isEdit={isEdit}
                 close={close}
+                requestInProgress={requestInProgress}
+                createEditNote={createEditNote}
               />
             )
           }

@@ -68,7 +68,9 @@ export default function MainMenu(props) {
               className={`${classes.menuItem} ${activeIcon("release-notes")}`}
               href="/#/release-notes"
             >
-              <img src='/resources/audit-icon.png' className={classes.icon} />
+              <Icon className={classes.icon}>
+                notes
+              </Icon>
             </a>
           </Tooltip>
         )
