@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useRef} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField, FormControl, InputLabel, Select, MenuItem, OutlinedInput} from '@material-ui/core'
+import { useFetchToggles } from '../../toggles/toggles.hooks.js'
+import { useCreateEditReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => ({
   inputRow: {
@@ -11,6 +13,14 @@ const useStyles = makeStyles(theme => ({
 export default function CreateEditReleaseNoteForm (props) {
   const { close, isEdit, releaseNote, title, setTitle, body, setBody } = props
   const classes = useStyles()
+  const [ feature, setFeature ] = useState('')
+  const [toggles, refetch] = useFetchToggles()
+  const toggleOptions = toggles
+    .filter(r => r.toggle.env === 'production')
+    .map(r => r.toggle.feature)
+
+  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit)
+
   return (
     <form
       noValidate
@@ -21,6 +31,7 @@ export default function CreateEditReleaseNoteForm (props) {
     >
       <div className={classes.inputRow}>
         <TextField
+          disabled={requestInProgress}
           variant='outlined'
           fullWidth
           id='release-note-title'
@@ -31,6 +42,7 @@ export default function CreateEditReleaseNoteForm (props) {
       </div>
       <div className={classes.inputRow}>
         <TextField
+          disabled={requestInProgress}
           variant='outlined'
           multiline
           fullWidth
@@ -40,11 +52,37 @@ export default function CreateEditReleaseNoteForm (props) {
           onChange={(e) => setBody(e.target.value)}
         />
       </div>
+      <div className={classes.inputRow}>
+        <FormControl
+          variant='outlined'
+          fullWidth
+        >
+          <InputLabel htmlFor='feature-toggle-select'>
+            Feature
+          </InputLabel>
+          <Select
+            disabled={requestInProgress}
+            value={feature}
+            onChange={(e) => setFeature(e.target.value)}
+            input={<OutlinedInput name='feature' id='feature-toggle-select' />}
+          >
+            <MenuItem value={''}>
+              None
+            </MenuItem>
+            {
+              toggleOptions.map(feature => (
+                <MenuItem key={feature} value={feature}>{feature}</MenuItem>
+              ))
+            }
+          </Select>
+        </FormControl>
+      </div>
     </form>
   )
 
   function handleSubmit(e) {
     e.preventDefault()
     console.log('submit')
+    createEditNote({title, body, feature})
   }
 }

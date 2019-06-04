@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { uniqueId } from 'lodash'
 
 export function useFetchReleaseNotes () {
   const [ notes, setNotes ] = useState([])
@@ -25,7 +26,29 @@ export function useFetchReleaseNotes () {
     notes,
     () => setCount(count + 1)
   ]
+}
 
+export function useCreateEditReleaseNote(isEdit) {
+  const [ note, setNote ] = useState()
+  const [ requestInProgress, setRequestInProgress] = useState(false)
+  const [ response, setResponse] = useState()
+  useEffect(() => {
+    if (note) {
+      setRequestInProgress(true)
+      const req = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve({id: uniqueId(), ...note})
+        }, 2000)
+      })
+      req.then(r => {
+        setResponse(r)
+        setRequestInProgress(false)
+      })
+      return () => {}
+    }
+  }, [note, isEdit])
+
+  return [setNote, requestInProgress, response]
 }
 
 
