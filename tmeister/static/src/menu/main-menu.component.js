@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Paper } from '@material-ui/core'
+import { Tooltip, Paper, Icon } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -28,8 +28,10 @@ const useStyles = makeStyles(theme => ({
     },
   },
   icon: {
+    color: theme.palette.text.primary,
     width: '100%',
-    height: '100%'
+    height: '100%',
+    fontSize: '3rem',
   }
 }))
 
@@ -42,7 +44,9 @@ export default function MainMenu(props) {
           className={`${classes.menuItem} ${activeIcon("toggles")}`}
           href="/#/toggles"
         >
-          <img src='/resources/toggle-icon.png' className={classes.icon} />
+          <Icon className={classes.icon}>
+            toggle_on
+          </Icon>
         </a>
       </Tooltip>
       <Tooltip title="Audit trail">
@@ -50,7 +54,9 @@ export default function MainMenu(props) {
           className={`${classes.menuItem} ${activeIcon("audit-trail")}`}
           href="/#/audit-trail"
         >
-          <img src='/resources/audit-icon.png' className={classes.icon} />
+          <Icon className={classes.icon}>
+            history
+          </Icon>
         </a>
       </Tooltip>
     </Paper>
