@@ -1,10 +1,18 @@
 import React, { useState } from 'react'
 import { md } from '../release-notes.helper.js'
+import { makeStyles } from '@material-ui/core/styles'
 import { TableRow, TableCell, TableBody, Paper, IconButton, Icon } from '@material-ui/core'
 import CreateEditReleaseNote from '../create-edit/create-edit.component.js'
 
+const useStyles = makeStyles(theme => ({
+  flex: {
+    display: 'flex'
+  }
+}))
+
 export default function ReleaseNoteRow (props) {
   const { note = {} } = props
+  const classes = useStyles()
   const { title, body, relatedToggles } = note
   const [inlinePreview, setInlinePreview] = useState(true)
   const [edit, setEdit] = useState(false)
@@ -14,26 +22,35 @@ export default function ReleaseNoteRow (props) {
         {title}
       </TableCell>
       <TableCell>
-        <div>
-          {previewBody(body)}
+        <div className={classes.flex}>
+          <div>
+            {previewBody(body)}
+          </div>
+          <div>
+            <IconButton onClick={() => setInlinePreview(!inlinePreview)}>
+              <Icon>
+                { inlinePreview ? 'arrow_drop_down' : 'arrow_drop_up'}
+              </Icon>
+            </IconButton>
+          </div>
         </div>
       </TableCell>
       <TableCell>
         {relatedToggles}
       </TableCell>
-      <TableCell onClick={() => setInlinePreview(!inlinePreview)}>
-        <IconButton onClick={() => setInlinePreview(!inlinePreview)}>
-          <Icon>
-            { inlinePreview ? 'arrow_drop_down' : 'arrow_drop_up'}
-          </Icon>
-        </IconButton>
-      </TableCell>
-      <TableCell>
-        <IconButton onClick={() => setEdit(!edit)}>
-          <Icon>
-            edit
-          </Icon>
-        </IconButton>
+      <TableCell >
+        <div className={classes.flex}>
+          <IconButton onClick={() => setEdit(!edit)}>
+            <Icon>
+              edit
+            </Icon>
+          </IconButton>
+          <IconButton onClick={() => console.log('delete')}>
+            <Icon>
+              delete
+            </Icon>
+          </IconButton>
+        </div>
       </TableCell>
       {
         edit && (
