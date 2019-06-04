@@ -6,16 +6,28 @@ import Modal from '../../common/modal/modal.component.js'
 import CreateEditReleaseNoteForm from './create-edit-form.component.js'
 import ReleaseNotePreview from '../release-note-preview/release-note-preview.component.js'
 
-const useStyles = makeStyles(theme => ({
-  tabs: {
-    marginBottom: '16px',
-  },
-  buttonRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    margin: '0px 24px',
+const useStyles = makeStyles(theme => {
+  return {
+    tabs: {
+      position: 'fixed',
+      backgroundColor: theme.palette.background.paper,
+      zIndex: 1,
+      width: '686px',
+    },
+    buttonRow: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      margin: '0px 24px',
+    },
+    tabContents: {
+      paddingTop: '72px',
+    },
+    contents: {
+      display: 'flex',
+      flexDirection: 'column',
+    }
   }
-}))
+})
 
 export default function CreateEditReleaseNote (props) {
   const classes = useStyles()
@@ -49,32 +61,39 @@ export default function CreateEditReleaseNote (props) {
         </div>
       )}
     >
-      <div>
-        <Tabs className={classes.tabs} value={tabValue} onChange={(e,v) => setTabValue(v)}>
+      <div className={classes.contents}>
+        <Tabs
+          className={classes.tabs}
+          value={tabValue}
+          onChange={(e,v) => setTabValue(v)}
+          fullWidth
+        >
           <Tab label={isEdit ? `Edit` : `Create`}/>
           <Tab label={`Preview`}/>
         </Tabs>
-        {
-          tabValue === 0 && (
-            <CreateEditReleaseNoteForm
-              title={title}
-              setTitle={setTitle}
-              body={body}
-              setBody={setBody}
-              releaseNote={releaseNote}
-              isEdit={isEdit}
-              close={close}
-            />
-          )
-        }
-        {
-          tabValue === 1 && (
-            <ReleaseNotePreview
-              body={body}
-              title={title}
-            />
-          )
-        }
+        <div className={classes.tabContents}>
+          {
+            tabValue === 0 && (
+              <CreateEditReleaseNoteForm
+                title={title}
+                setTitle={setTitle}
+                body={body}
+                setBody={setBody}
+                releaseNote={releaseNote}
+                isEdit={isEdit}
+                close={close}
+              />
+            )
+          }
+          {
+            tabValue === 1 && (
+              <ReleaseNotePreview
+                body={body}
+                title={title}
+              />
+            )
+          }
+        </div>
       </div>
     </Modal>
   )
