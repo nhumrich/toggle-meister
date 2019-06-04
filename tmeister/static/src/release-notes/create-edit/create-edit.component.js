@@ -66,7 +66,6 @@ export default function CreateEditReleaseNote (props) {
           className={classes.tabs}
           value={tabValue}
           onChange={(e,v) => setTabValue(v)}
-          fullWidth
         >
           <Tab label={isEdit ? `Edit` : `Create`}/>
           <Tab label={`Preview`}/>

@@ -34,7 +34,6 @@ export default function CreateEditReleaseNoteForm (props) {
           variant='outlined'
           multiline
           fullWidth
-          fullHeight
           id='release-note-Body'
           label='Release Note Body'
           value={body}
