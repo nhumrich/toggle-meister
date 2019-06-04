@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Tabs, Tab, Button } from '@material-ui/core'
 // project
-import Modal from '../../common/modal/modal.component.js'
+import ScrollModal from '../../common/modal/scroll-modal.component.js'
 import CreateEditReleaseNoteForm from './create-edit-form.component.js'
 import ReleaseNotePreview from '../release-note-preview/release-note-preview.component.js'
 import { useCreateEditReleaseNote } from '../release-notes.hooks.js'
@@ -44,10 +44,50 @@ export default function CreateEditReleaseNote (props) {
     close()
   })
   return (
-    <Modal
+    <ScrollModal
       headerText={isEdit ? `Edit Note` : 'Create Note'}
       closeAction={close}
-      bottomRowContents={(
+    >
+      <ScrollModal.Body>
+        <div className={classes.contents}>
+          <Tabs
+            className={classes.tabs}
+            value={tabValue}
+            onChange={(e,v) => setTabValue(v)}
+          >
+            <Tab label={isEdit ? `Edit` : `Create`}/>
+            <Tab label={`Preview`}/>
+          </Tabs>
+          <div className={classes.tabContents}>
+            {
+              tabValue === 0 && (
+                <div>
+                  <CreateEditReleaseNoteForm
+                    title={title}
+                    setTitle={setTitle}
+                    body={body}
+                    setBody={setBody}
+                    releaseNote={releaseNote}
+                    isEdit={isEdit}
+                    close={close}
+                    requestInProgress={requestInProgress}
+                    createEditNote={createEditNote}
+                  />
+                </div>
+              )
+            }
+            {
+              tabValue === 1 && (
+                <ReleaseNotePreview
+                  body={body}
+                  title={title}
+                />
+              )
+            }
+          </div>
+        </div>
+      </ScrollModal.Body>
+      <ScrollModal.BottomRow>
         <div className={classes.buttonRow}>
           <Button
             variant='contained'
@@ -65,44 +105,8 @@ export default function CreateEditReleaseNote (props) {
             Cancel
           </Button>
         </div>
-      )}
-    >
-      <div className={classes.contents}>
-        <Tabs
-          className={classes.tabs}
-          value={tabValue}
-          onChange={(e,v) => setTabValue(v)}
-        >
-          <Tab label={isEdit ? `Edit` : `Create`}/>
-          <Tab label={`Preview`}/>
-        </Tabs>
-        <div className={classes.tabContents}>
-          {
-            tabValue === 0 && (
-              <CreateEditReleaseNoteForm
-                title={title}
-                setTitle={setTitle}
-                body={body}
-                setBody={setBody}
-                releaseNote={releaseNote}
-                isEdit={isEdit}
-                close={close}
-                requestInProgress={requestInProgress}
-                createEditNote={createEditNote}
-              />
-            )
-          }
-          {
-            tabValue === 1 && (
-              <ReleaseNotePreview
-                body={body}
-                title={title}
-              />
-            )
-          }
-        </div>
-      </div>
-    </Modal>
+      </ScrollModal.BottomRow>
+    </ScrollModal>
   )
 
 }
