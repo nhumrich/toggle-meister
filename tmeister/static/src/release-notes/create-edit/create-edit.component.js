@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => {
     tabs: {
       position: 'fixed',
       backgroundColor: theme.palette.background.paper,
-      zIndex: 1,
+      zIndex: 100,
       width: '686px',
     },
     buttonRow: {
