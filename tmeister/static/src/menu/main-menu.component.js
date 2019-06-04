@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tooltip, Paper } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import useLocalStorageAsToggle from '../common/use-localstorage-as-toggle.hook.js'
 
 const useStyles = makeStyles(theme => ({
   menu: {
@@ -35,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function MainMenu(props) {
   const classes = useStyles()
+  const releaseNotesActive = useLocalStorageAsToggle('release-notes')
   return (
     <Paper className={classes.menu} classes={classes}>
       <Tooltip title="Manage toggles">
@@ -53,6 +55,18 @@ export default function MainMenu(props) {
           <img src='/resources/audit-icon.png' className={classes.icon} />
         </a>
       </Tooltip>
+      {
+        releaseNotesActive && (
+          <Tooltip title="Release Notes">
+            <a
+              className={`${classes.menuItem} ${activeIcon("release-notes")}`}
+              href="/#/release-notes"
+            >
+              <img src='/resources/audit-icon.png' className={classes.icon} />
+            </a>
+          </Tooltip>
+        )
+      }
     </Paper>
   );
 }

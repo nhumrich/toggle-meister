@@ -5,6 +5,7 @@ import RootContainer from './menu/root.container.js';
 import AuditTrail from './audit-trail/audit-trail.container.js';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles'
+import ReleaseNotes from './release-notes/release-notes.component.js'
 
 const palette = {
   primary: {
@@ -25,6 +26,7 @@ export default class RootComponent extends React.Component {
           <Route path="/" component={RootContainer}>
             <Route path="audit-trail" component={AuditTrail} />
             <Route path="toggles" component={TogglesContainer} />
+            <Route path="release-notes" component={ReleaseNotes} />
           </Route>
         </Router>
       </ThemeProvider>
