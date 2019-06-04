@@ -54,8 +54,7 @@ export default function ReleaseNoteRow (props) {
       slice.push('...')
       preview = slice.join('\n')
     }
-    const html = md.render(preview) || '<div>No preview</div>'
-    // const html = '<div>no preview</div>'
+    const html = md.render(preview)
     return (
       <div
         dangerouslySetInnerHTML={{__html: html}}
