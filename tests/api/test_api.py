@@ -165,6 +165,34 @@ def test_get_audit_logs(client):
     assert response.status_code == 200
 
 
+def test_create_release_note(client):
+    response = client.post('/api/release_notes',
+                           json={'title': 'obi-wan',
+                                 'body': 'has the high ground',
+                                 'feature': 'bobbytables'})
+    assert response.status_code == 200
+    results = client.get('/api/envs/production/release_notes')
+    assert results.status_code == 200
+
+    found = False
+    for rn in results.json()['release_notes']:
+        if rn['title'] == 'obi-wan':
+            found = True
+            break
+    assert found
+
+
+def test_delete_release_note(client):
+    results = client.get('/api/envs/production/release_notes')
+    id_ = 0
+    for rn in results.json()['release_notes']:
+        if rn['title'] == 'obi-wan':
+            id_ = rn['id']
+
+    response = client.delete(f'/api/release_notes/{id_}')
+    assert response.status_code == 204
+
+
 def test_turn_toggles_off(client):
     response = client.patch(
         '/api/toggles',

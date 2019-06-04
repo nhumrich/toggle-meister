@@ -1,5 +1,5 @@
 from sqlalchemy import Table, Column, Integer, String, \
-    ForeignKey, Index, text
+    ForeignKey, Index, text, Text
 from sqlalchemy.dialects.postgresql import TIMESTAMP, JSONB, DATE
 import sqlalchemy as sa
 
@@ -75,4 +75,13 @@ rollout_users = Table(
     Column('userid', String, index=True, nullable=False),
     Column('features', JSONB, index=True),
     Column('env', String, index=True)
+)
+
+release_notes = Table(
+    'release_notes', METADATA,
+    Column('id', Integer, autoincrement=True, primary_key=True),
+    Column('title', String, nullable=False),
+    Column('body', Text, nullable=True),
+    Column('feature', String, nullable=True, index=True),
+    Column('created_date', TIMESTAMP, nullable=False)
 )
