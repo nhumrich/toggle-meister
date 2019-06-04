@@ -16,6 +16,7 @@ export default function ReleaseNoteRow (props) {
   const { title, body, relatedToggles } = note
   const [inlinePreview, setInlinePreview] = useState(true)
   const [edit, setEdit] = useState(false)
+  const [showArrow, preview] = previewBody(body)
   return (
     <TableRow key={note.id}>
       <TableCell>
@@ -24,15 +25,19 @@ export default function ReleaseNoteRow (props) {
       <TableCell>
         <div className={classes.flex}>
           <div>
-            {previewBody(body)}
+            {preview}
           </div>
-          <div>
-            <IconButton onClick={() => setInlinePreview(!inlinePreview)}>
-              <Icon>
-                { inlinePreview ? 'arrow_drop_down' : 'arrow_drop_up'}
-              </Icon>
-            </IconButton>
-          </div>
+          {
+            showArrow && (
+              <div>
+                <IconButton onClick={() => setInlinePreview(!inlinePreview)}>
+                  <Icon>
+                    { inlinePreview ? 'arrow_drop_down' : 'arrow_drop_up'}
+                  </Icon>
+                </IconButton>
+              </div>
+            )
+          }
         </div>
       </TableCell>
       <TableCell>
@@ -72,11 +77,11 @@ export default function ReleaseNoteRow (props) {
       preview = slice.join('\n')
     }
     const html = md.render(preview)
-    return (
+    return [split.length > 5, (
       <div
         dangerouslySetInnerHTML={{__html: html}}
       />
-    )
+    )]
   }
 }
 
