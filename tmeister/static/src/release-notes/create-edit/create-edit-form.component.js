@@ -1,4 +1,4 @@
-import React, {useState, useRef} from 'react'
+import React, {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Button, TextField, FormControl, InputLabel, Select, MenuItem, OutlinedInput} from '@material-ui/core'
 import { useFetchToggles } from '../../toggles/toggles.hooks.js'
