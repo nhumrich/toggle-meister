@@ -14,7 +14,7 @@ const useStyles = makeStyles(theme => ({
 export default function ReleaseNoteRow (props) {
   const { note = {}, refetch } = props
   const classes = useStyles()
-  const { title, body, relatedToggles } = note
+  const { title, body, feature} = note
   const [edit, setEdit] = useState(false)
   const [ showDelete, setDelete ] = useState(false)
   return (
@@ -26,7 +26,7 @@ export default function ReleaseNoteRow (props) {
         <ReleaseNoteInlinePreview markdown={body} />
       </TableCell>
       <TableCell>
-        {relatedToggles}
+        {feature}
       </TableCell>
       <TableCell >
         <div className={classes.flex}>

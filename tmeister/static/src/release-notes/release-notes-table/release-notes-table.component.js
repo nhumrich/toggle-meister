@@ -18,7 +18,7 @@ export default function ReleaseNoteTable (props) {
               Body preview
             </TableCell>
             <TableCell>
-              Related Toggles
+              Related Feature
             </TableCell>
             <TableCell>
             </TableCell>
