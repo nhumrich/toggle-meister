@@ -23,12 +23,10 @@ export default function ReleaseNoteRow (props) {
         {title}
       </TableCell>
       <TableCell>
+        <ReleaseNoteInlinePreview markdown={body} />
       </TableCell>
       <TableCell>
         {relatedToggles}
-      </TableCell>
-      <TableCell>
-        <ReleaseNoteInlinePreview markdown={body} />
       </TableCell>
       <TableCell >
         <div className={classes.flex}>
