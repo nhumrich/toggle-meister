@@ -3,6 +3,7 @@ from starlette.responses import JSONResponse
 from asyncpg.exceptions import UniqueViolationError
 
 from .dataaccess import featureda
+from .dataaccess import releasesda
 from . import permissions
 from . import toggles
 from . import auditing
@@ -56,7 +57,7 @@ async def delete_feature(request: Request):
         await _do_hard_feature_delete(feature)
         await auditing.audit_event(
             'feature.delete', user, {'feature_name': feature})
-        return JSONResponse(None, status_code=204)
+
     else:
 
         await permissions.check_permissions(
@@ -68,7 +69,10 @@ async def delete_feature(request: Request):
         await auditing.audit_event(
             'feature.remove', user, {'feature_name': feature})
 
-        return JSONResponse(None, status_code=204)
+    # remove reference to release notes
+    await releasesda.remove_references_to_feature(feature)
+
+    return JSONResponse(None, status_code=204)
 
 
 async def _do_hard_feature_delete(feature):

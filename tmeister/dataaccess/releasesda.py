@@ -26,6 +26,12 @@ async def delete_release_note(release_note_id):
     await pg.fetchval(delete)
 
 
+async def remove_references_to_feature(feature):
+    update = db.release_notes.update().values(feature=None)\
+        .where(db.release_notes.c.feature == feature)
+    await pg.fetchval(update)
+
+
 async def update_release_note(release_note_id, title=None, body=None, feature=None):
     update = db.release_notes.update()
     kwargs = {}
