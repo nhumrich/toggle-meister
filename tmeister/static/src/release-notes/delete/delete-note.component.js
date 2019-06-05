@@ -1,13 +1,16 @@
 import React from 'react'
 import ScrollModal from '../../common/modal/scroll-modal.component.js'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Icon } from '@material-ui/core'
+import { Button, Icon, Typography } from '@material-ui/core'
 import { useDeleteReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => ({
   buttonBar: {
     display: 'flex',
     justifyContent: 'space-between',
+  },
+  warningText: {
+    color: theme.palette.error.main,
   }
 }))
 
@@ -22,17 +25,21 @@ export default function DeleteReleaseNote (props) {
   return (
     <ScrollModal
       closeAction={close}
-      headerText={`Delete Note?`}
+      headerText={`Confirm Delete`}
     >
       <ScrollModal.Body>
         <div>
-          <a target='_blank' rel='noopener noreferrer' href='https://youtu.be/SZvElCoK6so?t=9'>
-            KENOOOOOOOOOOBIIIII!!!!!!!!!!!!
-          </a>
+          <Typography variant='body1'>
+            This is a HARD delete. Deleting a release note will immediately stop it from being returned in the API.
+            You should consider if you really want to PERMANENTLY remove this release note.
+          </Typography>
+          <Typography variant='body1' className={c.warningText}>
+            There is no way to recover deleted notes.
+          </Typography>
         </div>
       </ScrollModal.Body>
       <ScrollModal.BottomRow>
-        <div className={c.flex}>
+        <div className={c.buttonBar}>
           <Button
             variant='contained'
             color='primary'
