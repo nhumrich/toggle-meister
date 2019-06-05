@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { uniqueId, property } from 'lodash'
 
+const baseURL = '/api/release_notes'
+
 export function useFetchReleaseNotes () {
   const [ notes, setNotes ] = useState([])
   const [ loadingNotes, setLoadingNotes ] = useState(false)
@@ -10,7 +12,7 @@ export function useFetchReleaseNotes () {
     setLoadingNotes(true)
     const controller = new AbortController()
     const signal = controller.signal
-    fetch('/api/release_notes', {credentials: 'same-origin', signal})
+    fetch(baseURL, {credentials: 'same-origin', signal})
       .then((response) => {
         if (response.ok) {
           return response.json()
@@ -44,7 +46,6 @@ export function useCreateEditReleaseNote(isEdit) {
       setRequestInProgress(true)
       const body = JSON.stringify(note)
       const method = isEdit ? 'PATCH' : 'POST'
-      const baseURL = '/api/release_notes'
       const url = isEdit ? `${baseURL}/${note.id}` : baseURL
       const req = fetch(url, {
         method,
@@ -75,4 +76,45 @@ export function useCreateEditReleaseNote(isEdit) {
   }, [note, isEdit])
 
   return [setNote, requestInProgress, response]
+}
+
+export function useDeleteReleaseNote() {
+  const [ note, setNote ] = useState()
+  const [ deleteInProgress, setDeleteInProgress ] = useState(false)
+  const [ deleted, setDeleted ] = useState(false)
+  useEffect(() => {
+    if(note) {
+      const controller = new AbortController()
+      const signal = controller.signal
+      setDeleteInProgress(true)
+      const req = fetch(`${baseURL}/${note.id}`, {
+        credentials: 'same-origin',
+        signal,
+        method: 'DELETE'
+      })
+
+      req.then((response) => {
+        if (response.ok) {
+          setNote()
+          setDeleted(true)
+          setDeleteInProgress(false)
+        } else {
+          throw response.status
+        }
+      }).catch(err => {
+        console.error(err)
+        setRequestInProgress(false)
+      })
+
+      return () => {
+        setNote()
+        setDeleted(false)
+        setDeleteInProgress(false)
+        controller.abort()
+      }
+    }
+  }, [note])
+
+  return [ setNote, deleteInProgress, deleted ]
+
 }
