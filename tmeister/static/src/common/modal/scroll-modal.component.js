@@ -34,7 +34,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function ModalWrapper (props) {
+export default function ScrollModal (props) {
   const { headerText, closeAction, children, bottomRowContents } = props
   const classes = useStyles();
   return (
@@ -49,11 +49,33 @@ export default function ModalWrapper (props) {
               </Icon>
             </IconButton>
           </div>
-          <div className={classes.modalContents}>
-            {children}
-          </div>
+          {children}
         </Paper>
       </div>
     </Modal>
   )
+}
+
+ScrollModal.Body = (props) => {
+  const classes = useStyles()
+  const { children } = props
+  return children ? (
+    <div className={classes.modalContents}>
+      {children}
+    </div>
+  ) : null
+}
+
+ScrollModal.BottomRow = (props) => {
+  const classes = useStyles();
+  const { children } = props
+  if (children) {
+    return (
+      <div className={classes.bottomRow}>
+        {children}
+      </div>
+    )
+  } else {
+    return null
+  }
 }
