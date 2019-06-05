@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { md } from '../release-notes.helper.js'
 import { makeStyles } from '@material-ui/core/styles'
 import { TableRow, TableCell, TableBody, Paper, IconButton, Icon } from '@material-ui/core'
 import CreateEditReleaseNote from '../create-edit/create-edit.component.js'
+import ReleaseNoteInlinePreview from './release-note-inline-preview.component.js'
 
 const useStyles = makeStyles(theme => ({
   flex: {
@@ -14,34 +14,19 @@ export default function ReleaseNoteRow (props) {
   const { note = {} } = props
   const classes = useStyles()
   const { title, body, relatedToggles } = note
-  const [inlinePreview, setInlinePreview] = useState(true)
   const [edit, setEdit] = useState(false)
-  const [showArrow, preview] = previewBody(body)
   return (
     <TableRow key={note.id}>
       <TableCell>
         {title}
       </TableCell>
       <TableCell>
-        <div className={classes.flex}>
-          <div>
-            {preview}
-          </div>
-          {
-            showArrow && (
-              <div>
-                <IconButton onClick={() => setInlinePreview(!inlinePreview)}>
-                  <Icon>
-                    { inlinePreview ? 'arrow_drop_down' : 'arrow_drop_up'}
-                  </Icon>
-                </IconButton>
-              </div>
-            )
-          }
-        </div>
       </TableCell>
       <TableCell>
         {relatedToggles}
+      </TableCell>
+      <TableCell>
+        <ReleaseNoteInlinePreview markdown={body} />
       </TableCell>
       <TableCell >
         <div className={classes.flex}>
@@ -67,21 +52,5 @@ export default function ReleaseNoteRow (props) {
       }
     </TableRow>
   )
-
-  function previewBody (markdown = '') {
-    const split = markdown.split('\n')
-    let preview = markdown
-    if (inlinePreview && split.length > 5) {
-      const slice = split.slice(0, 5)
-      slice.push('...')
-      preview = slice.join('\n')
-    }
-    const html = md.render(preview)
-    return [split.length > 5, (
-      <div
-        dangerouslySetInnerHTML={{__html: html}}
-      />
-    )]
-  }
 }
 
