@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { uniqueId } from 'lodash'
+import { uniqueId, property } from 'lodash'
 
 export function useFetchReleaseNotes () {
   const [ notes, setNotes ] = useState([])
@@ -13,7 +13,9 @@ export function useFetchReleaseNotes () {
     fetch('/api/release_notes', {credentials: 'same-origin', signal})
       .then((response) => {
         if (response.ok) {
-          return response.json().then(property('release_notes')).then(notes => {
+          return response.json()
+            .then(property('release_notes'))
+            .then(notes => {
             setLoadingNotes(false)
             setNotes(notes)
           })
@@ -58,7 +60,6 @@ export function useCreateEditReleaseNote(isEdit) {
         setNote()
         setResponse(result)
         setRequestInProgress(false)
-        successFn && successFn(r)
       }).catch((err) => {
         if (err !== 'cancelled') {
           console.error('err', err)
