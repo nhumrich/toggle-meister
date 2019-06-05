@@ -45,7 +45,8 @@ export function useCreateEditReleaseNote(isEdit) {
       setRequestInProgress(true)
       const body = JSON.stringify(note)
       const method = isEdit ? 'PATCH' : 'POST'
-      const url = isEdit ? `/api/release_notes/${note.id}` : `/aip/release_notes`
+      const baseURL = '/api/release_notes'
+      const url = isEdit ? `${baseURL}/${note.id}` : baseURL
       const req = fetch(url, {
         method,
         body,
@@ -63,6 +64,7 @@ export function useCreateEditReleaseNote(isEdit) {
         setResponse(result)
         setRequestInProgress(false)
       }).catch((err) => {
+        setRequestInProgress(false)
         if (err !== 'cancelled') {
           console.error('err', err)
         }
