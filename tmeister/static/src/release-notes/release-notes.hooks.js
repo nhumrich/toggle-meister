@@ -16,9 +16,9 @@ export function useFetchReleaseNotes () {
           return response.json()
             .then(property('release_notes'))
             .then(notes => {
-            setLoadingNotes(false)
-            setNotes(notes)
-          })
+              setLoadingNotes(false)
+              setNotes(notes)
+            })
         }
       }).catch(err => {
         setNotes([])
@@ -39,7 +39,6 @@ export function useCreateEditReleaseNote(isEdit) {
   const [ response, setResponse] = useState()
   useEffect(() => {
     if (note) {
-      console.log('note', note)
       const controller = new AbortController()
       const signal = controller.signal
       setRequestInProgress(true)
