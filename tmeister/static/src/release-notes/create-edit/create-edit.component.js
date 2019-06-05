@@ -38,11 +38,12 @@ export default function CreateEditReleaseNote (props) {
   const [ body, setBody] = useState(() => releaseNote.body || '')
   const [ preview, setPreview ] = useState(false)
   const [ tabValue, setTabValue ] = useState(0)
-  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit, () => {
+  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit)
+  if (responseNote) {
     createEditNote()
     onSuccess && onSuccess()
     close()
-  })
+  }
   return (
     <ScrollModal
       headerText={isEdit ? `Edit Note` : 'Create Note'}
