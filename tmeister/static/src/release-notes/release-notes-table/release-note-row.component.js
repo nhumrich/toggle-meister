@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 export default function ReleaseNoteRow (props) {
-  const { note = {} } = props
+  const { note = {}, refetch } = props
   const classes = useStyles()
   const { title, body, relatedToggles } = note
   const [edit, setEdit] = useState(false)
@@ -47,6 +47,7 @@ export default function ReleaseNoteRow (props) {
           <CreateEditReleaseNote
             releaseNote={note}
             close={() => setEdit(false)}
+            onSuccess={refetch}
           />
         )
       }

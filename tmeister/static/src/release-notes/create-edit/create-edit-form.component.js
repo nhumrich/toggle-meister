@@ -80,7 +80,6 @@ export default function CreateEditReleaseNoteForm (props) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    console.log('submit')
-    createEditNote({title, body, feature})
+    createEditNote({id: releaseNote.id, title, body, feature})
   }
 }

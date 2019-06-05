@@ -39,12 +39,14 @@ export function useCreateEditReleaseNote(isEdit) {
   const [ response, setResponse] = useState()
   useEffect(() => {
     if (note) {
+      console.log('note', note)
       const controller = new AbortController()
       const signal = controller.signal
       setRequestInProgress(true)
       const body = JSON.stringify(note)
       const method = isEdit ? 'PATCH' : 'POST'
-      const req = fetch('/api/release_notes', {
+      const url = isEdit ? `/api/release_notes/${note.id}` : `/aip/release_notes`
+      const req = fetch(url, {
         method,
         body,
         credentials: 'same-origin',
