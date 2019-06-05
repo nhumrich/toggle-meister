@@ -99,6 +99,36 @@ You would get the following response:
 
 This endpoint requires no authentication at all. In order to support rolling releases, you will also need to include `enrollment_id={x}` in your query string.
 
+There is also an endpoint to get release notes if you decide to use that feature:
+
+`http mytoggleservice.example.com/api/envs/production/release_notes`
+
+you would get the following response:
+
+```
+{
+    "release_notes": [
+        {
+            "body": "Cool new feature!",
+            "date": "2019-6-4",
+            "feature": null,
+            "id": 2,
+            "title": "feature without toggle"
+        },
+        {
+            "body": "Really sweet feature",
+            "date": "2019-6-4",
+            "feature": "open_source",
+            "id": 1,
+            "title": "that one thing"
+        }
+    ]
+}
+```
+
+If you include the `enrollment_id` query string on this endpoint, it will include the release notes for features that are turned on for that enrollment id, much like the toggle api.
+
+
 ## list of all current endpoints
 
 `http :8445/api/envs/production/toggles`
@@ -122,3 +152,14 @@ This endpoint requires no authentication at all. In order to support rolling rel
 `http :8445/api/auditlog`
 
 `http :8445/api/metrics/myfeature`
+
+`http :8445/api/release_notes`
+
+`http :8445/api/envs/production/release_notes`
+
+`http POST :8445/api/release_notes title=mynote body=awesome feature=test_feature`
+
+`http PATCH :8445/api/release_notes/1 body='more awesome'`
+
+`http DELETE :8445/api/release_notes/1`
+ 

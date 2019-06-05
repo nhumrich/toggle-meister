@@ -22,6 +22,7 @@ class Action(Enum):
     create_feature = 5
     delete_feature = 6
     hard_delete_feature = 7
+    manage_release_notes = 8
 
 
 async def check_permissions(username: str, action: Action):
