@@ -43,6 +43,7 @@ export default function Releases(props) {
             </div>
           </div>
           <ReleaseNoteTable
+            loading={loading}
             releaseNotes={releaseNotes}
             refetch={refetchReleaseNotes}
           />
