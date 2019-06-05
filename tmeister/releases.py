@@ -60,7 +60,10 @@ async def get_all_release_notes(request: Request) -> JSONResponse:
     # dont currently support number of days
     # num_of_days = int(request.query_params.get('num_of_days', '-1'))
     release_note_list = await releasesda.get_release_notes()
-    return JSONResponse(release_note_list)
+    for r in release_note_list:
+        r['date'] = f"{r['date'].year}-{r['date'].month}-{r['date'].day}"
+
+    return JSONResponse({'release_notes': release_note_list})
 
 
 async def create_release_note(request: Request) -> JSONResponse:
