@@ -38,11 +38,11 @@ export default function CreateEditReleaseNote (props) {
   const [ body, setBody] = useState(() => releaseNote.body || '')
   const [ preview, setPreview ] = useState(false)
   const [ tabValue, setTabValue ] = useState(0)
-  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit, () => {
-    createEditNote()
-    onSuccess && onSuccess()
+  const [ createEditNote, requestInProgress, responseNote ] = useCreateEditReleaseNote(isEdit)
+  if (responseNote != undefined) {
     close()
-  })
+    onSuccess && onSuccess()
+  }
   return (
     <ScrollModal
       headerText={isEdit ? `Edit Note` : 'Create Note'}
@@ -95,7 +95,7 @@ export default function CreateEditReleaseNote (props) {
             type={'submit'}
             form={'create-edit-release-note'}
           >
-            { isEdit ? 'Save' : 'Update'} note
+            { isEdit ? 'Update' : 'Save'} note
           </Button>
           <Button
             variant='contained'

@@ -27,7 +27,11 @@ export default function ReleaseNoteTable (props) {
         <TableBody>
           {
             releaseNotes.map((note) => (
-              <ReleaseNoteRow key={note.id} note={note} />
+              <ReleaseNoteRow
+                key={note.id}
+                note={note}
+                refetch={refetch}
+              />
             ))
           }
         </TableBody>
