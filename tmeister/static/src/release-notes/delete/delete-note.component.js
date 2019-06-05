@@ -1,9 +1,24 @@
 import React from 'react'
 import ScrollModal from '../../common/modal/scroll-modal.component.js'
-import { Button } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { Button, Icon } from '@material-ui/core'
+import { useDeleteReleaseNote } from '../release-notes.hooks.js'
+
+const useStyles = makeStyles(theme => ({
+  buttonBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  }
+}))
 
 export default function DeleteReleaseNote (props) {
-  const { note, close } = props
+  const { note, close, refetch } = props
+  const c = useStyles()
+  const [ deleteNote, deletePending, deleted ] = useDeleteReleaseNote()
+  if (deleted) {
+    close()
+    refetch()
+  }
   return (
     <ScrollModal
       closeAction={close}
@@ -17,9 +32,29 @@ export default function DeleteReleaseNote (props) {
         </div>
       </ScrollModal.Body>
       <ScrollModal.BottomRow>
-        <Button>
-          Button
-        </Button>
+        <div className={c.flex}>
+          <Button
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              deleteNote(note)
+            }}
+            disabled={deletePending}
+            type={'button'}
+          >
+            <Icon>
+              warning
+            </Icon>
+            Delete
+          </Button>
+          <Button
+            variant='contained'
+            type={'button'}
+            onClick={close}
+          >
+            Cancel
+          </Button>
+        </div>
       </ScrollModal.BottomRow>
     </ScrollModal>
   )

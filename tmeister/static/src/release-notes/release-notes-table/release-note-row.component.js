@@ -55,6 +55,7 @@ export default function ReleaseNoteRow (props) {
         showDelete && (
           <DeleteReleaseNote
             note={note}
+            refetch={refetch}
             close={() => setDelete(false)}
           />
         )
