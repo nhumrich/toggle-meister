@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { Tabs, Tab, Button } from '@material-ui/core'
+import { Tabs, Tab } from '@material-ui/core'
+import Button from '../../common/simple-button/simple-button.component.js'
 // project
 import ScrollModal from '../../common/modal/scroll-modal.component.js'
 import CreateEditReleaseNoteForm from './create-edit-form.component.js'
@@ -90,6 +91,8 @@ export default function CreateEditReleaseNote (props) {
       <ScrollModal.BottomRow>
         <div className={classes.buttonRow}>
           <Button
+            disabled={requestInProgress}
+            showLoader={requestInProgress}
             variant='contained'
             color='primary'
             type={'submit'}

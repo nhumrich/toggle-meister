@@ -1,7 +1,8 @@
 import React from 'react'
 import ScrollModal from '../../common/modal/scroll-modal.component.js'
 import { makeStyles } from '@material-ui/core/styles'
-import { Button, Icon, Typography } from '@material-ui/core'
+import { Icon, Typography } from '@material-ui/core'
+import Button from '../../common/simple-button/simple-button.component.js'
 import { useDeleteReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => ({
@@ -46,6 +47,7 @@ export default function DeleteReleaseNote (props) {
             onClick={() => {
               deleteNote(note)
             }}
+            showLoader={deletePending}
             disabled={deletePending}
             type={'button'}
           >
