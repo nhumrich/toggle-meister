@@ -42,7 +42,6 @@ function ButtonLoader (props) {
     <div className={c.loaderWrapper}>
       <CircularProgress
         size={20}
-        className={c.loader}
         color={progressColor}
       />
     </div>
