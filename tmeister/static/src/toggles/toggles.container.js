@@ -3,6 +3,7 @@ import ToggleControls from './toggle-controls.component.js';
 import ToggleTable from './table/toggle-table.component.js';
 import styles from './toggles.container.css';
 import { useFetchToggles, useFilterToggles } from './toggles.hooks.js'
+import { useFetchEnvs } from './envs.hooks.js'
 import { Container, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -21,7 +22,8 @@ const useStyles = makeStyles(theme => ({
 export default function TogglesContainer (props) {
   const classes = useStyles()
   const [ search, setSearch ] = useState()
-  const [ toggles, refetch ] = useFetchToggles()
+  const [ toggles, refetchToggles ] = useFetchToggles()
+  const [ allEnvs, refetchEnvs ] = useFetchEnvs()
   const [ envs, setEnvs ] = useState(['production'])
   const filteredToggles = useFilterToggles(envs, toggles, search)
 
@@ -35,14 +37,16 @@ export default function TogglesContainer (props) {
           <ToggleControls
             toggles={toggles}
             searchToggles={setSearch}
-            refetchToggles={refetch}
+            allEnvs={allEnvs}
+            refetchEnvs={refetchEnvs}
+            refetchToggles={refetchToggles}
             setEnvs={setEnvs}
             envs={envs}
           />
         </div>
         <ToggleTable
           toggles={filteredToggles}
-          refetchToggles={refetch}
+          refetchToggles={refetchToggles}
         />
       </Paper>
     </Container>

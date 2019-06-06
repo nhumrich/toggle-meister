@@ -14,11 +14,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function CreateEnvModal (props) {
   const classes = useStyles();
-  const { hide, refetchToggles } = props
+  const { hide, refetchToggles, refetchEnvs } = props
   const [ newEnv, setNewEnv ] = useState('')
   const [ createName, setCreateName ] = useState('')
   const [ saving, saveCompleted ] = useCreateEnv(createName)
   if (saveCompleted) {
+    refetchEnvs()
     refetchToggles()
     hide()
   }

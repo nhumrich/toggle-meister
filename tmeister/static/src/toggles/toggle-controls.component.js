@@ -6,7 +6,7 @@ import CreateEnv from './create/create-env/create-env.component.js';
 import SelectEnvs from './envs/select-envs.component.js';
 
 export default function TogglesControls (props) {
-  const {toggles, searchToggles, refetchToggles, envs, setEnvs} = props
+  const {toggles, searchToggles, refetchToggles, envs, setEnvs, allEnvs, refetchEnvs} = props
   return (
     <div className={styles.root}>
       <div className={styles.left}>
@@ -15,6 +15,7 @@ export default function TogglesControls (props) {
         />
         <SelectEnvs
           envs={envs}
+          allEnvs={allEnvs}
           setEnvs={setEnvs}
           toggles={toggles}
         />
@@ -25,6 +26,7 @@ export default function TogglesControls (props) {
         />
         <CreateEnv
           refetchToggles={refetchToggles}
+          refetchEnvs={refetchEnvs}
         />
       </div>
     </div>
