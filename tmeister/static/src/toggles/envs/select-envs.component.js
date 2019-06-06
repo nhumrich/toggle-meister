@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Input, InputLabel, MenuItem, FormControl, ListItemText, Select, Checkbox, Chip } from '@material-ui/core';
-import { getEnvList } from '../table/toggle-table.helpers.js';
 import { getSelectedEnvs } from './select-envs.helpers.js';
 import { chain, uniq, includes, partial } from 'lodash';
 

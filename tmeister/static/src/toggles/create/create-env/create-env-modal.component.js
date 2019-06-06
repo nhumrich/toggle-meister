@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styles from './create-env-modal.css';
 import { useCreateEnv } from '../create-hooks.js'
 import Modal from 'common/modal/scroll-modal.component.js'
-import { Button, TextField } from '@material-ui/core'
+import Button from 'commonButton'
+import { TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({

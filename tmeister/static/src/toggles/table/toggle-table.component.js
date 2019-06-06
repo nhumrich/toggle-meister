@@ -1,14 +1,13 @@
 import React from 'react';
-import { getEnvList, groupTogglesByFeature, fuzzySearch } from './toggle-table.helpers.js';
+import { groupTogglesByFeature } from './toggle-table.helpers.js';
 import DeleteFeatureModal from '../delete/delete-feature-modal.component.js';
 import ToggleProdModal from './toggle-prod-modal.component.js';
 import FeatureRow from './feature-row/feature-row.component.js'
 import { Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@material-ui/core'
 
 export default function ToggleTable (props) {
-  const { toggles, refetchToggles } = props
-  const envList = getEnvList(toggles);
-  const togglesByFeature = groupTogglesByFeature(toggles, envList)
+  const { toggles, refetchToggles, envs } = props
+  const togglesByFeature = groupTogglesByFeature(toggles, envs)
   return (
     <Paper>
       <Table size='small'>
@@ -17,7 +16,7 @@ export default function ToggleTable (props) {
             <TableCell>
               Feature Name
             </TableCell>
-            {envList.map(env => <TableCell key={env}>{env}</TableCell>)}
+            {envs.map(env => <TableCell key={env}>{env}</TableCell>)}
           </TableRow>
         </TableHead>
         <TableBody>
