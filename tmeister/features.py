@@ -12,14 +12,16 @@ from . import metrics
 
 async def create_feature(request):
     body = await request.json()
-    feature_name = body.get('name', '').lower()
+    feature_name = body.get('name', '')
     user = request.user.display_name
-    if not feature_name.isidentifier():
-        return JSONResponse({'Message': "Not a valid name"},
-                            status_code=400)
 
     await permissions.check_permissions(
         user, permissions.Action.create_feature)
+
+    if not feature_name.isidentifier() or not feature_name.islower():
+        return JSONResponse({'Message': "Name must be only lower case with underscores"},
+                            status_code=400)
+
     if await featureda.is_feature_soft_deleted(feature_name):
         # delete the feature first
         await _do_hard_feature_delete(feature_name)
