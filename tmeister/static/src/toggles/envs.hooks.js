@@ -15,7 +15,7 @@ export function useFetchEnvs () {
             .json()
             .then(property("envs"))
             .then(envs => {
-              const sortedEnvs = sortEnvs(envs)
+              const sortedEnvs = sortEnvs(envs.map(env => env.name))
               setEnvs(sortedEnvs);
             })
         }
@@ -37,9 +37,7 @@ export function useFetchEnvs () {
 }
 
 export function sortEnvs (envs = []) {
-  return envs.sort((item1, item2) => {
-    const a = item1.name || item1
-    const b = item2.name || item2
+  return envs.sort((a, b) => {
     if (a === 'production') {
       return 1
     } else if (b === 'production') {

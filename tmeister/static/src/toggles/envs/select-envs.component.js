@@ -38,7 +38,7 @@ const MenuProps = {
 };
 
 export default function SelectEnvs({toggles = [], setEnvs, envs, allEnvs}) {
-  const envList = allEnvs.map(env => env.name);
+  const envList = allEnvs;
   const selectedEnvs = envs;
   useInitializeSelectedEnvs(setEnvs)
   const classes = useStyles()
