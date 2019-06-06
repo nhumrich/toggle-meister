@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { Tabs, Tab } from '@material-ui/core'
-import Button from '../../common/simple-button/simple-button.component.js'
+import Button from 'common/simple-button/simple-button.component.js'
 // project
-import ScrollModal from '../../common/modal/scroll-modal.component.js'
+import ScrollModal from 'common/modal/scroll-modal.component.js'
 import CreateEditReleaseNoteForm from './create-edit-form.component.js'
 import ReleaseNotePreview from '../release-note-preview/release-note-preview.component.js'
 import { useCreateEditReleaseNote } from '../release-notes.hooks.js'
