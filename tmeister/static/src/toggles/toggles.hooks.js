@@ -113,7 +113,7 @@ export function useChangeFeatureStatus (callback) {
     }
   }, [featureToChange, newStatus, callback])
 
-  return [setFeatureToChange, setNewStatus]
+  return [setFeatureToChange, setNewStatus, pending]
 
 }
 

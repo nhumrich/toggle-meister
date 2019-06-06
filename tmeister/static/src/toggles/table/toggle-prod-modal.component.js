@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import SimpleButton from 'commonButton'
-import Modal from 'common/modal/modal.component.js'
+import Button from 'commonButton'
+import Modal from 'common/modal/scroll-modal.component.js'
 import { TextField, Switch, FormGroup, FormControlLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-  cancelButton: {
-    marginLeft: '8px'
-  },
-  buttonBar: {
-    marginTop: '16px'
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
   },
   rollingInputs: {
     margin: '8px 0px',
@@ -18,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ToggleProdModal (props) {
   const classes = useStyles();
-  const { toggle, performChange, close, toggleWillBeOn } = props
+  const { toggle, performChange, close, toggleWillBeOn, loading } = props
   const [ days, setDays ] = useState(3)
   const [ rolling, setRolling ] = useState(false)
   return (
@@ -26,7 +24,7 @@ export default function ToggleProdModal (props) {
       headerText='Alter Production feature toggle'
       closeAction={close}
     >
-      <div>
+      <Modal.Body>
         <div>
           This really will have an immediate impact on the production environment and could potentially break things for customers.
         </div>
@@ -70,25 +68,28 @@ export default function ToggleProdModal (props) {
             </div>
           )
         }
-      </div>
-      <div className={classes.buttonBar}>
-        <SimpleButton
-          actionType="primary"
-          onClick={() => {
-            if (rolling) {
-              performChange(`ROLL:${days}`)
-            } else {
-              performChange()
-            }
-          }}
-          disableOnClick={true}
-        >
-          I know what I am doing
-        </SimpleButton>
-        <SimpleButton className={classes.cancelButton} actionType="flat" onClick={close}>
-          Nevermind
-        </SimpleButton>
-      </div>
+      </Modal.Body>
+      <Modal.BottomRow>
+        <div className={classes.buttonRow}>
+          <Button
+            color="primary"
+            onClick={() => {
+              if (rolling) {
+                performChange(`ROLL:${days}`)
+              } else {
+                performChange()
+              }
+            }}
+            disabled={loading}
+            showLoader={loading}
+          >
+            Do it!
+          </Button>
+          <Button variant="text" onClick={close}>
+            Cancel
+          </Button>
+        </div>
+      </Modal.BottomRow>
     </Modal>
   );
 }
