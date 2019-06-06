@@ -86,7 +86,7 @@ export default function ToggleProdModal (props) {
             Do it!
           </Button>
           <Button variant="text" onClick={close}>
-            Nevermind
+            Cancel
           </Button>
         </div>
       </Modal.BottomRow>

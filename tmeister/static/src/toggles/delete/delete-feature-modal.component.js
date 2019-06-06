@@ -39,7 +39,7 @@ export default function DeleteFeatureModal (props) {
             Delete feature toggle
           </Button>
           <Button variant="text" onClick={close}>
-            Nevermind
+            Cancel
           </Button>
         </div>
       </Modal.BottomRow>
