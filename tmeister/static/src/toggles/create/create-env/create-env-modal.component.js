@@ -6,9 +6,6 @@ import { Button, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-  cancelButton: {
-    marginLeft: '8px'
-  },
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
@@ -61,7 +58,6 @@ export default function CreateEnvModal (props) {
           </Button>
           <Button
             variant='text'
-            className={classes.cancelButton}
             onClick={hide}
           >
             Cancel
