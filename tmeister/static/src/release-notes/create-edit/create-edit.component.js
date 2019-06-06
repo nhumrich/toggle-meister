@@ -101,8 +101,7 @@ export default function CreateEditReleaseNote (props) {
             { isEdit ? 'Update' : 'Save'} note
           </Button>
           <Button
-            variant='contained'
-            type={'button'}
+            variant='text'
             onClick={close}
           >
             Cancel

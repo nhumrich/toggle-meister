@@ -1,5 +1,5 @@
 import React from 'react'
-import ScrollModal from '../../common/modal/scroll-modal.component.js'
+import ScrollModal from 'common/modal/scroll-modal.component.js'
 import { makeStyles } from '@material-ui/core/styles'
 import { Icon, Typography } from '@material-ui/core'
 import Button from 'commonButton'

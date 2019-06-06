@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { groupBy, property } from 'lodash'
-import toasts from '../../common/simple-toast/simple-toast.js';
+import toasts from 'common/simple-toast/simple-toast.js';
 
 export function useMetricsForToggle (toggle) {
   const [metrics, setMetrics] = useState([])

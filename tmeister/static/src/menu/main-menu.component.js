@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tooltip, Paper, Icon } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
-import useLocalStorageAsToggle from '../common/use-localstorage-as-toggle.hook.js'
+import useLocalStorageAsToggle from 'common/use-localstorage-as-toggle.hook.js'
 
 const useStyles = makeStyles(theme => ({
   menu: {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './create-env-modal.css';
 import { useCreateEnv } from '../create-hooks.js'
-import Modal from '../../../common/modal/modal.component.js'
+import Modal from 'common/modal/modal.component.js'
 import { Button, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 

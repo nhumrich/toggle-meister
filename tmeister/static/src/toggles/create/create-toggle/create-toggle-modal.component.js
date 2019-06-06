@@ -1,17 +1,20 @@
 import React, { useState } from 'react';
 import styles from './create-toggle-modal.css'
 import { useCreateToggle } from '../create-hooks.js'
-import Modal from '../../../common/modal/modal.component.js'
-import { Button, TextField } from '@material-ui/core'
+import Modal from 'common/modal/scroll-modal.component.js'
+import Button from 'commonButton'
+import { TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
   cancelButton: {
     marginLeft: '8px'
   },
-  buttonBar: {
-    marginTop: '16px'
-  }
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    margin: '0px 24px',
+  },
 }))
 
 export default function CreateToggleModal (props) {
@@ -29,7 +32,7 @@ export default function CreateToggleModal (props) {
       headerText={'Create a new feature toggle'}
       closeAction={hide}
     >
-      <div>
+      <Modal.Body>
         <TextField
           id='new-toggle-name'
           label='Feature Toggle Name'
@@ -44,11 +47,14 @@ export default function CreateToggleModal (props) {
           }}
         >
         </TextField>
-        <div className={classes.buttonBar}>
+      </Modal.Body>
+      <Modal.BottomRow>
+        <div className={classes.buttonRow}>
           <Button
             variant='contained'
             color='primary'
             disabled={saving}
+            showLoader={saving}
             onClick={() => {
               setCreateName(newToggleName)
             }}
@@ -56,14 +62,14 @@ export default function CreateToggleModal (props) {
             Create feature
           </Button>
           <Button
-            color='secondary'
+            variant='text'
             className={classes.cancelButton}
             onClick={hide}
           >
-            Nevermind
+            Cancel
           </Button>
         </div>
-      </div>
+      </Modal.BottomRow>
     </Modal>
   );
 }

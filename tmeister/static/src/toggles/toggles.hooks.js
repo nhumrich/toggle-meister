@@ -1,7 +1,7 @@
 import { filter as fuzzyFilter } from 'fuzzy';
 import { property, includes } from 'lodash'
 import { useState, useEffect, useMemo } from 'react'
-import toasts from '../common/simple-toast/simple-toast.js';
+import toasts from 'common/simple-toast/simple-toast.js';
 
 export function useFetchToggles () {
   const [toggles, setToggles] = useState([])
