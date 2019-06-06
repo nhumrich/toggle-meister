@@ -2,7 +2,7 @@ import React from 'react'
 import ScrollModal from '../../common/modal/scroll-modal.component.js'
 import { makeStyles } from '@material-ui/core/styles'
 import { Icon, Typography } from '@material-ui/core'
-import Button from '../../common/simple-button/simple-button.component.js'
+import Button from 'commonButton'
 import { useDeleteReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => ({
