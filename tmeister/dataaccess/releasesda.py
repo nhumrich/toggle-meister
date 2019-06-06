@@ -1,5 +1,5 @@
 from asyncpgsa import pg
-from sqlalchemy.sql import functions
+from sqlalchemy.sql import functions, text
 
 from . import db
 
@@ -22,8 +22,10 @@ async def create_release_note(title, body=None, feature=None):
 
 
 async def delete_release_note(release_note_id):
-    delete = db.release_notes.delete().where(db.release_notes.c.id == release_note_id)
-    await pg.fetchval(delete)
+    delete = db.release_notes.delete()\
+        .where(db.release_notes.c.id == release_note_id).returning(text('*'))
+    results = await pg.fetchrow(delete)
+    return results
 
 
 async def remove_references_to_feature(feature):

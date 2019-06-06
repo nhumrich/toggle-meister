@@ -95,7 +95,10 @@ async def delete_release_note(request: Request) -> JSONResponse:
 
     await permissions.check_permissions(user, permissions.Action.manage_release_notes)
 
-    await releasesda.delete_release_note(release_note_id)
+    results = await releasesda.delete_release_note(release_note_id)
+    await auditing.audit_event('release_note.delete', user,
+                               {'id': release_note_id, 'title': results['title'],
+                                'body': results['body'], 'feature': results['feature']})
 
     return JSONResponse(None, status_code=204)
 
@@ -115,5 +118,9 @@ async def edit_release_note(request: Request) -> JSONResponse:
                                          title=release_title,
                                          body=body,
                                          feature=feature)
+
+    await auditing.audit_event('release_note.edit', user,
+                               {'id': release_note_id, 'title': release_title,
+                                'body': body, 'feature': feature})
 
     return JSONResponse(request_body)
