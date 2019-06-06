@@ -13,7 +13,6 @@ const useStyles = makeStyles(theme => ({
   buttonRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    margin: '0px 24px',
   },
 }))
 

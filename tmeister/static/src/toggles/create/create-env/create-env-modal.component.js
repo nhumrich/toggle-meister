@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './create-env-modal.css';
 import { useCreateEnv } from '../create-hooks.js'
-import Modal from 'common/modal/modal.component.js'
+import Modal from 'common/modal/scroll-modal.component.js'
 import { Button, TextField } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -9,9 +9,10 @@ const useStyles = makeStyles(theme => ({
   cancelButton: {
     marginLeft: '8px'
   },
-  buttonBar: {
-    marginTop: '16px'
-  }
+  buttonRow: {
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
 }))
 
 export default function CreateEnvModal (props) {
@@ -29,7 +30,7 @@ export default function CreateEnvModal (props) {
       headerText='Create a new environment'
       closeAction={hide}
     >
-      <div>
+      <Modal.Body>
         <TextField
           id='new-environment-name'
           label='Environment name'
@@ -44,11 +45,14 @@ export default function CreateEnvModal (props) {
           }}
         >
         </TextField>
-        <div className={classes.buttonBar}>
+      </Modal.Body>
+      <Modal.BottomRow>
+        <div className={classes.buttonRow}>
           <Button
             variant='contained'
             color='primary'
             disabled={saving}
+            showLoader={saving}
             onClick={() => {
               setCreateName(newEnv)
             }}
@@ -56,14 +60,14 @@ export default function CreateEnvModal (props) {
             Create Environment
           </Button>
           <Button
-            color='secondary'
+            variant='text'
             className={classes.cancelButton}
             onClick={hide}
           >
-            Nevermind
+            Cancel
           </Button>
         </div>
-      </div>
+      </Modal.BottomRow>
     </Modal>
   );
 }
