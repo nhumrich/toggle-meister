@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CreateToggleModal from './create-toggle-modal.component.js';
-import Button from '../../../common/simple-button/simple-button.component.js'
+import Button from 'commonButton'
 
 export default function CreateToggle (props) {
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import SimpleButton from '../../common/simple-button/simple-button.component.js'
-import Modal from '../../common/modal/modal.component.js'
+import Button from 'commonButton'
+import Modal from 'common/modal/modal.component.js'
 import DeleteModalMetrics from './delete-modal-metrics.component.js'
 import { useMetricsForToggle } from '../metrics/metrics.hooks.js'
 
@@ -25,12 +25,12 @@ export default function DeleteFeatureModal (props) {
         />
         <br />
         <div className="cps-modal__dialog__actions">
-          <SimpleButton actionType="primary" onClick={performDelete} disableOnClick={true}>
+          <Button actionType="primary" onClick={performDelete} disableOnClick={true}>
             Delete feature toggle
-          </SimpleButton>
-          <SimpleButton actionType="flat" onClick={close}>
+          </Button>
+          <Button actionType="flat" onClick={close}>
             Nevermind
-          </SimpleButton>
+          </Button>
         </div>
       </div>
     </Modal>

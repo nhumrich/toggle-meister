@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import toasts from '../../common/simple-toast/simple-toast.js';
+import toasts from 'common/simple-toast/simple-toast.js';
 
 export function useCreateEnv(name) {
   const [ saving, saved ] = useCreate(

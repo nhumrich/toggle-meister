@@ -51,7 +51,7 @@ module.exports = {
   resolve: {
     alias: {
       'common': path.resolve(__dirname, 'src/common'),
-      'commonButton': path.resolve(__dirname, 'src/common/simple-button/simple-button.component.js'),
+      'commonButton': path.resolve(__dirname, 'src/common/button/button.component.js'),
     }
   },
   plugins: [

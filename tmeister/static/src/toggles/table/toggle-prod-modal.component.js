@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import SimpleButton from '../../common/simple-button/simple-button.component.js'
-import Modal from '../../common/modal/modal.component.js'
+import SimpleButton from 'commonButton'
+import Modal from 'common/modal/modal.component.js'
 import { TextField, Switch, FormGroup, FormControlLabel } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
