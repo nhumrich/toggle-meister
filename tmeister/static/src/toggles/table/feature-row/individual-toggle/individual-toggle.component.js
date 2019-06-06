@@ -8,7 +8,7 @@ import { TableRow, TableCell, Switch } from '@material-ui/core'
 export default function IndividualToggle (props) {
   const { toggle, refetchToggles } = props
   const [ toggleConfirmModal, setToggleConfirmModal ] = useState(false)
-  const [ setToggleToChange, setNewState ] = useChangeFeatureStatus(refetchToggles)
+  const [ setToggleToChange, setNewState, pending ] = useChangeFeatureStatus(refetchToggles)
   const { state, env } = toggle.toggle
   const isOn = state === 'ROLL' || state === 'PAUSE' || state === 'ON'
   return (
@@ -31,8 +31,9 @@ export default function IndividualToggle (props) {
             toggleWillBeOn={toggle.toggle.state === 'OFF'}
             close={() => {
               setToggleToChange()
-              setToggleConfirmModal(false)}
-            }
+              setToggleConfirmModal(false)
+            }}
+            loading={pending}
             performChange={(state) => {
               changeToggle(toggle.toggle, state)
             }}
