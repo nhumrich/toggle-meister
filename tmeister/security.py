@@ -30,7 +30,8 @@ def get_hostname(request):
 class GoogleAuthBackend(AuthenticationBackend):
     allowed_patterns = [re.compile(r'^/api/envs/.*/toggles$'),
                         re.compile(r'^/api/features'),
-                        re.compile(r'^/heartbeat$')]
+                        re.compile(r'^/heartbeat$'),
+                        re.compile(r'^/api/envs/.*/release_notes')]
 
     def __init__(self, id, secret, org):
         super().__init__()
