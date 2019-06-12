@@ -15,8 +15,12 @@ async def get_release_notes():
 
 
 async def create_release_note(title, body=None, feature=None):
-    insert = db.release_notes.insert().values(title=title, body=body,
-                                              feature=feature, created_date=functions.now())
+    values = dict(title=title, created_date=functions.now())
+    if body:
+        values['body'] = body
+    if feature:
+        values['feature'] = feature
+    insert = db.release_notes.insert().values(**values)
     result = await pg.fetchval(insert)
     return result
 

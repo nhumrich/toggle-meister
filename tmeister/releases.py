@@ -69,9 +69,9 @@ async def get_all_release_notes(request: Request) -> JSONResponse:
 async def create_release_note(request: Request) -> JSONResponse:
     user = request.user.display_name
     request_body = await request.json()
-    release_title = request_body.get('title')
-    feature = request_body.get('feature')
-    body = request_body.get('body')
+    release_title = request_body.get('title', '').strip()
+    feature = request_body.get('feature', '').strip()
+    body = request_body.get('body', '').strip()
 
     await permissions.check_permissions(user, permissions.Action.manage_release_notes)
 
@@ -105,9 +105,9 @@ async def edit_release_note(request: Request) -> JSONResponse:
     release_note_id = int(request.path_params.get('id'))
     request_body = await request.json()
 
-    release_title = request_body.get('title')
-    feature = request_body.get('feature')
-    body = request_body.get('body')
+    release_title = request_body.get('title', '').strip()
+    feature = request_body.get('feature', '').strip()
+    body = request_body.get('body', '').strip()
 
     await permissions.check_permissions(user, permissions.Action.manage_release_notes)
 
