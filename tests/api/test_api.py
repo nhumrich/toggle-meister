@@ -194,6 +194,26 @@ def test_turn_toggles_off(client):
     assert response.status_code == 200
 
 
+def test_create_release_note_no_feature(client):
+    response = client.post('/api/release_notes',
+                           json={'title': 'palpatine',
+                                 'body': 'is a sith lord',
+                                 'feature': '',
+                                 })
+    assert response.status_code == 200
+    results = client.get('/api/envs/production/release_notes')
+    assert results.status_code == 200
+
+    # release note should still exist because there is no feature related
+
+    found = False
+    for rn in results.json()['release_notes']:
+        if rn['title'] == 'palpatine':
+            found = True
+            break
+    assert found
+
+
 def test_turn_toggle_on_rolling(client):
     response = client.patch(
         '/api/toggles',
@@ -206,7 +226,7 @@ def test_turn_toggle_on_rolling(client):
 
     # test getting it on at least once
     results = []
-    for i in range(200):
+    for i in range(400):
         response = client.get(f'/api/envs/bob2/toggles?feature=bobbytables&enrollment_id={i}')
         results.append(response.json()['bobbytables'])
 
@@ -292,13 +312,11 @@ def test_release_note_should_still_exist(client):
 
 def test_delete_release_note(client):
     results = client.get('/api/envs/production/release_notes')
-    id_ = 0
     for rn in results.json()['release_notes']:
-        if rn['title'] == 'obi-wan':
+        if rn['title'] in ('obi-wan', 'palpatine'):
             id_ = rn['id']
-
-    response = client.delete(f'/api/release_notes/{id_}')
-    assert response.status_code == 204
+            response = client.delete(f'/api/release_notes/{id_}')
+            assert response.status_code == 204
 
 
 def test_delete_env(client):
