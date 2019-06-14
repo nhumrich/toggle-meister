@@ -204,14 +204,27 @@ def test_create_release_note_no_feature(client):
     results = client.get('/api/envs/production/release_notes')
     assert results.status_code == 200
 
+    response = client.post('/api/release_notes',
+                           json={'title': 'sidious',
+                                 'body': 'is his sith name',
+                                 'feature': '',
+                                 })
+    assert response.status_code == 200
+    results = client.get('/api/envs/production/release_notes')
+    assert results.status_code == 200
+
     # release note should still exist because there is no feature related
 
-    found = False
+    found_palp = False
+    found_sid = False
     for rn in results.json()['release_notes']:
         if rn['title'] == 'palpatine':
-            found = True
-            break
-    assert found
+            found_palp = True
+        if rn['title'] == 'sidious':
+            found_sid = True
+
+    assert found_palp
+    assert found_sid
 
 
 def test_turn_toggle_on_rolling(client):
@@ -311,9 +324,9 @@ def test_release_note_should_still_exist(client):
 
 
 def test_delete_release_note(client):
-    results = client.get('/api/envs/production/release_notes')
+    results = client.get('/api/release_notes')
     for rn in results.json()['release_notes']:
-        if rn['title'] in ('obi-wan', 'palpatine'):
+        if rn['title'] in ('obi-wan', 'palpatine', 'sidious'):
             id_ = rn['id']
             response = client.delete(f'/api/release_notes/{id_}')
             assert response.status_code == 204
