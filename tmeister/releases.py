@@ -16,8 +16,13 @@ async def get_release_notes_for_env(request: Request) -> JSONResponse:
     enrollment_id = params.get('enrollment_id')
     num_of_days = int(params.get('num_of_days', '90'))
 
-    release_notes = await releasesda.get_release_notes()
-    release_notes = {r['feature']: r for r in release_notes}
+    release_notes_data = await releasesda.get_release_notes()
+    release_notes = {}
+    for r in release_notes_data:
+        if r['feature'] not in release_notes:
+            release_notes[r['feature']] = [r]
+        else:
+            release_notes[r['feature']].append(r)
 
     features = release_notes.keys()
 
@@ -29,9 +34,10 @@ async def get_release_notes_for_env(request: Request) -> JSONResponse:
                      (datetime.now() - row['date_on']).days <= num_of_days]
 
     # add in releases without features
-    for _, release in release_notes.items():
-        if 'feature' not in release or release['feature'] is None:
-            feature_order.append((release['feature'], release['date']))
+    for _, releases in release_notes.items():
+        for release in releases:
+            if 'feature' not in release or release['feature'] is None:
+                feature_order.append((release['feature'], release['date']))
 
     feature_order = sorted(feature_order, key=lambda x: x[1], reverse=True)
     feature_order = [a for a, _ in feature_order]
@@ -44,11 +50,18 @@ async def get_release_notes_for_env(request: Request) -> JSONResponse:
     results = []
     for t in toggles:
         if t not in feature_order:
-            results.append(release_notes.get(t))
+            # get the ones on for this user, but not on globally, put these at the top
+            # (not worth sorting by date)
+            for r in release_notes.get(t):
+                results.append(r)
 
     for f in feature_order:
-        results.append(release_notes.get(f))
+        # now go based on sort order
+        for r in release_notes.get(f):
+            if r not in results:
+                results.append(r)
 
+    # finally, make the dates json-able
     for r in results:
         r['date'] = f"{r['date'].year}-{r['date'].month}-{r['date'].day}"
 
