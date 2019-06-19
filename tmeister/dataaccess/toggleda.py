@@ -52,6 +52,9 @@ async def get_toggle_states_for_env(env, list_of_features, user_id=None):
             features = {}
         else:
             features = json.loads(user['features'])
+        if features.get('-whitelisted-', False):
+            # user is whitelisted to get all features on
+            return {k: True for k, v in states.items()}
         new_states = {}
         for feature, state in states.items():
             if state == 'ROLL':
