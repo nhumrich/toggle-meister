@@ -139,6 +139,7 @@ def progress_rolled_toggles():
                 new_increment = new_percent - real_current_percent
 
             # now put this data back in the db
+            new_increment = max(0, new_increment)
             new_schedule = {'increment': new_increment,
                             'hours_count': new_hour,
                             'current_percent': new_percent}
@@ -240,8 +241,6 @@ def report_to_slack():
 
 
 def run():
-    progress_rolled_toggles()
-    return
     # schedule slack shaming
     s1 = schedule.every(1).week
     s1.start_day = SLACK_REMINDER_DAY
