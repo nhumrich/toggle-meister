@@ -30,7 +30,7 @@ export default function Releases(props) {
         <Paper className={classes.container}>
           <div className={classes.header}>
             <Typography variant='h2'>
-              Release notes - beta
+              Release notes
             </Typography>
             <div className={classes.controls}>
               <Button
