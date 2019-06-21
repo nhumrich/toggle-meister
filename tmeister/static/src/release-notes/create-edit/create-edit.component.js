@@ -101,6 +101,14 @@ export default function CreateEditReleaseNote (props) {
             { isEdit ? 'Update' : 'Save'} note
           </Button>
           <Button
+            variant='outlined'
+            href='https://guides.github.com/features/mastering-markdown/'
+            target='_blank'
+            rel='noopener'
+          >
+            Markdown help
+          </Button>
+          <Button
             variant='text'
             onClick={close}
           >
