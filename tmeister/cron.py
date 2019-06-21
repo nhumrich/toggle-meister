@@ -148,6 +148,13 @@ def progress_rolled_toggles():
                 .where(db.toggles.c.env == env)
             pg.execute(query)
 
+            # remove users with it off, so that they are eligible again
+            update = (db.rollout_users.update()
+                      .where(db.rollout_users.c.env == env)
+                      .where(db.rollout_users.c.features[feature] == 'false')
+                      .values(features=sqlalchemy.sql.text(f"features - '{feature}'")))
+            pg.execute(update)
+
     # progress "paused" features
     for env in envs:
         paused_toggles = pg.execute(db.toggles.select()
@@ -199,8 +206,6 @@ def progress_rolled_toggles():
                    .where(db.toggles.c.env == env)
                    .values(schedule={}))
 
-    # find ON toggles without empty schedules
-
 
 def report_to_slack():
     toggs = get_production_toggles()
@@ -235,6 +240,8 @@ def report_to_slack():
 
 
 def run():
+    progress_rolled_toggles()
+    return
     # schedule slack shaming
     s1 = schedule.every(1).week
     s1.start_day = SLACK_REMINDER_DAY
