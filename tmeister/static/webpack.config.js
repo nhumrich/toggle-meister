@@ -10,6 +10,9 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
   },
   mode: 'production',
+  node: {
+    fs: 'empty',
+  },
   module: {
     rules: [
       {
