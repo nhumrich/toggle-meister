@@ -1,2 +1,3 @@
 import markdownIt from 'markdown-it'
-export const md = new markdownIt()
+import markdownImageSize from 'markdown-it-imsize'
+export const md = new markdownIt().use(markdownImageSize)
