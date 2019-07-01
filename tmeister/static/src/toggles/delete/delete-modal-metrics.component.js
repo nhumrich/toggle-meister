@@ -2,7 +2,7 @@ import React from 'react'
 import { sumBy, get } from 'lodash'
 import dayjs from 'dayjs'
 
-const calendarSettings = {
+const calendarSettingsOverrides = {
   sameDay: '[Today]',
   nextDay: '[Tomorrow]',
   lastDay: '[Yesterday]',
@@ -30,8 +30,8 @@ export default function DeleteFeatureModal (props) {
               })
             const dayCount = get(metrics, `[${key}].length`, 0)
             const dateRange = dayArray.length > 1 ?
-              `${dayArray[0].calendar(null, calendarSettings)} - ${dayArray[dayArray.length -1].calendar(null, calendarSettings)}` :
-              dayArray[0].calendar(null, calendarSettings)
+              `${dayArray[0].calendar(null, calendarSettingsOverrides)} - ${dayArray[dayArray.length -1].calendar(null, calendarSettingsOverrides)}` :
+              dayArray[0].calendar(null, calendarSettingsOverrides)
 
             return (
               <div key={key}>
