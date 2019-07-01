@@ -15,18 +15,20 @@ export default function ConfirmPause (props) {
         </div>
       </Modal.Body>
       <Modal.BottomRow>
-        <Button
-          color='primary'
-          onClick={() => {
-            confirm()
-            close()
-          }}
-        >
-          Yes
-        </Button>
-        <Button variant='text' onClick={close}>
-          No
-        </Button>
+        <div className='tm-flex-apart'>
+          <Button
+            color='primary'
+            onClick={() => {
+              confirm()
+              close()
+            }}
+          >
+            Yes
+          </Button>
+          <Button variant='text' onClick={close}>
+            No
+          </Button>
+        </div>
       </Modal.BottomRow>
     </Modal>
   )
