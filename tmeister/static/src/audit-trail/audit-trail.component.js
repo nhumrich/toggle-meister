@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs'
 import { generalToast } from '../common/simple-toast/simple-toast.js';
 import { Container, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@material-ui/core'
 
@@ -56,7 +56,7 @@ export default class AuditTrail extends React.Component {
                       {auditEvent.user}
                     </TableCell>
                     <TableCell>
-                      {moment(auditEvent.date).calendar()}
+                      {dayjs(auditEvent.date).calendar()}
                     </TableCell>
                     <TableCell>
                       {

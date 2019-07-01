@@ -8,7 +8,6 @@ import { useMetricsForToggle } from '../metrics/metrics.hooks.js'
 export default function DeleteFeatureModal (props) {
   const { close, featureName, performDelete } = props
   const [metrics, loading, refetch]= useMetricsForToggle(featureName)
-  const c = useStyles()
   return (
     <Modal
       headerText={`Delete feature ${featureName}`}

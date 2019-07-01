@@ -1,5 +1,14 @@
 import React from 'react'
-import { sumBy } from 'lodash'
+import { sumBy, get } from 'lodash'
+import dayjs from 'dayjs'
+
+const calendarSettings = {
+  sameDay: '[Today]',
+  nextDay: '[Tomorrow]',
+  lastDay: '[Yesterday]',
+  lastWeek: '[Last] dddd',
+  sameElse: 'MM/DD/YYYY'
+}
 
 export default function DeleteFeatureModal (props) {
   const { metrics, loading } = props
@@ -11,10 +20,24 @@ export default function DeleteFeatureModal (props) {
         {
           Object.keys(metrics).map((key) => {
             const countTimes = sumBy(metrics[key], i => i.hit_count)
-            const dayCount = metrics[key].length
+            const dayArray = metrics[key].map(obj => dayjs(obj.date))
+              .sort((a, b) => {
+                if (a.isBefore(b)) {
+                  return -1
+                } else {
+                  return 1
+                }
+              })
+            const dayCount = get(metrics, `[${key}].length`, 0)
+            const dateRange = dayArray.length > 1 ?
+              `${dayArray[0].calendar(null, calendarSettings)} - ${dayArray[dayArray.length -1].calendar(null, calendarSettings)}` :
+              dayArray[0].calendar(null, calendarSettings)
+
             return (
               <div key={key}>
-                This toggle was requested {countTimes} times in {key} in the last {dayCount} days
+                <span>
+                  <strong>{key}</strong>: {countTimes} requests ({dateRange})
+                </span>
               </div>
             )
           })
