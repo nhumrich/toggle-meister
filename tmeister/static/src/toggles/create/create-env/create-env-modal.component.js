@@ -4,17 +4,8 @@ import { useCreateEnv } from '../create-hooks.js'
 import Modal from 'common/modal/scroll-modal.component.js'
 import Button from 'commonButton'
 import { TextField } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
-
-const useStyles = makeStyles(theme => ({
-  buttonRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-}))
 
 export default function CreateEnvModal (props) {
-  const classes = useStyles();
   const { hide, refetchToggles, refetchEnvs } = props
   const [ newEnv, setNewEnv ] = useState('')
   const [ createName, setCreateName ] = useState('')
@@ -46,7 +37,7 @@ export default function CreateEnvModal (props) {
         </TextField>
       </Modal.Body>
       <Modal.BottomRow>
-        <div className={classes.buttonRow}>
+        <div className={'flex-apart'}>
           <Button
             variant='contained'
             color='primary'

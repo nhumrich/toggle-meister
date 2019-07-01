@@ -5,10 +5,6 @@ import { TextField, Switch, FormGroup, FormControlLabel } from '@material-ui/cor
 import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
-  buttonRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   rollingInputs: {
     margin: '8px 0px',
   }
@@ -70,7 +66,7 @@ export default function ToggleProdModal (props) {
         }
       </Modal.Body>
       <Modal.BottomRow>
-        <div className={classes.buttonRow}>
+        <div className={'flex-apart'}>
           <Button
             color="primary"
             onClick={() => {

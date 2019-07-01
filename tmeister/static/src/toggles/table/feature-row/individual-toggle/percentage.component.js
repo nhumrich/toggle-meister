@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import { CircularProgress, Typography, Icon, Tooltip, IconButton } from '@material-ui/core'
+import ConfirmPause from './confirm-pause.component.js'
 
 const useStyles = makeStyles(theme => ({
   emptyButton: {
@@ -41,6 +42,7 @@ export default function Percentage(props) {
   const classes = useStyles()
   const { toggle, changeToggle } = props
   const { state, env, current_percent } = toggle
+  const [ showConfirmPause, setShowConfirmPause ] = useState(false)
   if (state === 'PAUSE') {
     return (
       <Tooltip title={`paused for 48 hours at ${current_percent}%`}>
@@ -62,13 +64,21 @@ export default function Percentage(props) {
         <div className={classes.relative}>
           <IconButton
             className={`${classes.emptyButton} ${classes.relative}`}
-            onClick={() => changeToggle(toggle, 'PAUSE')}
+            onClick={() => setShowConfirmPause(true)}
           >
             <CircularProgress size={40} variant='static' value={current_percent} />
           <Typography className={classes.progressText}>
             {current_percent}%
           </Typography>
           </IconButton>
+          {
+            showConfirmPause ? (
+              <ConfirmPause
+                close={() => setShowConfirmPause(false)}
+                confirm={() => changeToggle(toggle, 'PAUSE')}
+              />
+            ) : null
+          }
         </div>
       </Tooltip>
     )

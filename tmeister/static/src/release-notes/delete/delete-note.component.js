@@ -6,10 +6,6 @@ import Button from 'commonButton'
 import { useDeleteReleaseNote } from '../release-notes.hooks.js'
 
 const useStyles = makeStyles(theme => ({
-  buttonBar: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
   warningText: {
     color: theme.palette.error.main,
   }
@@ -40,7 +36,7 @@ export default function DeleteReleaseNote (props) {
         </div>
       </ScrollModal.Body>
       <ScrollModal.BottomRow>
-        <div className={c.buttonBar}>
+        <div className={'flex-apart'}>
           <Button
             variant='contained'
             color='primary'

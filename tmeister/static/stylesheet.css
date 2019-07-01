@@ -1,0 +1,4 @@
+.flex-apart {
+  display: flex;
+  justify-content: space-between;
+}

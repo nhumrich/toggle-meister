@@ -5,13 +5,6 @@ import Modal from 'common/modal/scroll-modal.component.js'
 import DeleteModalMetrics from './delete-modal-metrics.component.js'
 import { useMetricsForToggle } from '../metrics/metrics.hooks.js'
 
-const useStyles = makeStyles(theme => ({
-  buttonRow: {
-    display: 'flex',
-    justifyContent: 'space-between',
-  },
-}))
-
 export default function DeleteFeatureModal (props) {
   const { close, featureName, performDelete } = props
   const [metrics, loading, refetch]= useMetricsForToggle(featureName)
@@ -34,7 +27,7 @@ export default function DeleteFeatureModal (props) {
         />
       </Modal.Body>
       <Modal.BottomRow>
-        <div className={c.buttonRow}>
+        <div className={'flex-apart'}>
           <Button color="primary" onClick={performDelete} disabled={loading} showLoader={loading} >
             Delete feature toggle
           </Button>
