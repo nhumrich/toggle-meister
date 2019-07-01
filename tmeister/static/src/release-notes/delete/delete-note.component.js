@@ -36,7 +36,7 @@ export default function DeleteReleaseNote (props) {
         </div>
       </ScrollModal.Body>
       <ScrollModal.BottomRow>
-        <div className={'flex-apart'}>
+        <div className={'tm-flex-apart'}>
           <Button
             variant='contained'
             color='primary'

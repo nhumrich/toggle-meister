@@ -66,7 +66,7 @@ export default function ToggleProdModal (props) {
         }
       </Modal.Body>
       <Modal.BottomRow>
-        <div className={'flex-apart'}>
+        <div className={'tm-flex-apart'}>
           <Button
             color="primary"
             onClick={() => {

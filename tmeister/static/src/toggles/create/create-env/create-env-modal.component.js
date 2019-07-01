@@ -37,7 +37,7 @@ export default function CreateEnvModal (props) {
         </TextField>
       </Modal.Body>
       <Modal.BottomRow>
-        <div className={'flex-apart'}>
+        <div className={'tm-flex-apart'}>
           <Button
             variant='contained'
             color='primary'
