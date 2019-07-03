@@ -10,13 +10,20 @@ async def get_employee(username):
 
 
 async def get_employee_usernames(employee_list=None):
-    query = sa.select([db.employees.c.username])
+    results = await get_employees(employee_list=employee_list)
+    return [r['username'] for r in results]
+
+
+async def get_employees(employee_list=None):
+    query = db.employees.select()
     if employee_list:
         query = query.where(db.employees.c.username.in_(employee_list))
 
     results = await pg.fetch(query)
-
-    return [r['username'] for r in results]
+    return [{'username': r['username'],
+             'name': r['name'],
+             'email': r['email'],
+             'role': r['role_id']} for r in results]
 
 
 async def add_employee(username: str, *,
@@ -28,3 +35,18 @@ async def add_employee(username: str, *,
 
     employee_id = await pg.fetchval(query)
     return employee_id
+
+
+async def modify_employee(username, role=None, name=None):
+    values = {}
+    if role:
+        values['role_id'] = role
+    if name:
+        values['name'] = name
+
+    update = db.employees.update().values(**values).where(db.employees.c.username == username)
+    result = await pg.fetchrow(update)
+    return {'username': result['username'],
+            'name': result['name'],
+            'email': result['email'],
+            'role': result['role_id']}
