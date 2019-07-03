@@ -346,4 +346,3 @@ def test_get_employees(client):
     admin_user = {'username': 'admin.user', 'name': 'Admin User',
                   'email': 'admin.user@sampledomain.com', 'role': 'admin'}
     assert admin_user in body['employees']
-

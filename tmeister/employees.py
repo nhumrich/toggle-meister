@@ -28,14 +28,14 @@ async def edit_employee(request: Request):
         if current_user['username'] == modified_user['username']:
             # updating self
             updates['name'] = body['name']
-        elif current_user['role'] is not 1:
+        elif current_user['role'] != 1:
             return JSONResponse({'Message': 'Cannot edit other users'}, status_code=403)
 
     if 'email' in body and body['email'] != modified_user['email']:
         if current_user['username'] == modified_user['username']:
             # updating self
             updates['email'] = body['email']
-        elif current_user['role'] is not 1:
+        elif current_user['role'] != 1:
             return JSONResponse({'Message': 'Cannot edit other users'}, status_code=403)
 
     if 'role' in body and body['role'] != Role(modified_user['role']).name:

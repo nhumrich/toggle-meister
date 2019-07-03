@@ -1,5 +1,4 @@
 from asyncpgsa import pg
-import sqlalchemy as sa
 from . import db
 
 
