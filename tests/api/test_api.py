@@ -335,3 +335,15 @@ def test_delete_release_note(client):
 def test_delete_env(client):
     response = client.delete('/api/envs/bob2')
     assert response.status_code == 204
+
+
+def test_get_employees(client):
+    response = client.get('/api/employees')
+    assert response.status_code == 200
+    body = response.json()
+    print(body)
+    assert 'employees' in body
+    admin_user = {'username': 'admin.user', 'name': 'Admin User',
+                  'email': 'admin.user@sampledomain.com', 'role': 'admin'}
+    assert admin_user in body['employees']
+

@@ -18,6 +18,8 @@ that doesnt suck by focusing on a couple key principles
 * Toggles must be short lived. 
  * After a toggle is stable on production it needs to be removed from the codebase
 
+For running this service please see [deployment.md](/deployment.md)
+
 ## FAQ
 
 * What is a feature toggle service?
@@ -162,4 +164,8 @@ If you include the `enrollment_id` query string on this endpoint, it will includ
 `http PATCH :8445/api/release_notes/1 body='more awesome'`
 
 `http DELETE :8445/api/release_notes/1`
+
+`http :8445/api/employees`
+
+`http PATCH :8445/api/employees/my.user name='new name' role=admin`
  

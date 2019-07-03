@@ -13,7 +13,7 @@ from starlette.middleware.authentication import AuthenticationMiddleware
 from sentry_asgi import SentryMiddleware
 import sentry_sdk
 
-from . import toggles, features, environments, auditing, health, metrics, releases
+from . import toggles, features, environments, auditing, health, metrics, releases, employees
 from .permissions import InsufficientPermissionsError
 from .security import GoogleAuthBackend
 
@@ -77,8 +77,9 @@ def init():
                        max_age=2 * 24 * 60 * 60)  # 2 days
 
     # sentry stuff
-    sentry_sdk.init(dsn=SENTRY_URL, environment=ENV_NAME)
-    app.add_middleware(SentryMiddleware)
+    if SENTRY_URL:
+        sentry_sdk.init(dsn=SENTRY_URL, environment=ENV_NAME)
+        app.add_middleware(SentryMiddleware)
 
     async def index_html(request):
         static = pathlib.Path('tmeister/static/index.html')
@@ -100,6 +101,8 @@ def init():
     app.add_route('/api/release_notes', releases.create_release_note, methods=['POST'])
     app.add_route('/api/release_notes/{id}', releases.delete_release_note, methods=['DELETE'])
     app.add_route('/api/release_notes/{id}', releases.edit_release_note, methods=['PATCH'])
+    app.add_route('/api/employees', employees.get_employees, methods=['GET'])
+    app.add_route('/api/employees/{username}', employees.edit_employee, methods=['PATCH'])
     app.add_route('/heartbeat', health.get_health)
     app.add_route('/', index_html)
 
