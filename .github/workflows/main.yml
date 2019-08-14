@@ -11,10 +11,9 @@ jobs:
     - uses: actions/checkout@master
     - name: build docker
       env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DOCKER_AUTH_CONFIG: ${{ secrets.DOCKER_AUTH_CONFIG }}
           CI_COMMIT_SHA: ${{ github.sha }}
       run: |
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        echo "DOCKER_AUTH_CONFIG" > $HOME/.docker/config.json
         docker build --pull -t "canopytax/toggle-meister:$CI_COMMIT_SHA" .
         docker push canopytax/toggle-meister:$CI_COMMIT_SHA
