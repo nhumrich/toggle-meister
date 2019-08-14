@@ -9,7 +9,7 @@ jobs:
     
     steps:
     - uses: actions/checkout@master
-      name: build docker
+    - name: build docker
       env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
