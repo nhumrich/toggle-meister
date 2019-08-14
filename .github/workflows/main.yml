@@ -9,6 +9,9 @@ jobs:
     
     steps:
     - uses: actions/checkout@master
+      env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: build docker
       run: |
         docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
