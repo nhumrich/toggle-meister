@@ -15,7 +15,7 @@ jobs:
           CI_COMMIT_SHA: ${{ github.sha }}
     - name: build docker
       run: |
-        echo $DOCKER_USERNAME
+        echo "$DOCKER_USERNAME"
         #docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        docker build --pull -t canopytax/toggle-meister:$CI_COMMIT_SHA .
+        docker build --pull -t "canopytax/toggle-meister:$CI_COMMIT_SHA" .
         #docker push canopytax/toggle-meister:$CI_COMMIT_SHA
