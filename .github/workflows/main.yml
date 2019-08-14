@@ -14,6 +14,7 @@ jobs:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     - name: build docker
       run: |
-        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        echo $DOCKER_USERNAME
+        #docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         docker build --pull -t canopytax/toggle-meister:$CI_COMMIT_SHA .
-        docker push canopytax/toggle-meister:$CI_COMMIT_SHA
+        #docker push canopytax/toggle-meister:$CI_COMMIT_SHA
