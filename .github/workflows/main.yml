@@ -18,3 +18,11 @@ jobs:
         echo "$DOCKER_AUTH_CONFIG" > /home/runner/.docker/config.json
         docker build --pull -t "canopytax/toggle-meister:$CI_COMMIT_SHA" .
         docker push canopytax/toggle-meister:$CI_COMMIT_SHA
+
+    - name: test
+      env:
+        CI_COMMIT_SHA: ${{ github.sha }}
+      uses: docker://canopytax/toggle-meister:$CI_COMMIT_SHA
+      run: |
+        python --version
+        ls
