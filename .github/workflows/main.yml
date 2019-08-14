@@ -20,6 +20,7 @@ jobs:
         docker push canopytax/toggle-meister:$CI_COMMIT_SHA
 
   test:
+    needs: build
     runs-on: canopytax/toggle-meister:$GITHUB_SHA
 
     steps:
