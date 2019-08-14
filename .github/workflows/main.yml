@@ -1,0 +1,16 @@
+name: 
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@master
+    - name: build docker
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker build --pull -t canopytax/toggle-meister:$CI_COMMIT_SHA .
+        docker push canopytax/toggle-meister:$CI_COMMIT_SHA
