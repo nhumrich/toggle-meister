@@ -12,6 +12,7 @@ jobs:
       env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USER }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          CI_COMMIT_SHA: ${{ github.sha }}
     - name: build docker
       run: |
         echo $DOCKER_USERNAME
