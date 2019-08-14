@@ -16,6 +16,7 @@ jobs:
           LITERAL: "foobar"
     - name: build docker
       run: |
+        env
         echo "$DOCKER_USERNAME"
         echo "$CI_COMMIT_SHA"
         echo "$LITERAL"
