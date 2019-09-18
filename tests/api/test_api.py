@@ -91,6 +91,11 @@ def test_get_single_toggle_on(client):
     assert response.json()['bobbytables'] == True  # noqa
 
 
+def test_get_all_toggles(client):
+    response = client.get('/api/envs/bob2/toggles?all=true')
+    assert response.json()['bobbytables'] == True  # noqa
+
+
 def test_turn_toggle_on_thats_already_on(client):
     # should work fine, no error
     response = client.patch(
