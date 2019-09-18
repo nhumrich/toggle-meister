@@ -130,6 +130,10 @@ you would get the following response:
 
 If you include the `enrollment_id` query string on this endpoint, it will include the release notes for features that are turned on for that enrollment id, much like the toggle api.
 
+If you include the `all=true` query string on this endpoint, it will give you all features, making it so you dont have to specify which features you want.
+Note that this will turn metrics off, and be slightly slower. 
+
+
 
 ## list of all current endpoints
 

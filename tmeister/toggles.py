@@ -17,19 +17,25 @@ async def get_toggle_states_for_env(request: Request):
 
     env = request.path_params.get('name').lower()
     features = [feature.lower() for feature in params.getlist('feature')]
-    track = params.get('metrics', 'true').lower() == 'true'
+    get_all = params.get('all', 'false').lower() == 'true'
+    if get_all:
+        track = False
+    else:
+        track = params.get('metrics', 'true').lower() == 'true'
     enrollment_id = params.get('enrollment_id')
 
-    if not features:
+    if not features and not get_all:
         return JSONResponse({'Message': "No features provided"},
                             status_code=400)
-    else:
-        result = await toggleda.get_toggle_states_for_env(env, features, user_id=enrollment_id)
-        for f in features:
-            if f not in result.keys():
-                # Everything not in the database is assumed off,
-                # even if it doesn't exist
-                result[f] = False
+    if get_all:
+        features = await featureda.get_features()
+
+    result = await toggleda.get_toggle_states_for_env(env, features, user_id=enrollment_id)
+    for f in features:
+        if f not in result.keys():
+            # Everything not in the database is assumed off,
+            # even if it doesn't exist
+            result[f] = False
 
     if track:
         metrics.track_metrics(features, env)
