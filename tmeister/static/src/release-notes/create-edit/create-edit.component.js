@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => {
     contents: {
       display: 'flex',
       flexDirection: 'column',
+    },
+    warning: {
+      color: theme.palette.error.main,
     }
   }
 })
@@ -63,6 +66,9 @@ export default function CreateEditReleaseNote (props) {
             {
               tabValue === 0 && (
                 <div>
+                  <span className={classes.warning}>
+                    ALL RELEASE NOTES WITHOUT A TOGGLE ASSOCIATED WITH THEM WILL SHOW WHEN REQUESTED BY THE API
+                  </span>
                   <CreateEditReleaseNoteForm
                     title={title}
                     setTitle={setTitle}
