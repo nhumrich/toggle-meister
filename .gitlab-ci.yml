@@ -3,6 +3,7 @@ image: canopytax/dind
 stages:
     - build
     - test
+    - security
     - push-to-dockerhub
     - deploy-stage
     - deploy-prod
@@ -38,6 +39,20 @@ test:
     - export IS_LOCAL=true
     - alembic upgrade head
     - python3 -m pytest --cov tmeister
+
+bandit:
+  allow_failure: true
+  only:
+    refs:
+      - merge_requests
+    variables:
+      - $CI_PROJECT_REPOSITORY_LANGUAGES =~ /python/
+  variables:
+    BANDIT_API_TOKEN: $BANDIT_API_TOKEN
+  stage: security
+  image: canopytax/python-bandit
+  script:
+    - echo
 
 push-to-dockerhub:
   stage: push-to-dockerhub
