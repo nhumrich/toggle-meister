@@ -14,7 +14,7 @@ COPY ["pyproject.toml", "pyproject.lock", "/app/"]
 WORKDIR /app
 
 RUN export PYCURL_SSL_LIBRARY=openssl && \
-    poetry config settings.virtualenvs.create false && \
+    poetry config virtualenvs.create false && \
     poetry install -vvv --no-dev
 
 
