@@ -111,7 +111,7 @@ async def set_toggle_state(env, feature, state, rollout_days=0):
         if state == 'ROLL':
             schedule['increment'] = 1
             schedule['hours_count'] = 0
-            schedule['total_hours'] = int(rollout_days) * 24
+            schedule['total_hours'] = int(float(rollout_days)) * 24
             schedule['current_percent'] = 1
         elif state == 'PAUSE':
             roll_schedule = json.loads(results[0]['schedule'])
