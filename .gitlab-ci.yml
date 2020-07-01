@@ -13,6 +13,10 @@ variables:
   CONTAINER_IMAGE: docker.io/$REPO_NAME:$CI_COMMIT_SHA
   REGISTRY: docker.io
   DOCKER_DRIVER: overlay
+  POSTGRES_DB: postgres
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: ""
+  POSTGRES_HOST_AUTH_METHOD: trust
 
 build:
   stage: build
